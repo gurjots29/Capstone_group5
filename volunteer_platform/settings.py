@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +126,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [str(Path(BASE_DIR).joinpath('static'))]
 
 
@@ -132,3 +134,7 @@ STATICFILES_DIRS = [str(Path(BASE_DIR).joinpath('static'))]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Media files (uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
