@@ -1,4 +1,8 @@
-from django.shortcuts import render
+# myapp/views.py
+from rest_framework import viewsets
+from .models import Event
+from .serializers import EventSerializer
 
-def home(request):
-    return render(request, 'home.html')
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer

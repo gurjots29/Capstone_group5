@@ -1,23 +1,8 @@
+# myapp/serializers.py
 from rest_framework import serializers
-from .models import Badge, Skill, Volunteer, Organization
+from .models import Event
 
-class BadgeSerializer(serializers.ModelSerializer):
+class EventSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Badge
-        fields = '__all__'
-
-class SkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Skill
-        fields = '__all__'
-
-
-class VolunteerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Volunteer
-        fields = '__all__'
-
-class OrganizationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Organization
+        model = Event
         fields = '__all__'
