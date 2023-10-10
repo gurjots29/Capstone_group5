@@ -1,9 +1,8 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html>
-{% load static %}
 <head>
-    <title>My Volunteer Site</title>
+  <title>{% block titulo %}  {% endblock titulo %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -96,19 +95,7 @@
                                   <div class="notification-info">
                                     <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
                                   </div></a></li>
-                              <li class="notification"><a href="#">
-                                  <div class="image"><img src="theme/img/avatar3.png" alt="Avatar"></div>
-                                  <div class="notification-info">
-                                    <div class="text"><span class="user-name">Joel King</span> is now following you</div><span class="date">2 days ago</span>
-                                  </div></a></li>
-                              <li class="notification"><a href="#">
-                                  <div class="image"><img src="theme/img/avatar4.png" alt="Avatar"></div>
-                                  <div class="notification-info">
-                                    <div class="text"><span class="user-name">John Doe</span> is watching your main repository</div><span class="date">2 days ago</span>
-                                  </div></a></li>
-                              <li class="notification"><a href="#">
-                                  <div class="image"><img src="theme/img/avatar5.png" alt="Avatar"></div>
-                                  <div class="notification-info"><span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span class="date">5 days ago</span></div></a></li>
+                        
                             </ul>
                           </div>
                         </div>
@@ -124,14 +111,10 @@
                         <div class="content">
                           <div class="row">
                             <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/github.png" alt="Github"><span>GitHub</span></a></div>
-                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
-                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/slack.png" alt="Slack"><span>Slack</span></a></div>
-                          </div>
+                            </div>
                           <div class="row">
                             <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
-                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
-                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
-                          </div>
+                           </div>
                         </div>
                       </div>
                       <div class="footer"> <a href="#">More</a></div>
