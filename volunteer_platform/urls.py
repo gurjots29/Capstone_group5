@@ -24,4 +24,5 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('api/users/', include('apps.users.urls')),
+    path('api/post/', include('apps.post.urls')),
 ]
