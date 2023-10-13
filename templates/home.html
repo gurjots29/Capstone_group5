@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 {% load static %}
 <!DOCTYPE html>
@@ -308,3 +309,153 @@
 
     </body> 
 </html>
+=======
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="be-wrapper be-fixed-sidebar">
+  
+  <div class="be-left-sidebar">
+    <div class="left-sidebar-wrapper"><a href="#" class="left-sidebar-toggle">Home</a>
+      <div class="left-sidebar-spacer">
+        <div class="left-sidebar-scroll">
+          <div class="left-sidebar-content">
+            <ul class="sidebar-elements">
+              <li class="divider">Menu</li>
+              <li class="active"><a href="index.html"><i class="icon mdi mdi-home"></i><span>Home</span></a>
+              </li>
+              <li class="parent"><a href="#"><i class="icon mdi mdi-face"></i><span>Organizations</span></a>
+                <ul class="sub-menu">
+                  <li><a href="ui-alerts.html">Profile</a>
+                  </li>
+                </ul>
+              </li>
+              
+              <li class="parent"><a href="#"><i class="icon mdi mdi-face"></i><span>Events Managment</span></a>
+                  <ul class="sub-menu">
+                    <li><a href="ui-alerts.html">Create</a>
+                    </li>
+                    <li><a href="ui-buttons.html">Notifications</a>
+                    </li>
+                  </ul>
+                </li>
+             
+             
+              <li class="divider">Features</li>
+              <li class="parent"><a href="#"><i class="icon mdi mdi-inbox"></i><span>Email</span></a>
+                <ul class="sub-menu">
+                  <li><a href="email-inbox.html">Inbox</a>
+                  </li>
+                  <li><a href="email-read.html">Email Detail</a>
+                  </li>
+                  <li><a href="email-compose.html">Email Compose</a>
+                  </li>
+                </ul>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="progress-widget">
+        <div class="progress-data"><span class="progress-value">60%</span><span class="name">Current Project</span></div>
+        <div class="progress">
+          <div style="width: 60%;" class="progress-bar progress-bar-primary"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="be-content">
+    <div class="main-content container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="widget widget-tile">
+                      <div id="spark1" class="chart sparkline"></div>
+                      <div class="data-info">
+                        <div class="desc">New Users</div>
+                        <div class="value"><span class="indicator indicator-equal mdi mdi-chevron-right"></span><span data-toggle="counter" data-end="113" class="number">0</span>
+                        </div>
+                      </div>
+                    </div>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="widget widget-tile">
+                      <div id="spark2" class="chart sparkline"></div>
+                      <div class="data-info">
+                        <div class="desc">Monthly Sales</div>
+                        <div class="value"><span class="indicator indicator-positive mdi mdi-chevron-up"></span><span data-toggle="counter" data-end="80" data-suffix="%" class="number">0</span>
+                        </div>
+                      </div>
+                    </div>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="widget widget-tile">
+                      <div id="spark3" class="chart sparkline"></div>
+                      <div class="data-info">
+                        <div class="desc">Impressions</div>
+                        <div class="value"><span class="indicator indicator-positive mdi mdi-chevron-up"></span><span data-toggle="counter" data-end="532" class="number">0</span>
+                        </div>
+                      </div>
+                    </div>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="widget widget-tile">
+                      <div id="spark4" class="chart sparkline"></div>
+                      <div class="data-info">
+                        <div class="desc">Downloads</div>
+                        <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-down"></span><span data-toggle="counter" data-end="113" class="number">0</span>
+                        </div>
+                      </div>
+                    </div>
+        </div>
+      </div>
+     
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default panel-table">
+            <div class="panel-heading"> 
+              <div class="tools dropdown"> <span class="icon mdi mdi-download"></span><a href="#" type="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
+                <ul role="menu" class="dropdown-menu pull-right">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <div class="title">Dashboard</div>
+            </div>
+            <div class="panel-body table-responsive">
+             
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+              <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a href="#" type="button" data-toggle="dropdown" class="dropdown-toggle"><span class="icon mdi mdi-more-vert"></span></a>
+                <ul role="menu" class="dropdown-menu pull-right">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <div class="title">Latest Commits</div>
+            </div>
+            <div class="panel-body table-responsive">
+             
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+</div>
+
+{% endblock content %}
+>>>>>>> 5afe1c1 (Pushing for POST API and Comments API)

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Create Post</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Title Input Field -->
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Title:</label>
+                <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}">
+            </div>
+
+            <!-- Content Textarea -->
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}">Content:</label>
+                <textarea class="form-control" id="{{ form.content.id_for_label }}" name="{{ form.content.name }}" rows="6"></textarea>
+            </div>
+
+            <!-- File Input Field -->
+            <div class="form-group">
+                <label for="{{ form.file.id_for_label }}">File:</label>
+                <input type="file" class="form-control-file" id="{{ form.file.id_for_label }}" name="{{ form.file.name }}">
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
