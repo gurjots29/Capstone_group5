@@ -24,10 +24,12 @@ class Volunteer(models.Model):
     interests = models.TextField()
     badges = models.ManyToManyField(Badge, related_name='volunteers', blank=True)
     skills = models.ManyToManyField(Skill, related_name='volunteers', blank=True)
-  
+    friends = models.ManyToManyField('self')    #namsik
+    members = models.ManyToManyField('self')    #namsik
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+    # def __str__(self):
+    #    return f"{self.first_name} {self.last_name}"
+
 
 class Organization(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -37,7 +39,38 @@ class Organization(models.Model):
     phone_number = models.CharField(max_length=20)
     website = models.URLField(blank=True)
     logo = models.ImageField(upload_to='organization_logos/', blank=True)
+    friends = models.ManyToManyField('self')    #namsik
+    members = models.ManyToManyField('self')    #namsik
 
 
     def __str__(self):
         return self.name
+
+#namsik add the model for friendship and membership
+
+class FriendshipRequest(models.Model):
+    SENT = 'sent'
+    ACCEPTED = 'accepted'
+
+    STATUS_CHOICES = (
+        (SENT, 'Sent'),
+        (ACCEPTED, 'Accepted'),
+    )
+
+    created_for = models.ForeignKey(User, related_name='received_friendshiprequests', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, related_name='created_friendshiprequests', on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
+
+
+class MembershipRequest(models.Model):
+    SENT = 'sent'
+    ACCEPTED = 'accepted'
+
+    STATUS_CHOICES = (
+        (SENT, 'Sent'),
+        (ACCEPTED, 'Accepted'),
+    )
+
+    created_for = models.ForeignKey(User, related_name='received_membershiprequests', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, related_name='created_membershiprequests', on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)

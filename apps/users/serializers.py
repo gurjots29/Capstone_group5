@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Badge, Skill, Volunteer, Organization
+from .models import Badge, Skill, Volunteer, Organization, FriendshipRequest, MembershipRequest
+
 
 class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,4 +21,15 @@ class VolunteerSerializer(serializers.ModelSerializer):
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
+        fields = '__all__'
+
+class FriendshipRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendshipRequest
+        fields = '__all__'
+
+
+class MembershipRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MembershipRequest
         fields = '__all__'

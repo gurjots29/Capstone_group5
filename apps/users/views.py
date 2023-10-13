@@ -1,6 +1,8 @@
 from rest_framework import generics
-from .models import Badge, Skill, Volunteer, Organization
-from .serializers import BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer
+from .models import Badge, Skill, Volunteer, Organization, FriendshipRequest, MembershipRequest
+from .serializers import BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer, \
+    FriendshipRequestSerializer, MembershipRequestSerializer
+
 
 class BadgeListCreateView(generics.ListCreateAPIView):
     queryset = Badge.objects.all()
@@ -22,3 +24,11 @@ class VolunteerDetailView(generics.RetrieveAPIView):
 class OrganizationListCreateView(generics.ListCreateAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
+
+class FriendshipRequestView(generics.ListCreateAPIView):
+    queryset = FriendshipRequest.objects.all()
+    serializer_class = FriendshipRequestSerializer
+
+class MembershipRequestView(generics.ListCreateAPIView):
+    queryset = MembershipRequest.objects.all()
+    serializer_class = MembershipRequestSerializer

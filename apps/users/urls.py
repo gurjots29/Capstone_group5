@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import BadgeListCreateView, SkillListCreateView, VolunteerListCreateView, OrganizationListCreateView,VolunteerDetailView
+from .views import BadgeListCreateView, SkillListCreateView, VolunteerListCreateView, OrganizationListCreateView, \
+    VolunteerDetailView, FriendshipRequestView, MembershipRequestView
 
 urlpatterns = [
     path('badges/', BadgeListCreateView.as_view(), name='badge-list-create'),
@@ -7,4 +8,6 @@ urlpatterns = [
     path('volunteers/', VolunteerListCreateView.as_view(), name='volunteer-list-create'),
     path('volunteers/<int:pk>/', VolunteerDetailView.as_view(), name='volunteer-detail'),
     path('organizations/', OrganizationListCreateView.as_view(), name='organization-list-create'),
+    path('friendrequest/', FriendshipRequestView.as_view(), name='friend-list-create'),
+    path('memberrequest/', MembershipRequestView.as_view(), name='friend-list-create'),
 ]
