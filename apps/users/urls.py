@@ -7,4 +7,3 @@ urlpatterns = [
     path('volunteers/', VolunteerListCreateView.as_view(), name='volunteer-list-create'),
     path('volunteers/<int:pk>/', VolunteerDetailView.as_view(), name='volunteer-detail'),
     path('organizations/', OrganizationListCreateView.as_view(), name='organization-list-create'),
-]
