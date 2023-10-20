@@ -24,7 +24,8 @@ class Volunteer(models.Model):
     interests = models.TextField()
     badges = models.ManyToManyField(Badge, related_name='volunteers', blank=True)
     skills = models.ManyToManyField(Skill, related_name='volunteers', blank=True)
-  
+    location = models.CharField(max_length=255, blank=True, null=True)  # Consider using a more detailed location model or a library like django-cities for more granularity
+    date_of_birth = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
