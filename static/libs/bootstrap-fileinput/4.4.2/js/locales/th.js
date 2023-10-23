@@ -25,8 +25,13 @@
         msgNoFilesSelected: '',
         msgCancelled: 'ยกเลิก',
         msgZoomModalHeading: 'ตัวอย่างละเอียด',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: 'ไฟล์ "{name}" (<b>{size} KB</b>) มีขนาดเกินที่ระบบอนุญาตที่ <b>{maxSize} KB</b>, กรุณาลองใหม่อีกครั้ง!',
         msgFilesTooLess: 'คุณต้องเลือกไฟล์จำนวนอย่างน้อย <b>{n}</b> {files} เพื่ออัพโหลด, กรุณาลองใหม่อีกครั้ง!',
         msgFilesTooMany: 'ไฟล์ที่คุณเลือกมีจำนวน <b>({n})</b> ซึ่งเกินกว่าที่ระบบอนุญาตที่ <b>{m}</b>, กรุณาลองใหม่อีกครั้ง!',
@@ -35,6 +40,7 @@
         msgFileNotReadable: 'ไม่สามารถอ่านไฟล์ "{name}" ได้',
         msgFilePreviewAborted: 'ไฟล์ "{name}" ไม่อนุญาตให้ดูตัวอย่าง',
         msgFilePreviewError: 'พบปัญหาในการดูตัวอย่างไฟล์ "{name}".',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: 'ไฟล์ "{name}" เป็นประเภทไฟล์ที่ไม่ถูกต้อง, อนุญาตเฉพาะไฟล์ประเภท "{types}"',
         msgInvalidFileExtension: 'ไฟล์ "{name}" เป็น extension ที่ไมถูกต้อง, อนุญาตเฉพาะไฟล์ extension "{extensions}"',
@@ -52,6 +58,25 @@
         msgUploadThreshold: 'Processing...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: 'ไฟล์ "{name}" เป็นประเภทไฟล์ที่ไม่ถูกต้อง, อนุญาตเฉพาะไฟล์ประเภท "{types}"',
+        msgInvalidFileExtension: 'ไฟล์ "{name}" เป็น extension ที่ไมถูกต้อง, อนุญาตเฉพาะไฟล์ extension "{extensions}"',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: 'อัปโหลดไฟล์ถูกยกเลิก',
+        msgUploadThreshold: 'Processing...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'ข้อผิดพลาดในการตรวจสอบ',
         msgLoading: 'กำลังโหลดไฟล์ {index} จาก {files} &hellip;',
@@ -64,6 +89,7 @@
         msgImageHeightLarge: 'ความสูงของไฟล์ภาพ "{name}" ไม่เกิน {size} พิกเซล.',
         msgImageResizeError: 'ไม่สามารถรับขนาดภาพเพื่อปรับขนาด',
         msgImageResizeException: 'ข้อผิดพลาดขณะปรับขนาดภาพ<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -72,6 +98,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Drag & drop ไฟล์ตรงนี้ &hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

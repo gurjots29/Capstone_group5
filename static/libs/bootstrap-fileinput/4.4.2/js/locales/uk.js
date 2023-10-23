@@ -26,8 +26,13 @@
         msgNoFilesSelected: '',
         msgCancelled: 'Cкасовано',
         msgZoomModalHeading: 'Детальний превью',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: 'Файл "{name}" (<b>{size} KB</b>) перевищує максимальний розмір <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'Ви повинні вибрати як мінімум <b>{n}</b> {files} для загрузки.',
         msgFilesTooMany: 'Кількість вибраних файлів <b>({n})</b> перевищує максимально допустиму кількість <b>{m}</b>.',
@@ -36,6 +41,7 @@
         msgFileNotReadable: 'Файл "{name}" неможливо прочитати.',
         msgFilePreviewAborted: 'Перегляд скасований для файла "{name}".',
         msgFilePreviewError: 'Сталася помилка під час читання файла "{name}".',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: 'Заборонений тип файла для "{name}". Тільки "{types}" дозволені.',
         msgInvalidFileExtension: 'Заборонене розширення для файла "{name}". Тільки "{extensions}" дозволені.',
@@ -53,6 +59,25 @@
         msgUploadThreshold: 'Processing...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: 'Заборонений тип файла для "{name}". Тільки "{types}" дозволені.',
+        msgInvalidFileExtension: 'Заборонене розширення для файла "{name}". Тільки "{extensions}" дозволені.',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: 'Вивантаження файлу перервана',
+        msgUploadThreshold: 'Processing...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Помилка перевірки',
         msgLoading: 'Загрузка файла {index} із {files} &hellip;',
@@ -65,6 +90,7 @@
         msgImageHeightLarge: 'Висота зображення "{name}" не може перевищувати {size} px.',
         msgImageResizeError: 'Не вдалося розміри зображення, щоб змінити розмір.',
         msgImageResizeException: 'Помилка при зміні розміру зображення.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -73,6 +99,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Перетягніть файли сюди &hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

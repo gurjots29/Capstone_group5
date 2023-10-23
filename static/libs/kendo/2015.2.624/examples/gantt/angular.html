@@ -31,6 +31,7 @@
 
 <script>
     angular.module("KendoDemo", ["kendo.directives"])
+<<<<<<< HEAD
         .controller("MyCtrl", function($scope) {
             var serviceRoot = "http://demos.telerik.com/kendo-ui/service";
             var tasksDataSource = new kendo.data.GanttDataSource({
@@ -62,6 +63,39 @@
                     model: {
                         id: "id",
                         fields: {
+=======
+        .controller("MyCtrl", function($scope) {
+            var serviceRoot = "http://demos.telerik.com/kendo-ui/service";
+            var tasksDataSource = new kendo.data.GanttDataSource({
+                batch: false,
+                transport: {
+                    read: {
+                        url: serviceRoot + "/GanttTasks",
+                        dataType: "jsonp"
+                    },
+                    update: {
+                        url: serviceRoot + "/GanttTasks/Update",
+                        dataType: "jsonp"
+                    },
+                    destroy: {
+                        url: serviceRoot + "/GanttTasks/Destroy",
+                        dataType: "jsonp"
+                    },
+                    create: {
+                        url: serviceRoot + "/GanttTasks/Create",
+                        dataType: "jsonp"
+                    },
+                    parameterMap: function(options, operation) {
+                        if (operation !== "read") {
+                            return { models: kendo.stringify(options.models || [options]) };
+                        }
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                             id: { from: "ID", type: "number" },
                             orderId: { from: "OrderID", type: "number", validation: { required: true } },
                             parentId: { from: "ParentID", type: "number", defaultValue: null, validation: { required: true } },
@@ -70,6 +104,7 @@
                             title: { from: "Title", defaultValue: "", type: "string" },
                             percentComplete: { from: "PercentComplete", type: "number" },
                             summary: { from: "Summary", type: "boolean" },
+<<<<<<< HEAD
                             expanded: { from: "Expanded", type: "boolean", defaultValue: true }
                         }
                     }
@@ -113,6 +148,51 @@
             });
 
             $scope.ganttOptions = {
+=======
+                            expanded: { from: "Expanded", type: "boolean", defaultValue: true }
+                        }
+                    }
+                }
+            });
+
+            var dependenciesDataSource = new kendo.data.GanttDependencyDataSource({
+                transport: {
+                    read: {
+                        url: serviceRoot + "/GanttDependencies",
+                        dataType: "jsonp"
+                    },
+                    update: {
+                        url: serviceRoot + "/GanttDependencies/Update",
+                        dataType: "jsonp"
+                    },
+                    destroy: {
+                        url: serviceRoot + "/GanttDependencies/Destroy",
+                        dataType: "jsonp"
+                    },
+                    create: {
+                        url: serviceRoot + "/GanttDependencies/Create",
+                        dataType: "jsonp"
+                    },
+                    parameterMap: function(options, operation) {
+                        if (operation !== "read" && options.models) {
+                            return { models: kendo.stringify(options.models) };
+                        }
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            predecessorId: { from: "PredecessorID", type: "number" },
+                            successorId: { from: "SuccessorID", type: "number" },
+                            type: { from: "Type", type: "number" }
+                        }
+                    }
+                }
+            });
+
+            $scope.ganttOptions = {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 dataSource: tasksDataSource,
                 dependencies: dependenciesDataSource,
                 views: [
@@ -129,6 +209,7 @@
                 height: 400,
 
                 showWorkHours: false,
+<<<<<<< HEAD
                 showWorkDays: false
             };
         });
@@ -139,6 +220,18 @@
         if (gantt) {
             gantt.refresh();
         }
+=======
+                showWorkDays: false
+            };
+        });
+
+    $(document).bind("kendo:skinChange", function() {
+        var gantt = $("div [kendo-gantt]").data("kendoGantt");
+
+        if (gantt) {
+            gantt.refresh();
+        }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     });
 </script>
 

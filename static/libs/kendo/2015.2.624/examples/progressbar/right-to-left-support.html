@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     <div class="k-rtl demo-section k-header">
         <h4>ProgressBar</h4>
@@ -75,6 +76,61 @@
             text-align: right;
         }
     </style> 
+=======
+    <div id="example">
+    <div class="k-rtl demo-section k-header">
+        <h4>ProgressBar</h4>
+        <div id="progressBar"></div>
+        <button id="startProgress" class="k-button k-primary">Start progress</button>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#progressBar").kendoProgressBar({ 
+                type: "percent",
+                animation: {
+                    duration: 600
+                },
+                complete: onComplete
+            });
+        });
+
+        $("#startProgress").click(function () {
+            if (!$(this).hasClass("k-state-disabled")) {
+                $(this).addClass("k-state-disabled");
+
+                progress();
+            }
+        });
+
+        function onComplete() {
+            $("#startProgress").removeClass("k-state-disabled").text("Restart Progress");
+        }
+
+        function progress() {
+            var pb = $("#progressBar").data("kendoProgressBar");
+            pb.value(0);
+
+            var interval = setInterval(function () {
+                if (pb.value() < 100) {
+                    pb.value(pb.value() + 10);
+                } else {
+                    clearInterval(interval);
+                }
+            }, 100);
+        }
+    </script>
+
+    <style>
+        #progressBar {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .demo-section {
+            text-align: right;
+        }
+    </style> 
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 </div>
 
     

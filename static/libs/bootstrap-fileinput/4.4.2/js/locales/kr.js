@@ -25,7 +25,11 @@
         msgNoFilesSelected: '선택한 파일이 없습니다.',
         msgCancelled: '취소되었습니다.',
         msgZoomModalHeading: '자세한 미리보기',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooSmall: '파일 "{name}" (<b>{size} KB</b>)이 너무 작습니다. <b>{minSize} KB</b>보다 용량이 커야 합니다..',
         msgSizeTooLarge: '파일 "{name}" (<b>{size} KB</b>)이 너무 큽니다. 허용 파일 사이즈는 <b>{maxSize} KB</b>.입니다.',
         msgFilesTooLess: '업로드하기 위해 최소 <b>{n}</b> {files}개의 파일을 선택해야 합니다.',
@@ -50,8 +54,13 @@
         },
         msgUploadAborted: '파일 업로드가 중단되었습니다.',
         msgUploadThreshold: '업로드 중...',
+<<<<<<< HEAD
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: '업로드 가능 데이터가 존재하지 않습니다.',
         msgValidationError: '유효성 오류',
         msgLoading: '파일 {files} 중 {index}번째를 로딩하고 있습니다. &hellip;',
@@ -64,6 +73,7 @@
         msgImageHeightLarge: '이미지 파일 "{name}"의 세로는 최대 {size} px를 넘을수 없습니다.',
         msgImageResizeError: '이미지의 사이즈를 재조정을 위한 이미지 사이즈를 가져올 수 없습니다.',
         msgImageResizeException: '이미지 사이즈 재조정이 다음 이유로 실패했습니다.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -72,6 +82,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: '파일을 여기에 드래그인 드랍을 하십시요 &hellip;',
         dropZoneClickTitle: '<br>(또는 {files} 선택을 위해 클릭하십시요)',
         fileActionSettings: {

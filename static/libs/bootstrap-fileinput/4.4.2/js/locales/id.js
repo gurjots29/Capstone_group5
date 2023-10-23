@@ -26,8 +26,13 @@
         msgNoFilesSelected: '',
         msgCancelled: 'Dibatalkan',
         msgZoomModalHeading: 'Pratinjau terperinci',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: 'Berkas "{name}" (<b>{size} KB</b>) melebihi ukuran upload maksimal yaitu <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'Anda harus memilih setidaknya <b>{n}</b> {files} untuk diunggah.',
         msgFilesTooMany: '<b>({n})</b> berkas yang dipilih untuk diunggah melebihi ukuran upload maksimal yaitu <b>{m}</b>.',
@@ -36,6 +41,7 @@
         msgFileNotReadable: 'Berkas "{name}" tak dapat dibaca.',
         msgFilePreviewAborted: 'Pratinjau untuk berkas "{name}" dibatalkan.',
         msgFilePreviewError: 'Kesalahan saat membaca berkas "{name}".',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: 'Jenis berkas "{name}" tidak sah. Hanya berkas "{types}" yang didukung.',
         msgInvalidFileExtension: 'Ekstensi berkas "{name}" tidak sah. Hanya ekstensi "{extensions}" yang didukung.',
@@ -53,6 +59,25 @@
         msgUploadThreshold: 'Processing...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: 'Jenis berkas "{name}" tidak sah. Hanya berkas "{types}" yang didukung.',
+        msgInvalidFileExtension: 'Ekstensi berkas "{name}" tidak sah. Hanya ekstensi "{extensions}" yang didukung.',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: 'Pengunggahan berkas dibatalkan',
+        msgUploadThreshold: 'Processing...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Kesalahan validasi',
         msgLoading: 'Memuat {index} dari {files} berkas &hellip;',
@@ -65,6 +90,7 @@
         msgImageHeightLarge: 'Tinggi dari gambar "{name}" tak boleh melebihi {size} px.',
         msgImageResizeError: 'Tak dapat menentukan dimensi gambar untuk mengubah ukuran.',
         msgImageResizeException: 'Kesalahan saat mengubah ukuran gambar.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -73,6 +99,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Tarik dan lepaskan berkas disini &hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

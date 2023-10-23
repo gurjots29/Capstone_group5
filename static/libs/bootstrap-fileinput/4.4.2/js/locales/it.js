@@ -27,8 +27,13 @@
         msgNoFilesSelected: '',
         msgCancelled: 'Annullato',
         msgZoomModalHeading: 'Anteprima dettagliata',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: 'Il file "{name}" (<b>{size} KB</b>) eccede la dimensione massima di caricamento di <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'Devi selezionare almeno <b>{n}</b> {files} da caricare.',
         msgFilesTooMany: 'Il numero di file selezionati per il caricamento <b>({n})</b> eccede il numero massimo di file accettati <b>{m}</b>.',
@@ -37,6 +42,7 @@
         msgFileNotReadable: 'Il file "{name}" non \xE8 leggibile.',
         msgFilePreviewAborted: 'Generazione anteprima per "{name}" annullata.',
         msgFilePreviewError: 'Errore durante la lettura del file "{name}".',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: 'Tipo non valido per il file "{name}". Sono ammessi solo file di tipo "{types}".',
         msgInvalidFileExtension: 'Estensione non valida per il file "{name}". Sono ammessi solo file con estensione "{extensions}".',
@@ -54,6 +60,25 @@
         msgUploadThreshold: 'Processing...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: 'Tipo non valido per il file "{name}". Sono ammessi solo file di tipo "{types}".',
+        msgInvalidFileExtension: 'Estensione non valida per il file "{name}". Sono ammessi solo file con estensione "{extensions}".',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: 'Il caricamento del file è stata interrotta',
+        msgUploadThreshold: 'Processing...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Errore di convalida',
         msgLoading: 'Caricamento file {index} di {files}&hellip;',
@@ -66,6 +91,7 @@
         msgImageHeightLarge: 'Altezza di file immagine "{name}" non può superare {size} px.',
         msgImageResizeError: "Impossibile ottenere le dimensioni dell'immagine per ridimensionare.",
         msgImageResizeException: "Errore durante il ridimensionamento dell'immagine.<pre>{errors}</pre>",
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -74,6 +100,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Trascina i file qui&hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

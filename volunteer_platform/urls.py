@@ -14,7 +14,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.users.urls')),
     path('post/', include('apps.post.urls')),
+<<<<<<< HEAD
     path('event/', include('apps.event.urls')),
+=======
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 ]
 
 if settings.DEBUG:

@@ -26,8 +26,13 @@
     <div id="scheduler"></div>
 </div>
 <script>
+<<<<<<< HEAD
     $(function () {
         $("#scheduler").kendoScheduler({
+=======
+    $(function () {
+        $("#scheduler").kendoScheduler({
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             date: new Date("2013/6/13"),
             startTime: new Date("2013/6/13 07:00 AM"),
             eventHeight: 50,
@@ -36,6 +41,7 @@
                 "timeline",
                 "timelineWeek",
                 "timelineWorkWeek",
+<<<<<<< HEAD
                 {
                     type: "timelineMonth",
                     startTime: new Date("2013/6/13 00:00 AM"),
@@ -72,6 +78,44 @@
                     model: {
                         id: "meetingID",
                         fields: {
+=======
+                {
+                    type: "timelineMonth",
+                    startTime: new Date("2013/6/13 00:00 AM"),
+                    majorTick: 1440
+                }
+            ],
+            timezone: "Etc/UTC",
+            dataSource: {
+                batch: true,
+                transport: {
+                    read: {
+                        url: "http://demos.telerik.com/kendo-ui/service/meetings",
+                        dataType: "jsonp"
+                    },
+                    update: {
+                        url: "http://demos.telerik.com/kendo-ui/service/meetings/update",
+                        dataType: "jsonp"
+                    },
+                    create: {
+                        url: "http://demos.telerik.com/kendo-ui/service/meetings/create",
+                        dataType: "jsonp"
+                    },
+                    destroy: {
+                        url: "http://demos.telerik.com/kendo-ui/service/meetings/destroy",
+                        dataType: "jsonp"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation !== "read" && options.models) {
+                            return { models: kendo.stringify(options.models) };
+                        }
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "meetingID",
+                        fields: {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                             meetingID: { from: "MeetingID", type: "number" },
                             title: { from: "Title", defaultValue: "No title", validation: { required: true } },
                             start: { type: "date", from: "Start" },
@@ -84,6 +128,7 @@
                             recurrenceException: { from: "RecurrenceException" },
                             roomId: { from: "RoomID", nullable: true },
                             attendees: { from: "Attendees", nullable: true },
+<<<<<<< HEAD
                             isAllDay: { type: "boolean", from: "IsAllDay" }
                         }
                     }
@@ -95,15 +140,34 @@
             },
             resources: [
                 {
+=======
+                            isAllDay: { type: "boolean", from: "IsAllDay" }
+                        }
+                    }
+                }
+            },
+            group: {
+                resources: ["Rooms", "Attendees"],
+                orientation: "vertical"
+            },
+            resources: [
+                {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     field: "roomId",
                     name: "Rooms",
                     dataSource: [
                         { text: "Meeting Room 101", value: 1, color: "#6eb3fa" },
                         { text: "Meeting Room 201", value: 2, color: "#f58a8a" }
                     ],
+<<<<<<< HEAD
                     title: "Room"
                 },
                 {
+=======
+                    title: "Room"
+                },
+                {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     field: "attendees",
                     name: "Attendees",
                     dataSource: [
@@ -112,10 +176,17 @@
                         { text: "Charlie", value: 3, color: "#56ca85" }
                     ],
                     multiple: true,
+<<<<<<< HEAD
                     title: "Attendees"
                 }
             ]
         });
+=======
+                    title: "Attendees"
+                }
+            ]
+        });
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     });
 </script>
 

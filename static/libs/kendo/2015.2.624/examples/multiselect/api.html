@@ -23,11 +23,19 @@
         <a class="offline-button" href="../index.html">Back</a>
     
     <div id="example">
+<<<<<<< HEAD
     
     <div class="demo-section k-header">
         <select id="movies" data-placeholder="Select movie..."></select>
     </div>
     
+=======
+    
+    <div class="demo-section k-header">
+        <select id="movies" data-placeholder="Select movie..."></select>
+    </div>
+    
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     <div class="box wide">
         <div class="box-col">
         <h4>API Functions</h4>
@@ -88,8 +96,13 @@
         {text: "The Godfather: Part II", value:"9"},
         {text: "The Shawshank Redemption", value:"10"},
         {text: "The Shawshank Redemption 2", value:"11"}
+<<<<<<< HEAD
         ];
 
+=======
+        ];
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         $("#movies").kendoMultiSelect({
             dataTextField: "text",
             dataValueField: "value",
@@ -98,8 +111,13 @@
 
         $("#filter").kendoDropDownList({
             change: filterTypeOnChanged
+<<<<<<< HEAD
         });
 
+=======
+        });
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         var multiSelect = $("#movies").data("kendoMultiSelect"),
             setValue = function(e) {
                 if (e.type != "keypress" || kendo.keys.ENTER == e.keyCode) {

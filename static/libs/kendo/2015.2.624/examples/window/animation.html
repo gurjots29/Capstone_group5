@@ -54,6 +54,7 @@
             <script>
                 function onClose() {
                     $("#undo").fadeIn(300);
+<<<<<<< HEAD
                 }
 
                 $(document).ready(function () {
@@ -99,6 +100,53 @@
                     }
 
                     initWindow();
+=======
+                }
+
+                $(document).ready(function () {
+                    var original = $("#window").clone(true);
+
+                    $(".configuration input").change(function () {
+                        var clone = original.clone(true);
+
+                        $("#undo").hide();
+                        $("#window").data("kendoWindow").destroy();
+
+                        setTimeout(function () {
+                            $("#example").append(clone);
+                            initWindow();
+                        }, 200);
+                    });
+
+                    var getEffects = function () {
+                        return (($("#expand")[0].checked ? "expand:vertical " : "") +
+                                ($("#opacity")[0].checked ? "fadeIn" : "")) || false;
+                    };
+
+                    function initWindow() {
+                        var windowOptions = {
+                            width: "500px",
+                            title: "EGG CHAIR",
+                            visible: false,
+                            close: onClose
+                        };
+
+                        if (!$("#default")[0].checked)
+                            windowOptions.animation = { open: { effects: getEffects() }, close: { effects: getEffects(), reverse: true} };
+
+                        $("#window").kendoWindow(windowOptions);
+
+                        $("#undo")
+                            .bind("click", function () {
+                                $("#window").data("kendoWindow").open();
+                                $("#undo").fadeOut(300);
+                            });
+
+                        $("#window").data("kendoWindow").open();
+                    }
+
+                    initWindow();
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 });
             </script>
 

@@ -25,7 +25,11 @@
         msgNoFilesSelected: 'Brak zaznaczonych plików',
         msgCancelled: 'Odwołany',
         msgZoomModalHeading: 'Szczegółowy podgląd',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooSmall: 'Plik "{name}" (<b>{size} KB</b>) jest zbyt mały i musi być większy niż <b>{minSize} KB</b>.',
         msgSizeTooLarge: 'Plik o nazwie "{name}" (<b>{size} KB</b>) przekroczył maksymalną dopuszczalną wielkość pliku wynoszącą <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'Minimalna liczba plików do wgrania: <b>{n}</b>.',
@@ -40,8 +44,13 @@
         msgInvalidFileExtension: 'Złe rozszerzenie dla pliku "{name}". Tylko następujące rozszerzenia plików są obsługiwane: "{extensions}".',
         msgUploadAborted: 'Przesyłanie pliku zostało przerwane',
         msgUploadThreshold: 'Przetwarzanie...',
+<<<<<<< HEAD
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Błąd walidacji',
         msgLoading: 'Wczytywanie pliku {index} z {files} &hellip;',
@@ -54,6 +63,7 @@
         msgImageHeightLarge: 'Wysokość pliku obrazu "{name}" nie może przekraczać {size} px.',
         msgImageResizeError: 'Nie udało się uzyskać wymiaru obrazu, aby zmienić rozmiar.',
         msgImageResizeException: 'Błąd podczas zmiany rozmiaru obrazu.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -62,6 +72,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Przeciągnij i upuść pliki tutaj &hellip;',
         dropZoneClickTitle: '<br>(lub kliknij tutaj i wybierz {files} z komputera)',
         fileActionSettings: {

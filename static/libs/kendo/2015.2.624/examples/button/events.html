@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     
         <div id="example">
 
@@ -70,6 +71,56 @@
                     margin-right: 10px;
                 }
             </style>
+=======
+    
+        <div id="example">
+
+            <div class="demo-section k-header">
+                <h4>Buttons</h4>
+                <button type="button" id="textButton">Text Button</button>
+                <span id="refreshButton">Refresh Button</span>
+                <a id="disabledButton">Disabled Button</a>
+            
+                <p class="demo-hint">The disabled button will not fire click events.</p>
+            </div>
+
+            <div class="box">                
+                <h4>Console log</h4>
+                <div class="console"></div>
+            </div>
+
+            <script>
+                $(document).ready(function() {
+
+                    function onClick(e) {
+                        kendoConsole.log("event :: click (" + $(e.event.target).closest(".k-button").attr("id") + ")" );
+                    }
+
+                    $("#textButton").kendoButton({
+                        click: onClick
+                    });
+
+                    $("#refreshButton").kendoButton({
+                        icon: "refresh",
+                        click: onClick
+                    });
+
+                    $("#disabledButton").kendoButton({
+                        enable: false,
+                        click: onClick
+                    });
+                });
+            </script>
+            
+            <style>
+                .demo-section {
+                    line-height: 4em;
+                }
+                .demo-section .k-button {
+                    margin-right: 10px;
+                }
+            </style>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         </div>
 
     

@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     <div>
         <div data-role="treemap"
@@ -64,6 +65,50 @@
         $(document).ready(treeMap)
     </script>
 </div>
+=======
+    <div id="example">
+    <div>
+        <div data-role="treemap"
+             data-text-field="name"
+             data-value-field="value"
+             data-bind="
+                source: populationUSA,
+                events: { dataBound: onDataBound }"
+             style="height: 600px;">
+        </div>
+    </div>
+    
+    <div class="box wide">
+        <h4>Console</h4>
+        <div class="console"></div>
+    </div>
+    <script>
+        function treeMap() {
+            var viewModel = kendo.observable({
+                onDataBound: function (e) {
+                    kendoConsole.log("Data Bound");
+                },
+                populationUSA: new kendo.data.HierarchicalDataSource({
+                    transport: {
+                        read: {
+                            url: "../content/dataviz/js/population-usa.json",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            children: "items"
+                        }
+                    }
+                })
+            });
+            kendo.bind($("#example"), viewModel);
+        }
+
+        $(document).ready(treeMap)
+    </script>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

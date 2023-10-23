@@ -51,6 +51,7 @@
                 },{
                     "value": 8,
                     "text": "Seafood"
+<<<<<<< HEAD
                 }];
 
                 $(document).ready(function () {
@@ -85,6 +86,42 @@
                             { command: "destroy", title: " ", width: "150px"}],
                         editable: true
                     });
+=======
+                }];
+
+                $(document).ready(function () {
+                    var dataSource = new kendo.data.DataSource({
+                        pageSize: 20,
+                        data: products,
+                        autoSync: true,
+                        schema: {
+                            model: {
+                                id: "ProductID",
+                                fields: {
+                                    ProductID: { editable: false, nullable: true },
+                                    ProductName: { validation: { required: true} },
+                                    CategoryID: { field: "CategoryID", type: "number", defaultValue: 1 },
+                                    UnitPrice: { type: "number", validation: { required: true, min: 1} }
+                                }
+                            }
+                        }
+                    });
+
+                    $("#grid").kendoGrid({
+                        dataSource: dataSource,
+                        filterable: true,
+                        groupable: true,
+                        pageable: true,
+                        height: 540,
+                        toolbar: ["create"],
+                        columns: [
+                            { field: "ProductName", title: "Product Name" },
+                            { field: "CategoryID", width: "200px", values: categories, title: "Category" },
+                            { field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: "200px" },
+                            { command: "destroy", title: " ", width: "150px"}],
+                        editable: true
+                    });
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 });
             </script>
         </div>

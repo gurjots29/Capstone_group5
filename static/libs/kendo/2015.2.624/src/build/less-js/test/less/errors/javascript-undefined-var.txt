@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 NameError: variable @b is undefined in {path}javascript-undefined-var.less on line 2, column 15:
 1 .scope {
 2     @a: `@{b}`;
 3 }
+=======
+NameError: variable @b is undefined in {path}javascript-undefined-var.less on line 2, column 15:
+1 .scope {
+2     @a: `@{b}`;
+3 }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d

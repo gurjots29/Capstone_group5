@@ -60,6 +60,7 @@ var wysihtml5 = {
   SPACE_KEY:      32,
   DELETE_KEY:     46
 };
+<<<<<<< HEAD
 ;/**
  * Rangy, a cross-browser JavaScript range and selection library
  * http://code.google.com/p/rangy/
@@ -504,6 +505,452 @@ var wysihtml5 = {
 
     /*----------------------------------------------------------------------------------------------------------------*/
     
+=======
+;/**
+ * Rangy, a cross-browser JavaScript range and selection library
+ * http://code.google.com/p/rangy/
+ *
+ * Copyright 2014, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3alpha.20140804
+ * Build date: 4 August 2014
+ */
+
+(function(factory, global) {
+    if (typeof define == "function" && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(factory);
+/*
+    TODO: look into this properly.
+    
+    } else if (typeof exports == "object") {
+        // Node/CommonJS style for Browserify
+        module.exports = factory;
+*/
+    } else {
+        // No AMD or CommonJS support so we place Rangy in a global variable
+        global.rangy = factory();
+    }
+})(function() {
+
+    var OBJECT = "object", FUNCTION = "function", UNDEFINED = "undefined";
+
+    // Minimal set of properties required for DOM Level 2 Range compliance. Comparison constants such as START_TO_START
+    // are omitted because ranges in KHTML do not have them but otherwise work perfectly well. See issue 113.
+    var domRangeProperties = ["startContainer", "startOffset", "endContainer", "endOffset", "collapsed",
+        "commonAncestorContainer"];
+
+    // Minimal set of methods required for DOM Level 2 Range compliance
+    var domRangeMethods = ["setStart", "setStartBefore", "setStartAfter", "setEnd", "setEndBefore",
+        "setEndAfter", "collapse", "selectNode", "selectNodeContents", "compareBoundaryPoints", "deleteContents",
+        "extractContents", "cloneContents", "insertNode", "surroundContents", "cloneRange", "toString", "detach"];
+
+    var textRangeProperties = ["boundingHeight", "boundingLeft", "boundingTop", "boundingWidth", "htmlText", "text"];
+
+    // Subset of TextRange's full set of methods that we're interested in
+    var textRangeMethods = ["collapse", "compareEndPoints", "duplicate", "moveToElementText", "parentElement", "select",
+        "setEndPoint", "getBoundingClientRect"];
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    // Trio of functions taken from Peter Michaux's article:
+    // http://peter.michaux.ca/articles/feature-detection-state-of-the-art-browser-scripting
+    function isHostMethod(o, p) {
+        var t = typeof o[p];
+        return t == FUNCTION || (!!(t == OBJECT && o[p])) || t == "unknown";
+    }
+
+    function isHostObject(o, p) {
+        return !!(typeof o[p] == OBJECT && o[p]);
+    }
+
+    function isHostProperty(o, p) {
+        return typeof o[p] != UNDEFINED;
+    }
+
+    // Creates a convenience function to save verbose repeated calls to tests functions
+    function createMultiplePropertyTest(testFunc) {
+        return function(o, props) {
+            var i = props.length;
+            while (i--) {
+                if (!testFunc(o, props[i])) {
+                    return false;
+                }
+            }
+            return true;
+        };
+    }
+
+    // Next trio of functions are a convenience to save verbose repeated calls to previous two functions
+    var areHostMethods = createMultiplePropertyTest(isHostMethod);
+    var areHostObjects = createMultiplePropertyTest(isHostObject);
+    var areHostProperties = createMultiplePropertyTest(isHostProperty);
+
+    function isTextRange(range) {
+        return range && areHostMethods(range, textRangeMethods) && areHostProperties(range, textRangeProperties);
+    }
+
+    function getBody(doc) {
+        return isHostObject(doc, "body") ? doc.body : doc.getElementsByTagName("body")[0];
+    }
+
+    var modules = {};
+
+    var api = {
+        version: "1.3alpha.20140804",
+        initialized: false,
+        supported: true,
+
+        util: {
+            isHostMethod: isHostMethod,
+            isHostObject: isHostObject,
+            isHostProperty: isHostProperty,
+            areHostMethods: areHostMethods,
+            areHostObjects: areHostObjects,
+            areHostProperties: areHostProperties,
+            isTextRange: isTextRange,
+            getBody: getBody
+        },
+
+        features: {},
+
+        modules: modules,
+        config: {
+            alertOnFail: true,
+            alertOnWarn: false,
+            preferTextRange: false,
+            autoInitialize: (typeof rangyAutoInitialize == UNDEFINED) ? true : rangyAutoInitialize
+        }
+    };
+
+    function consoleLog(msg) {
+        if (isHostObject(window, "console") && isHostMethod(window.console, "log")) {
+            window.console.log(msg);
+        }
+    }
+
+    function alertOrLog(msg, shouldAlert) {
+        if (shouldAlert) {
+            window.alert(msg);
+        } else  {
+            consoleLog(msg);
+        }
+    }
+
+    function fail(reason) {
+        api.initialized = true;
+        api.supported = false;
+        alertOrLog("Rangy is not supported on this page in your browser. Reason: " + reason, api.config.alertOnFail);
+    }
+
+    api.fail = fail;
+
+    function warn(msg) {
+        alertOrLog("Rangy warning: " + msg, api.config.alertOnWarn);
+    }
+
+    api.warn = warn;
+
+    // Add utility extend() method
+    if ({}.hasOwnProperty) {
+        api.util.extend = function(obj, props, deep) {
+            var o, p;
+            for (var i in props) {
+                if (props.hasOwnProperty(i)) {
+                    o = obj[i];
+                    p = props[i];
+                    if (deep && o !== null && typeof o == "object" && p !== null && typeof p == "object") {
+                        api.util.extend(o, p, true);
+                    }
+                    obj[i] = p;
+                }
+            }
+            // Special case for toString, which does not show up in for...in loops in IE <= 8
+            if (props.hasOwnProperty("toString")) {
+                obj.toString = props.toString;
+            }
+            return obj;
+        };
+    } else {
+        fail("hasOwnProperty not supported");
+    }
+
+    // Test whether Array.prototype.slice can be relied on for NodeLists and use an alternative toArray() if not
+    (function() {
+        var el = document.createElement("div");
+        el.appendChild(document.createElement("span"));
+        var slice = [].slice;
+        var toArray;
+        try {
+            if (slice.call(el.childNodes, 0)[0].nodeType == 1) {
+                toArray = function(arrayLike) {
+                    return slice.call(arrayLike, 0);
+                };
+            }
+        } catch (e) {}
+
+        if (!toArray) {
+            toArray = function(arrayLike) {
+                var arr = [];
+                for (var i = 0, len = arrayLike.length; i < len; ++i) {
+                    arr[i] = arrayLike[i];
+                }
+                return arr;
+            };
+        }
+
+        api.util.toArray = toArray;
+    })();
+
+
+    // Very simple event handler wrapper function that doesn't attempt to solve issues such as "this" handling or
+    // normalization of event properties
+    var addListener;
+    if (isHostMethod(document, "addEventListener")) {
+        addListener = function(obj, eventType, listener) {
+            obj.addEventListener(eventType, listener, false);
+        };
+    } else if (isHostMethod(document, "attachEvent")) {
+        addListener = function(obj, eventType, listener) {
+            obj.attachEvent("on" + eventType, listener);
+        };
+    } else {
+        fail("Document does not have required addEventListener or attachEvent method");
+    }
+
+    api.util.addListener = addListener;
+
+    var initListeners = [];
+
+    function getErrorDesc(ex) {
+        return ex.message || ex.description || String(ex);
+    }
+
+    // Initialization
+    function init() {
+        if (api.initialized) {
+            return;
+        }
+        var testRange;
+        var implementsDomRange = false, implementsTextRange = false;
+
+        // First, perform basic feature tests
+
+        if (isHostMethod(document, "createRange")) {
+            testRange = document.createRange();
+            if (areHostMethods(testRange, domRangeMethods) && areHostProperties(testRange, domRangeProperties)) {
+                implementsDomRange = true;
+            }
+        }
+
+        var body = getBody(document);
+        if (!body || body.nodeName.toLowerCase() != "body") {
+            fail("No body element found");
+            return;
+        }
+
+        if (body && isHostMethod(body, "createTextRange")) {
+            testRange = body.createTextRange();
+            if (isTextRange(testRange)) {
+                implementsTextRange = true;
+            }
+        }
+
+        if (!implementsDomRange && !implementsTextRange) {
+            fail("Neither Range nor TextRange are available");
+            return;
+        }
+
+        api.initialized = true;
+        api.features = {
+            implementsDomRange: implementsDomRange,
+            implementsTextRange: implementsTextRange
+        };
+
+        // Initialize modules
+        var module, errorMessage;
+        for (var moduleName in modules) {
+            if ( (module = modules[moduleName]) instanceof Module ) {
+                module.init(module, api);
+            }
+        }
+
+        // Call init listeners
+        for (var i = 0, len = initListeners.length; i < len; ++i) {
+            try {
+                initListeners[i](api);
+            } catch (ex) {
+                errorMessage = "Rangy init listener threw an exception. Continuing. Detail: " + getErrorDesc(ex);
+                consoleLog(errorMessage);
+            }
+        }
+    }
+
+    // Allow external scripts to initialize this library in case it's loaded after the document has loaded
+    api.init = init;
+
+    // Execute listener immediately if already initialized
+    api.addInitListener = function(listener) {
+        if (api.initialized) {
+            listener(api);
+        } else {
+            initListeners.push(listener);
+        }
+    };
+
+    var shimListeners = [];
+
+    api.addShimListener = function(listener) {
+        shimListeners.push(listener);
+    };
+
+    function shim(win) {
+        win = win || window;
+        init();
+
+        // Notify listeners
+        for (var i = 0, len = shimListeners.length; i < len; ++i) {
+            shimListeners[i](win);
+        }
+    }
+
+    api.shim = api.createMissingNativeApi = shim;
+
+    function Module(name, dependencies, initializer) {
+        this.name = name;
+        this.dependencies = dependencies;
+        this.initialized = false;
+        this.supported = false;
+        this.initializer = initializer;
+    }
+
+    Module.prototype = {
+        init: function() {
+            var requiredModuleNames = this.dependencies || [];
+            for (var i = 0, len = requiredModuleNames.length, requiredModule, moduleName; i < len; ++i) {
+                moduleName = requiredModuleNames[i];
+
+                requiredModule = modules[moduleName];
+                if (!requiredModule || !(requiredModule instanceof Module)) {
+                    throw new Error("required module '" + moduleName + "' not found");
+                }
+
+                requiredModule.init();
+
+                if (!requiredModule.supported) {
+                    throw new Error("required module '" + moduleName + "' not supported");
+                }
+            }
+            
+            // Now run initializer
+            this.initializer(this);
+        },
+        
+        fail: function(reason) {
+            this.initialized = true;
+            this.supported = false;
+            throw new Error("Module '" + this.name + "' failed to load: " + reason);
+        },
+
+        warn: function(msg) {
+            api.warn("Module " + this.name + ": " + msg);
+        },
+
+        deprecationNotice: function(deprecated, replacement) {
+            api.warn("DEPRECATED: " + deprecated + " in module " + this.name + "is deprecated. Please use " +
+                replacement + " instead");
+        },
+
+        createError: function(msg) {
+            return new Error("Error in Rangy " + this.name + " module: " + msg);
+        }
+    };
+    
+    function createModule(isCore, name, dependencies, initFunc) {
+        var newModule = new Module(name, dependencies, function(module) {
+            if (!module.initialized) {
+                module.initialized = true;
+                try {
+                    initFunc(api, module);
+                    module.supported = true;
+                } catch (ex) {
+                    var errorMessage = "Module '" + name + "' failed to load: " + getErrorDesc(ex);
+                    consoleLog(errorMessage);
+                }
+            }
+        });
+        modules[name] = newModule;
+    }
+
+    api.createModule = function(name) {
+        // Allow 2 or 3 arguments (second argument is an optional array of dependencies)
+        var initFunc, dependencies;
+        if (arguments.length == 2) {
+            initFunc = arguments[1];
+            dependencies = [];
+        } else {
+            initFunc = arguments[2];
+            dependencies = arguments[1];
+        }
+
+        var module = createModule(false, name, dependencies, initFunc);
+
+        // Initialize the module immediately if the core is already initialized
+        if (api.initialized) {
+            module.init();
+        }
+    };
+
+    api.createCoreModule = function(name, dependencies, initFunc) {
+        createModule(true, name, dependencies, initFunc);
+    };
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    // Ensure rangy.rangePrototype and rangy.selectionPrototype are available immediately
+
+    function RangePrototype() {}
+    api.RangePrototype = RangePrototype;
+    api.rangePrototype = new RangePrototype();
+
+    function SelectionPrototype() {}
+    api.selectionPrototype = new SelectionPrototype();
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    // Wait for document to load before running tests
+
+    var docReady = false;
+
+    var loadHandler = function(e) {
+        if (!docReady) {
+            docReady = true;
+            if (!api.initialized && api.config.autoInitialize) {
+                init();
+            }
+        }
+    };
+
+    // Test whether we have window and document objects that we will need
+    if (typeof window == UNDEFINED) {
+        fail("No window found");
+        return;
+    }
+    if (typeof document == UNDEFINED) {
+        fail("No document found");
+        return;
+    }
+
+    if (isHostMethod(document, "addEventListener")) {
+        document.addEventListener("DOMContentLoaded", loadHandler, false);
+    }
+
+    // Add a fallback in case the DOMContentLoaded event isn't supported
+    addListener(window, "load", loadHandler);
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     // DOM utility methods used by Rangy
     api.createCoreModule("DomUtil", [], function(api, module) {
         var UNDEF = "undefined";
@@ -976,10 +1423,17 @@ var wysihtml5 = {
         };
 
         api.DOMException = DOMException;
+<<<<<<< HEAD
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+=======
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     // Pure JavaScript implementation of DOM Range
     api.createCoreModule("DomRange", ["DomUtil"], function(api, module) {
         var dom = api.dom;
@@ -2172,10 +2626,17 @@ var wysihtml5 = {
         });
 
         api.DomRange = Range;
+<<<<<<< HEAD
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+=======
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     // Wrappers for the browser's native DOM Range and/or TextRange implementation 
     api.createCoreModule("WrappedRange", ["DomRange"], function(api, module) {
         var WrappedRange, WrappedTextRange;
@@ -2786,10 +3247,17 @@ var wysihtml5 = {
             }
             doc = win = null;
         });
+<<<<<<< HEAD
     });
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+=======
+    });
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     // This module creates a selection object wrapper that conforms as closely as possible to the Selection specification
     // in the HTML Editing spec (http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#selections)
     api.createCoreModule("WrappedSelection", ["DomRange", "WrappedRange"], function(api, module) {
@@ -3788,6 +4256,7 @@ var wysihtml5 = {
             win = null;
         });
     });
+<<<<<<< HEAD
     
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -3807,6 +4276,27 @@ var wysihtml5 = {
  * Version: 1.3alpha.20140804
  * Build date: 4 August 2014
  */
+=======
+    
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+
+    return api;
+}, this);;/**
+ * Selection save and restore module for Rangy.
+ * Saves and restores user selections using marker invisible elements in the DOM.
+ *
+ * Part of Rangy, a cross-browser JavaScript range and selection library
+ * http://code.google.com/p/rangy/
+ *
+ * Depends on Rangy core.
+ *
+ * Copyright 2014, Tim Down
+ * Licensed under the MIT license.
+ * Version: 1.3alpha.20140804
+ * Build date: 4 August 2014
+ */
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 (function(factory, global) {
     if (typeof define == "function" && define.amd) {
         // AMD. Register as an anonymous module with a dependency on Rangy.

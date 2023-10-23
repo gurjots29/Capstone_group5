@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     
 
         <div id="example">
@@ -94,6 +95,80 @@
             </style>
         </div>
 
+=======
+    
+
+        <div id="example">
+            <div id="treelist"></div>
+
+            <script>
+                $(document).ready(function () {
+                    var crudServiceBaseUrl = "http://demos.telerik.com/kendo-ui/service";
+
+                    var dataSource = new kendo.data.TreeListDataSource({
+                            transport: {
+                                read: {
+                                    url: crudServiceBaseUrl + "/EmployeeDirectory",
+                                    dataType: "jsonp"
+                                }
+                            },
+                            schema: {
+                                model: {
+                                    id: "EmployeeId",
+                                    fields: {
+                                        EmployeeId: { type: "number", nullable: false },
+                                        parentId: { field: "ReportsTo", nullable: true }
+                                    }
+                                }
+                            }
+                        });
+
+                    $("#treelist").kendoTreeList({
+                        dataSource: dataSource,
+                        reorderable: true,
+                        resizable: true,
+                        sortable: true,
+                        filterable: true,
+                        columnMenu: true,
+                        columns: [
+                            {
+                                field: "FirstName",
+                                expandable: true,
+                                title: "First Name",
+                                locked: true,
+                                lockable: false,
+                                width: 250
+                            },
+                            {
+                                field: "LastName",
+                                title: "Last Name",
+                                locked: true,
+                                width: 200
+                            },
+                            {
+                                field: "Position",
+                                width: 400
+                            },
+                            {
+                                field: "Extension",
+                                title: "Ext",
+                                format: "{0:#}",
+                                width: 150,
+                                lockable: false
+                            }
+                        ]
+                    });
+                });
+            </script>
+
+            <style>
+                #treelist {
+                    width: 950px;
+                }
+            </style>
+        </div>
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

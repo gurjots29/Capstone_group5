@@ -27,8 +27,13 @@
         msgCancelled: '取消',
         zoomTitle: '詳細資料',
         msgZoomModalHeading: '內容預覽',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: '檔案 "{name}" (<b>{size} KB</b>) 大小超過上限 <b>{maxSize} KB</b>.',
         msgFilesTooLess: '最少必須選擇 <b>{n}</b> {files} 來上傳. ',
         msgFilesTooMany: '上傳的檔案數量 <b>({n})</b> 超過最大檔案上傳限制 <b>{m}</b>.',
@@ -37,6 +42,7 @@
         msgFileNotReadable: '文件 "{name}" 不可讀取.',
         msgFilePreviewAborted: '檔案 "{name}" 預覽中止.',
         msgFilePreviewError: '讀取 "{name}" 發生錯誤.',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: '檔案類型錯誤 "{name}". 只能使用 "{types}" 類型的檔案.',
         msgInvalidFileExtension: '附檔名錯誤 "{name}". 只能使用 "{extensions}" 的檔案.',
@@ -54,6 +60,25 @@
         msgUploadThreshold: 'Processing...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: '檔案類型錯誤 "{name}". 只能使用 "{types}" 類型的檔案.',
+        msgInvalidFileExtension: '附檔名錯誤 "{name}". 只能使用 "{extensions}" 的檔案.',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: '該文件上傳被中止',
+        msgUploadThreshold: 'Processing...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: '驗證錯誤',
         msgLoading: '載入第 {index} 個檔案，共 {files} &hellip;',
@@ -66,6 +91,7 @@
         msgImageHeightLarge: '圖檔高度"{name}"不能超過{size}像素(px).',
         msgImageResizeError: '無法獲取的圖像尺寸調整。',
         msgImageResizeException: '錯誤而調整圖像大小。<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -74,6 +100,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: '拖曳檔案至此 &hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

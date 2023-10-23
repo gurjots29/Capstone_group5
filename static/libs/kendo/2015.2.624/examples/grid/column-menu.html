@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
             
         <div id="example">
             <div id="grid"></div>
@@ -73,6 +74,59 @@
                 });
             </script>
         </div>
+=======
+            
+        <div id="example">
+            <div id="grid"></div>
+
+            <script>
+                $(document).ready(function() {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        ShipCountry: { type: "string" },
+                                        ShipName: { type: "string" },
+                                        ShipAddress: { type: "string" }                                        
+                                    }
+                                }
+                            },
+                            pageSize: 30,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        height: 550,
+                        sortable: true,
+                        filterable: true,
+                        columnMenu: true,
+                        pageable: true,
+                        columns: [ {
+                                field: "OrderID",
+                                title: "Order ID",
+                                width: 120
+                            }, {
+                                field: "ShipCountry",
+                                title: "Ship Country"
+                            }, {
+                                field: "ShipName",
+                                title: "Ship Name"
+                            },  {
+                                field: "ShipAddress",
+                                filterable: false
+                            }
+                        ]
+                    });
+                });
+            </script>
+        </div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

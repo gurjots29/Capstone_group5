@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
             <script src="../content/shared/js/orders.js"></script>
 
         <div id="example">
@@ -107,6 +108,93 @@
                 }
             </style>
         </div>
+=======
+            <script src="../content/shared/js/orders.js"></script>
+
+        <div id="example">
+
+            <div class="demo-section k-header wide">
+                <h4>Grid with single column sorting enabled</h4>
+                <div id="singleSort"></div>
+            </div>
+
+            <div class="demo-section k-header wide">
+                <h4>Grid with multiple column sorting enabled</h4>
+                <div id="multipleSort"></div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $("#singleSort").kendoGrid({
+                        dataSource: {
+                            data: orders,
+                            pageSize: 6
+                        },
+                        sortable: {
+                            mode: "single",
+                            allowUnsort: false
+                        },
+                        pageable: {
+                            buttonCount: 5
+                        },
+                        scrollable: false,
+                        columns: [
+                            {
+                                field: "ShipCountry",
+                                title: "Ship Country",
+                                width: 300
+                            },
+                            {
+                                field: "Freight",
+                                width: 300
+                            },
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:dd/MM/yyyy}"
+                            }
+                        ]
+                    });
+
+                    $("#multipleSort").kendoGrid({
+                        dataSource: {
+                            data: orders,
+                            pageSize: 6
+                        },
+                        sortable: {
+                            mode: "multiple",
+                            allowUnsort: true
+                        },
+                        pageable: {
+                            buttonCount: 5
+                        },
+                        scrollable: false,
+                        columns: [
+                            {
+                                field: "ShipCountry",
+                                title: "Ship Country",
+                                width: 300
+                            },
+                            {
+                                field: "Freight",
+                                width: 300
+                            },
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:d}"
+                            }
+                        ]
+                    });
+                });
+            </script>
+            <style>
+                .demo-section h3 {
+                    margin: 5px 0 15px 0;
+                }
+            </style>
+        </div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

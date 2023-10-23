@@ -26,6 +26,7 @@
 
 
             <div class="demo-section k-header">
+<<<<<<< HEAD
                 <ul id="fieldlist">
                     <li>
                         <label for="categories">Categories</label>
@@ -42,10 +43,29 @@
                     <li>
                        <button class="k-button k-primary" id="get">View Order</button>
                     </li>
+=======
+                <ul id="fieldlist">
+                    <li>
+                        <label for="categories">Categories</label>
+                        <input id="categories" style="width: 100%;" />
+                    </li>
+                    <li>
+                        <label for="products">Products</label>
+                        <input id="products" disabled="disabled" style="width: 100%;" />
+                    </li>
+                    <li>
+                        <label for="orders">Orders</label>
+                        <input id="orders" disabled="disabled" style="width: 100%;" />
+                    </li>
+                    <li>
+                       <button class="k-button k-primary" id="get">View Order</button>
+                    </li>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 </ul>
             </div>
 
             <style>
+<<<<<<< HEAD
                #fieldlist {
                    margin: 0;
                    padding: 0;
@@ -63,12 +83,36 @@
                    font-weight: bold;
                    text-transform: uppercase;
                    font-size: 12px;
+=======
+               #fieldlist {
+                   margin: 0;
+                   padding: 0;
+               }
+       
+               #fieldlist li {
+                   list-style: none;
+                   padding-bottom: 1.5em;
+                   text-align: left;
+               }
+       
+               #fieldlist label {
+                   display: block;
+                   padding-bottom: .3em;
+                   font-weight: bold;
+                   text-transform: uppercase;
+                   font-size: 12px;
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                }
             </style>
 
             <script>
+<<<<<<< HEAD
                 $(document).ready(function() {
                     var categories = $("#categories").kendoComboBox({
+=======
+                $(document).ready(function() {
+                    var categories = $("#categories").kendoComboBox({
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                         filter: "contains",
                         placeholder: "Select category...",
                         dataTextField: "CategoryName",
@@ -83,7 +127,11 @@
                     }).data("kendoComboBox");
 
                     var products = $("#products").kendoComboBox({
+<<<<<<< HEAD
                         autoBind: false,
+=======
+                        autoBind: false,
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                         cascadeFrom: "categories",
                         filter: "contains",
                         placeholder: "Select product...",
@@ -99,8 +147,13 @@
                     }).data("kendoComboBox");
 
                     var orders = $("#orders").kendoComboBox({
+<<<<<<< HEAD
                         autoBind: false,
                         cascadeFrom: "products",
+=======
+                        autoBind: false,
+                        cascadeFrom: "products",
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                         filter: "contains",
                         placeholder: "Select order...",
                         dataTextField: "Order.ShipCity",

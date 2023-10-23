@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     <div class="demo-section k-content">
         <div id="chart"></div>
@@ -76,6 +77,62 @@
         $(document).bind("kendo:skinChange", createChart);
     </script>
 </div>
+=======
+    <div id="example">
+    <div class="demo-section k-content">
+        <div id="chart"></div>
+    </div>
+    <script>
+        var data = [
+            {
+                "source": "Hydro",
+                "percentage": 22,
+                "explode": true
+            },
+            {
+                "source": "Solar",
+                "percentage": 2
+            },
+            {
+                "source": "Nuclear",
+                "percentage": 49
+            },
+            {
+                "source": "Wind",
+                "percentage": 27
+            }
+        ];
+
+        function createChart() {
+            $("#chart").kendoChart({
+                title: {
+                    text: "Break-up of Spain Electricity Production for 2008"
+                },
+                legend: {
+                    position: "bottom"
+                },
+                dataSource: {
+                    data: data
+                },
+                series: [{
+                    type: "pie",
+                    field: "percentage",
+                    categoryField: "source",
+                    explodeField: "explode"
+                }],
+                seriesColors: ["#03a9f4", "#ff9800", "#fad84a", "#4caf50"],
+                tooltip: {
+                    visible: true,
+                    template: "${ category } - ${ value }%"
+                }
+            });
+        }
+
+        $(document).ready(createChart);
+        $(document).bind("kendo:skinChange", createChart);
+    </script>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

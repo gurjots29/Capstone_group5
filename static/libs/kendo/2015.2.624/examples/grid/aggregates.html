@@ -31,6 +31,7 @@
                         dataSource: {
                             type: "odata",
                             transport: {
+<<<<<<< HEAD
                                 read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
                             },
                             schema:{
@@ -42,6 +43,19 @@
                                         UnitsOnOrder: { type: "number" },
                                         UnitsInStock: { type: "number" }
                                     }
+=======
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
+                            },
+                            schema:{
+                                model: {
+                                    fields: {
+                                        UnitsInStock: { type: "number" },
+                                        ProductName: { type: "string" },
+                                        UnitPrice: { type: "number" },
+                                        UnitsOnOrder: { type: "number" },
+                                        UnitsInStock: { type: "number" }
+                                    }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                                 }
                             },
                             pageSize: 7,

@@ -25,9 +25,15 @@
     
         <div id="example">
 
+<<<<<<< HEAD
             <div class="demo-section k-header">
                 <h4>Products</h4>
                 <input id="products" style="width: 100%;" />
+=======
+            <div class="demo-section k-header">
+                <h4>Products</h4>
+                <input id="products" style="width: 100%;" />
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             </div>
 
             <script>
@@ -36,6 +42,7 @@
                         filter: "startswith",
                         dataTextField: "ProductName",
                         dataValueField: "ProductID",
+<<<<<<< HEAD
                         dataSource: {
                             type: "odata",
                             serverFiltering: true,
@@ -48,6 +55,20 @@
                     });
                 });
             </script>
+=======
+                        dataSource: {
+                            type: "odata",
+                            serverFiltering: true,
+                            transport: {
+                                read: {
+                                    url: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products",
+                                }
+                            }
+                        }
+                    });
+                });
+            </script>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
         </div>
 

@@ -26,8 +26,13 @@
         msgNoFilesSelected: 'Không tập tin nào được chọn',
         msgCancelled: 'Đã hủy',
         msgZoomModalHeading: 'Chi tiết xem trước',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: 'Tập tin "{name}" (<b>{size} KB</b>) vượt quá kích thước giới hạn cho phép <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'Bạn phải chọn ít nhất <b>{n}</b> {files} để upload.',
         msgFilesTooMany: 'Số lượng tập tin upload <b>({n})</b> vượt quá giới hạn cho phép là <b>{m}</b>.',
@@ -36,6 +41,7 @@
         msgFileNotReadable: 'Không đọc được tập tin "{name}".',
         msgFilePreviewAborted: 'Đã dừng xem trước tập tin "{name}".',
         msgFilePreviewError: 'Đã xảy ra lỗi khi đọc tập tin "{name}".',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: 'Tập tin "{name}" không hợp lệ. Chỉ hỗ trợ loại tập tin "{types}".',
         msgInvalidFileExtension: 'Phần mở rộng của tập tin "{name}" không hợp lệ. Chỉ hỗ trợ phần mở rộng "{extensions}".',
@@ -53,6 +59,25 @@
         msgUploadThreshold: 'Đang xử lý...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: 'Tập tin "{name}" không hợp lệ. Chỉ hỗ trợ loại tập tin "{types}".',
+        msgInvalidFileExtension: 'Phần mở rộng của tập tin "{name}" không hợp lệ. Chỉ hỗ trợ phần mở rộng "{extensions}".',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: 'Đã dừng upload',
+        msgUploadThreshold: 'Đang xử lý...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Lỗi xác nhận',
         msgLoading: 'Đang nạp {index} tập tin trong số {files} &hellip;',
@@ -65,6 +90,7 @@
         msgImageHeightLarge: 'Chiều cao của hình ảnh "{name}" không được quá {size} px.',
         msgImageResizeError: 'Không lấy được kích thước của hình ảnh để resize.',
         msgImageResizeException: 'Resize hình ảnh bị lỗi.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -73,6 +99,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Kéo thả tập tin vào đây &hellip;',
         dropZoneClickTitle: '<br>(hoặc click để chọn {files})',
         fileActionSettings: {

@@ -24,6 +24,7 @@
     
     
         <div id="example">
+<<<<<<< HEAD
             
             <div class="demo-section k-header">
                 <h4>Select movie</h4>
@@ -32,6 +33,16 @@
             
             <div class="box wide">
                 <div class="box-col">
+=======
+            
+            <div class="demo-section k-header">
+                <h4>Select movie</h4>
+                <input id="movies" style="width: 100%;" />
+            </div>          
+            
+            <div class="box wide">
+                <div class="box-col">
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 <h4>API Functions</h4>
                 <ul class="options">
                     <li>
@@ -45,11 +56,19 @@
                     </li>
                     <li>
                         <button id="getValue" class="k-button">Get value</button> <button id="getText" class="k-button">Get text</button>
+<<<<<<< HEAD
                     </li>
                 </ul>
                 </div>
                 <div class="box-col">
                 <h4>Filter</h4>
+=======
+                    </li>
+                </ul>
+                </div>
+                <div class="box-col">
+                <h4>Filter</h4>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 <ul class="options">
                     <li>
                         <select id="filter">
@@ -61,6 +80,7 @@
                     </li>
                     <li>
                         <input id="word" value="The" class="k-textbox" style="width: 149px; margin: 0;" />
+<<<<<<< HEAD
                     </li>
                     <li>
                         <button id="find" class="k-button">Find item</button>
@@ -69,6 +89,16 @@
                 </div>
                 <div class="box-col">
                 <h4>Select</h4>
+=======
+                    </li>
+                    <li>
+                        <button id="find" class="k-button">Find item</button>
+                    </li>
+                </ul>
+                </div>
+                <div class="box-col">
+                <h4>Select</h4>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 <ul class="options">
                     <li>
                         <input id="index" value="0" class="k-textbox" style="width: 40px; margin: 0;" /> <button id="select" class="k-button">Select by index</button>
@@ -76,7 +106,11 @@
                     <li>
                         <input id="value" value="1" class="k-textbox" style="width: 40px; margin: 0;" /> <button id="setValue" class="k-button">Select by value</button>
                     </li>
+<<<<<<< HEAD
                 </ul>
+=======
+                </ul>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 </div>
             </div>
 
@@ -94,12 +128,21 @@
                         {text: "The Godfather: Part II", value:"9"},
                         {text: "The Shawshank Redemption", value:"10"},
                         {text: "The Shawshank Redemption 2", value:"11"}
+<<<<<<< HEAD
                     ];
 
                     $("#movies").kendoComboBox({
                                        dataTextField: "text",
                                        dataValueField: "value",
                                        dataSource: data,
+=======
+                    ];
+
+                    $("#movies").kendoComboBox({
+                                       dataTextField: "text",
+                                       dataValueField: "value",
+                                       dataSource: data,
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                                        height: 100
                                   })
                                   .closest(".k-widget")
@@ -107,8 +150,13 @@
 
                     $("#filter").kendoDropDownList({
                         change: filterTypeOnChanged
+<<<<<<< HEAD
                     });
 
+=======
+                    });
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     var combobox = $("#movies").data("kendoComboBox"),
                         setValue = function(e) {
                             if (e.type != "keypress" || kendo.keys.ENTER == e.keyCode)
@@ -170,10 +218,17 @@
             <style>
                 .box .k-textbox {
                     width: 40px;
+<<<<<<< HEAD
                 }
                 .k-button {
                     min-width: 80px;
                 }
+=======
+                }
+                .k-button {
+                    min-width: 80px;
+                }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             </style>
         </div>
 

@@ -26,12 +26,21 @@
         <div id="example">
             <div class="demo-section k-header">
                 <h4>Select a state in USA:</h4>
+<<<<<<< HEAD
                 <input id="states" style="width: 100%;"/>
                 <div class="demo-hint">Hint: type "m"</div>
             </div>
             <div class="box">                
                 <h4>Console log</h4>
                 <div class="console"></div>
+=======
+                <input id="states" style="width: 100%;"/>
+                <div class="demo-hint">Hint: type "m"</div>
+            </div>
+            <div class="box">                
+                <h4>Console log</h4>
+                <div class="console"></div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             </div>
             <script>
                 $(document).ready(function() {
@@ -57,6 +66,7 @@
                         if ("kendoConsole" in window) {
                             var dataItem = this.dataItem(e.item.index());
                             kendoConsole.log("event :: select (" + dataItem + ")" );
+<<<<<<< HEAD
                         }
                     }
 
@@ -70,6 +80,21 @@
                         if ("kendoConsole" in window) {
                             kendoConsole.log("event :: filtering");
                         }
+=======
+                        }
+                    }
+
+                    function onDataBound(e) {
+                        if ("kendoConsole" in window) {
+                            kendoConsole.log("event :: dataBound");
+                        }
+                    }
+
+                    function onFiltering(e) {
+                        if ("kendoConsole" in window) {
+                            kendoConsole.log("event :: filtering");
+                        }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     }
 
                     var data = [
@@ -141,7 +166,11 @@
                         dataBound: onDataBound
                     });
                 });
+<<<<<<< HEAD
             </script>
+=======
+            </script>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             
         </div>
 

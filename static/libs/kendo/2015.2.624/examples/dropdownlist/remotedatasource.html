@@ -25,9 +25,15 @@
     
         <div id="example">
             
+<<<<<<< HEAD
             <div class="demo-section k-header">
                 <h4>Products</h4>
                 <input id="products" style="width: 100%" />
+=======
+            <div class="demo-section k-header">
+                <h4>Products</h4>
+                <input id="products" style="width: 100%" />
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             </div>
 
             <script>
@@ -35,6 +41,7 @@
                     $("#products").kendoDropDownList({
                         dataTextField: "ProductName",
                         dataValueField: "ProductID",
+<<<<<<< HEAD
                         dataSource: {
                             transport: {
                                 read: {
@@ -46,6 +53,19 @@
                     });
                 });
             </script>
+=======
+                        dataSource: {
+                            transport: {
+                                read: {
+                                    dataType: "jsonp",
+                                    url: "http://demos.telerik.com/kendo-ui/service/Products",
+                                }
+                            }
+                        }
+                    });
+                });
+            </script>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
         </div>
 

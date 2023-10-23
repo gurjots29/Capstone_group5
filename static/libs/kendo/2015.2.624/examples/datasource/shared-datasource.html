@@ -41,6 +41,7 @@
             <script>
                $(function () {
                     var productsDataSource = new kendo.data.DataSource({
+<<<<<<< HEAD
                             type: "odata",
                             serverFiltering: true,
                             serverPaging: true,
@@ -48,6 +49,15 @@
                             pageSize: 10,
                             transport: {
                                 read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
+=======
+                            type: "odata",
+                            serverFiltering: true,
+                            serverPaging: true,
+                            serverSorting: true,
+                            pageSize: 10,
+                            transport: {
+                                read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                             },
                     });   
 
@@ -64,7 +74,11 @@
                     $("#grid").kendoGrid({
                         dataSource: productsDataSource,
                         autoBind: false,
+<<<<<<< HEAD
                         pageable: true,
+=======
+                        pageable: true,
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                         height: 300,
                         selectable: true,
                         columns: [

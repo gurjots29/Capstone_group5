@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     
     <div id="treeMap" style="height: 600px; font-size: 12px;"></div>
@@ -65,6 +66,51 @@
         <div class="console"></div>
     </div>
 </div>
+=======
+    <div id="example">
+    
+    <div id="treeMap" style="height: 600px; font-size: 12px;"></div>
+    
+    <script>
+        function treeMap() {
+            $("#treeMap").kendoTreeMap({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "../content/dataviz/js/population-usa.json",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            children: "items"
+                        }
+                    }
+                },
+                valueField: "value",
+                textField: "name",
+                dataBound: onDataBound,
+                itemCreated: onItemCreated
+            });
+
+            function onDataBound(e) {
+                kendoConsole.log("Data bound");
+            }
+
+            function onItemCreated(e) {
+                kendoConsole.log("Item is created");
+            }
+        }
+
+        $(document).ready(treeMap);
+        $(document).bind("kendo:skinChange", treeMap);
+    </script>
+    <div class="box wide">
+        <h4>Console log</h4>
+        <div class="console"></div>
+    </div>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

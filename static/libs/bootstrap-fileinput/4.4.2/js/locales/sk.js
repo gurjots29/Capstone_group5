@@ -25,8 +25,13 @@
         msgNoFilesSelected: '',
         msgCancelled: 'Zrušené',
         msgZoomModalHeading: 'Detailný náhľad',
+<<<<<<< HEAD
         msgFileRequired: 'You must select a file to upload.',
         msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+=======
+        msgFileRequired: 'You must select a file to upload.',
+        msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgSizeTooLarge: 'Súbor "{name}" (<b>{size} KB</b>): prekročenie - maximálna povolená veľkosť <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'Musíte vybrať najmenej <b>{n}</b> {files} pre nahranie.',
         msgFilesTooMany: 'Počet vybratých súborov pre nahranie <b>({n})</b>: prekročenie - maximálny povolený limit <b>{m}</b>.',
@@ -35,6 +40,7 @@
         msgFileNotReadable: 'Súbor "{name}" nie je čitateľný.',
         msgFilePreviewAborted: 'Náhľad súboru bol prerušený pre "{name}".',
         msgFilePreviewError: 'Nastala chyba pri načítaní súboru "{name}".',
+<<<<<<< HEAD
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
         msgInvalidFileType: 'Neplatný typ súboru "{name}". Iba "{types}" súborov sú podporované.',
         msgInvalidFileExtension: 'Neplatná extenzia súboru "{name}". Iba "{extensions}" súborov sú podporované.',
@@ -52,6 +58,25 @@
         msgUploadThreshold: 'Processing...',
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
+        msgInvalidFileType: 'Neplatný typ súboru "{name}". Iba "{types}" súborov sú podporované.',
+        msgInvalidFileExtension: 'Neplatná extenzia súboru "{name}". Iba "{extensions}" súborov sú podporované.',
+        msgFileTypes: {
+            'image': 'image',
+            'html': 'HTML',
+            'text': 'text',
+            'video': 'video',
+            'audio': 'audio',
+            'flash': 'flash',
+            'pdf': 'PDF',
+            'object': 'object'
+        },
+        msgUploadAborted: 'Súbor nahrávania bol prerušený',
+        msgUploadThreshold: 'Processing...',
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Chyba overenia',
         msgLoading: 'Nahrávanie súboru {index} z {files} &hellip;',
@@ -64,6 +89,7 @@
         msgImageHeightLarge: 'Výška súboru obrazu "{name}" nesmie presiahnuť {size} px.',
         msgImageResizeError: 'Nemožno získať rozmery obrázku zmeniť veľkosť.',
         msgImageResizeException: 'Chyba pri zmene veľkosti obrázka.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -72,6 +98,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Tiahni a pusť súbory tu &hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

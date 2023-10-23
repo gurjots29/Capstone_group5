@@ -25,7 +25,11 @@
     
         <div id="example">
             <div class="demo-section k-header">
+<<<<<<< HEAD
                 <h4>Find a product</h4>
+=======
+                <h4>Find a product</h4>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 <input id="products" style="width: 100%;" />
             </div>
             <script>
@@ -37,6 +41,7 @@
                         filter: "contains",
                         autoBind: false,
                         minLength: 3,
+<<<<<<< HEAD
                         dataSource: {
                             type: "odata",
                             serverFiltering: true,
@@ -45,6 +50,16 @@
                                     url: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products",
                                 }
                             }
+=======
+                        dataSource: {
+                            type: "odata",
+                            serverFiltering: true,
+                            transport: {
+                                read: {
+                                    url: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products",
+                                }
+                            }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                         }
                     });
                 });

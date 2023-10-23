@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿.hlError
 {
     background-color:#fea;
@@ -13,4 +14,21 @@
 .inlineCode
 {
     font:bold 12px monospace;
+=======
+﻿.hlError
+{
+    background-color:#fea;
+    color:#f33;
+}
+
+.hlOK
+{
+    background-color:#aef;
+    color:#060;
+}
+
+.inlineCode
+{
+    font:bold 12px monospace;
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 }

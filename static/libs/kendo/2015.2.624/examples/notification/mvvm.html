@@ -31,9 +31,15 @@
 <script>
     var viewModel = kendo.observable({
         now: new Date(),
+<<<<<<< HEAD
         showMessage: function () {
             this.set("now", new Date());
             var time = kendo.toString(this.get("now"), "HH:mm:ss:fff");
+=======
+        showMessage: function () {
+            this.set("now", new Date());
+            var time = kendo.toString(this.get("now"), "HH:mm:ss:fff");
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             $("#ntf1").data("kendoNotification").info(time);
         }
     });

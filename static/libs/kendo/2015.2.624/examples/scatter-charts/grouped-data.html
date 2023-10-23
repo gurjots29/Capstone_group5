@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     <div class="demo-section k-content">
         <div id="chart"></div>
@@ -89,6 +90,75 @@
         $(document).bind("kendo:skinChange", createChart);
     </script>
 </div>
+=======
+    <div id="example">
+    <div class="demo-section k-content">
+        <div id="chart"></div>
+    </div>
+    <script>
+        var stocksDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: function() {
+                        return "../content/dataviz/dashboards/stock-data-2011.json";
+                    },
+                    dataType: "json"
+                }
+            },
+
+            group: {
+                field: "symbol"
+            },
+
+            sort: {
+                field: "date",
+                dir: "asc"
+            },
+
+            schema: {
+                model: {
+                    fields: {
+                        date: {
+                            type: "date"
+                        }
+                    }
+                }
+            }
+        });
+
+        function createChart() {
+            $("#chart").kendoChart({
+                title: { text: "Stock Prices" },
+                dataSource: stocksDataSource,
+                series: [{
+                    type: "scatterLine",
+                    xField: "date",
+                    yField: "close",
+                    name: "#= group.value # (close)"
+                }],
+                legend: {
+                    position: "bottom"
+                },
+                yAxis: {
+                    labels: {
+                        format: "${0}",
+                        skip: 2,
+                        step: 2
+                    }
+                },
+                xAxis: {
+                    labels: {
+                        format: "MMM"
+                    }
+                }
+            });
+        }
+
+        $(document).ready(createChart);
+        $(document).bind("kendo:skinChange", createChart);
+    </script>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

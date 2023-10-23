@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
 
     <div class="demo-section k-header wide">
@@ -121,6 +122,107 @@
         }
     </style>
 </div>
+=======
+    <div id="example">
+
+    <div class="demo-section k-header wide">
+        <div id="listView"></div>
+        <div id="pager" class="k-pager-wrap"> </div>
+    </div>
+
+    <div class="box wide">
+        <h4>Console Log</h4>
+        <div class="console"></div>
+    </div>
+
+    <script type="text/x-kendo-tmpl" id="template">
+        <div class="product">
+            <img src="../content/web/foods/#:ProductID#.jpg" alt="#:ProductName# image" />
+            <h3>#:ProductName#</h3>
+        </div>
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var dataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: "http://demos.telerik.com/kendo-ui/service/Products",
+                            dataType: "jsonp"
+                        }
+                    },
+                    pageSize: 15
+                });
+
+            $("#pager").kendoPager({
+                dataSource: dataSource
+            });
+
+            $("#listView").kendoListView({
+                dataSource: dataSource,
+                selectable: "multiple",
+                dataBound: onDataBound,
+                change: onChange,
+                template: kendo.template($("#template").html())
+            });
+
+            function onDataBound() {
+                kendoConsole.log("ListView data bound");
+            }
+
+            function onChange() {
+                var data = dataSource.view(),
+                    selected = $.map(this.select(), function(item) {
+                        return data[$(item).index()].ProductName;
+                    });
+
+                kendoConsole.log("Selected: " + selected.length + " item(s), [" + selected.join(", ") + "]");
+            }
+        });
+    </script>
+
+    <style>
+        .product
+        {
+            float: left;
+            width: 220px;
+            height: 110px;
+            margin: 0;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .product img
+        {
+            float: left;
+            width: 110px;
+            height: 110px;
+        }
+        .product h3
+        {
+            margin: 0;
+            padding: 10px 0 0 10px;
+            font-size: .9em;
+            overflow: hidden;
+            font-weight: normal;
+            float: left;
+            max-width: 100px;
+            text-transform: uppercase;
+        }
+        .k-pager-wrap
+        {
+            border-top: 0;
+        }
+        .demo-section .k-listview:after
+        {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+    </style>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

@@ -31,14 +31,23 @@
             </div>
             <script>
                 $(document).ready(function() {
+<<<<<<< HEAD
                     $("#products").kendoAutoComplete({
                         dataTextField: "ProductName",
+=======
+                    $("#products").kendoAutoComplete({
+                        dataTextField: "ProductName",
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                         filter: "contains",
                         minLength: 3,
                         dataSource: {
                             type: "odata",
                             serverFiltering: true,
+<<<<<<< HEAD
                             transport: {
+=======
+                            transport: {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                                 read: "http://demos.telerik.com/kendo-ui/service/Northwind.svc/Products"
                             }
                         }

@@ -23,9 +23,15 @@
         <a class="offline-button" href="../index.html">Back</a>
     
     <div id="example">
+<<<<<<< HEAD
     <div class="demo-section k-header">
         <h4>Select a product</h4>
         <input id="products" style="width: 100%;"/>
+=======
+    <div class="demo-section k-header">
+        <h4>Select a product</h4>
+        <input id="products" style="width: 100%;"/>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     </div>
     <div id="product-preview" class="demo-section k-header"></div>
 </div>
@@ -35,6 +41,7 @@
     <img src="../content/web/foods/#= ProductID #.jpg">
 </script>
 
+<<<<<<< HEAD
 <script>
     var template = kendo.template($("#product-template").html());
 
@@ -66,6 +73,39 @@
         },
         dataBound: preview,
         change: preview
+=======
+<script>
+    var template = kendo.template($("#product-template").html());
+
+    function preview() {
+        var dropdown = $("#products").data("kendoDropDownList");
+
+        var product = dropdown.dataSource.get(dropdown.value());
+
+        var productPreviewHtml = template(product);
+
+        $("#product-preview").html(productPreviewHtml);
+    }
+
+    $("#products").kendoDropDownList({
+        dataTextField: "ProductName",
+        dataValueField: "ProductID",
+        dataSource: {
+            transport: {
+                read: {
+                    url: "http://demos.telerik.com/kendo-ui/service/products",
+                    dataType: "jsonp"
+                }
+            },
+            schema: {
+                model: {
+                    id: "ProductID"
+                }
+            }
+        },
+        dataBound: preview,
+        change: preview
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     });
 </script>
 

@@ -43,10 +43,17 @@
             <button class="k-button k-primary" id="get" style="margin-top: 2em; float: right;">Customize</button>
         </div>
         <style>
+<<<<<<< HEAD
            #tshirt {
                display: block;
                margin: 2em auto;
            }
+=======
+           #tshirt {
+               display: block;
+               margin: 2em auto;
+           }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
            .k-readonly
            {
                color: gray;
@@ -55,7 +62,11 @@
 
             <script>
                 $(document).ready(function() {
+<<<<<<< HEAD
                     // create ComboBox from input HTML element
+=======
+                    // create ComboBox from input HTML element
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     $("#fabric").kendoComboBox({
                         dataTextField: "text",
                         dataValueField: "value",
@@ -71,13 +82,22 @@
                     });
 
                     // create ComboBox from select HTML element
+<<<<<<< HEAD
                     $("#size").kendoComboBox();
 
+=======
+                    $("#size").kendoComboBox();
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     var fabric = $("#fabric").data("kendoComboBox");
 					var select = $("#size").data("kendoComboBox");
 
 
+<<<<<<< HEAD
 					$("#get").click(function() {
+=======
+					$("#get").click(function() {
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 					    alert('Thank you! Your Choice is:\n\nFabric ID: ' + fabric.value() + ' and Size: ' + select.value());
                     });
                 });

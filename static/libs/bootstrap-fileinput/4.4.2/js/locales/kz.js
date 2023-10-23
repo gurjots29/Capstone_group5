@@ -38,8 +38,13 @@
         msgInvalidFileExtension: '"{name}" тыйым салынған файл кеңейтімі. Тек "{extensions}" рұқсат.',
         msgUploadAborted: 'Файлды жүктеу доғарылды',
         msgUploadThreshold: 'Өңдеу...',
+<<<<<<< HEAD
         msgUploadBegin: 'Initializing...',
         msgUploadEnd: 'Done',
+=======
+        msgUploadBegin: 'Initializing...',
+        msgUploadEnd: 'Done',
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         msgUploadEmpty: 'No valid data available for upload.',
         msgValidationError: 'Тексеру қатесі',
         msgLoading: '{index} файлды {files} &hellip; жүктеу',
@@ -52,6 +57,7 @@
         msgImageHeightLarge: '"{name}" суреттің биіктігі {size} px. аспау керек',
         msgImageResizeError: 'Суреттің өлшемін өзгерту үшін, мөлшері алынбады',
         msgImageResizeException: 'Суреттің мөлшерлерін өзгерткен кезде қателік пайда болды.<pre>{errors}</pre>',
+<<<<<<< HEAD
         msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
         msgAjaxProgressError: '{operation} failed',
         ajaxOperations: {
@@ -60,6 +66,16 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
+=======
+        msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
+        msgAjaxProgressError: '{operation} failed',
+        ajaxOperations: {
+            deleteThumb: 'file delete',
+            uploadThumb: 'file upload',
+            uploadBatch: 'batch file upload',
+            uploadExtra: 'form data upload'
+        },
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         dropZoneTitle: 'Файлдарды осында сүйреу &hellip;',
         dropZoneClickTitle: '<br>(or click to select {files})',
         fileActionSettings: {

@@ -23,11 +23,19 @@
         <a class="offline-button" href="../index.html">Back</a>
     
     
+<<<<<<< HEAD
         <div id="example">
             
             <div class="demo-section k-header">
                 <div id="droptarget" class="k-header">Drag the small circle here.</div>
                 <div id="draggable"></div>
+=======
+        <div id="example">
+            
+            <div class="demo-section k-header">
+                <div id="droptarget" class="k-header">Drag the small circle here.</div>
+                <div id="draggable"></div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             </div>
 
             <script>
@@ -35,7 +43,11 @@
                     kendoConsole.log("dragstart");
 
                     $("#draggable").addClass("hollow");
+<<<<<<< HEAD
                     $("#droptarget").text("Drop here.");
+=======
+                    $("#droptarget").text("Drop here.");
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     $("#droptarget").removeClass("painted");
                 }
 
@@ -63,14 +75,22 @@
                 function droptargetOnDragEnter(e) {
                     kendoConsole.log("dragenter");
 
+<<<<<<< HEAD
                     $("#droptarget").text("Now drop...");
+=======
+                    $("#droptarget").text("Now drop...");
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     $("#droptarget").addClass("painted");
                 }
 
                 function droptargetOnDragLeave(e) {
                     kendoConsole.log("dragleave");
 
+<<<<<<< HEAD
                     $("#droptarget").text("Drop here.");
+=======
+                    $("#droptarget").text("Drop here.");
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     $("#droptarget").removeClass("painted");
                 }
 
@@ -105,6 +125,7 @@
                 <div class="console"></div>
             </div>
 
+<<<<<<< HEAD
             <style>
                 #draggable {
                     cursor: move;
@@ -147,6 +168,50 @@
                     height: 300px;
                     position: relative;
                 }
+=======
+            <style>
+                #draggable {
+                    cursor: move;
+                    position: absolute;
+                    top: 260px;
+                    left: 50%;
+                    margin-left: -28px;
+                    width: 56px;
+                    height: 56px;
+                    border-radius: 50%;
+                    background-color: #03a9f4;
+                    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16);
+                }
+                .painted {
+                    background-color: #03a9f4;
+                    color: #fff;
+                }
+                
+                #draggable.hollow
+                {
+                    cursor: default;
+                    background: #ececec;
+                }
+                
+                #droptarget
+                {
+                    height: 200px;
+                    width: 200px;
+                    font-size: 14px;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 200px;
+                    margin: 0 auto;
+                    cursor: default;
+                    border: 1px solid #999;
+                }
+
+                .demo-section
+                {
+                    height: 300px;
+                    position: relative;
+                }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
             </style>
         </div>
 

@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     
     <div class="box wide">
@@ -92,6 +93,78 @@
         $(document).bind("kendo:skinChange", createDiagram);
     </script>
 </div>
+=======
+    <div id="example">
+    
+    <div class="box wide">
+        <div class="box-col">
+            <h4>Layout: </h4>
+               <select id="subtype">
+                    <option value="down">Tree Down</option>
+                    <option value="up">Tree Up</option>
+                    <option value="tipover">Tipover Tree</option>
+               </select>
+        </div>
+    </div>
+    
+    <div id="diagram"></div>
+    <script>
+        function createDiagram() {
+            $("#diagram").kendoDiagram({
+                dataSource: {
+                    data: diagramNodes(),
+                    schema: {
+                        model: {
+                            children: "items"
+                        }
+                    }
+                },
+                layout: {
+                    type: "tree",
+                    subtype: "down",
+                    horizontalSeparation: 30,
+                    verticalSeparation: 20
+                },
+                shapeDefaults: {
+                    width: 40,
+                    height: 40
+                }
+            });
+        }
+
+        function diagramNodes() {
+            var root = { name: "0", items: [] };
+            addNodes(root, [3, 2, 2]);
+            return [root];
+        }
+
+        function addNodes(root, levels) {
+            if (levels.length > 0) {
+                for (var i = 0; i < levels[0]; i++) {
+                    var node = { name: "0", items: [] };
+                    root.items.push(node);
+
+                    addNodes(node, levels.slice(1));
+                }
+            }
+        }
+
+        $(document).ready(function() {
+            $("#subtype").change(function() {
+                $("#diagram").getKendoDiagram().layout({
+                    subtype: $(this).val(),
+                    type: "tree",
+                    horizontalSeparation: 30,
+                    verticalSeparation: 20
+                });
+            });
+        });
+
+        $(document).ready(createDiagram);
+        $(document).bind("kendo:skinChange", createDiagram);
+    </script>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

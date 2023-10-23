@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     <div class="demo-section k-header">
     <h4>Tasks</h4>
@@ -55,6 +56,41 @@
             color: #FF0000;
         }
     </style>
+=======
+    <div id="example">
+    <div class="demo-section k-header">
+    <h4>Tasks</h4>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Important</th>
+      </tr>
+      <tr>
+        <td>
+          <span data-bind="text: text, css: { important: important }"></span>
+        </td>
+        <td>
+          <input type="checkbox" data-bind="checked: important"/>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var viewModel = kendo.observable({
+                text: "Meet with Jenny",
+                important: true
+            });
+            kendo.bind($("#example"), viewModel);
+        });
+    </script>
+
+    <style scoped>
+        .important {
+            color: #FF0000;
+        }
+    </style>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 </div>
 
     

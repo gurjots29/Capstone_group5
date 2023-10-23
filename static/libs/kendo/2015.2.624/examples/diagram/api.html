@@ -22,8 +22,13 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
 
+=======
+    <div id="example">
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
     <div id="apiOptions" class="box wide">
         <div class="box-col">
             <h4>Add Shape</h4>
@@ -96,6 +101,7 @@
                 </li>
             </ul>
         </div>
+<<<<<<< HEAD
     </div>    
     <div id="diagram"></div>
 
@@ -160,6 +166,72 @@
         }
     </style>
 </div>
+=======
+    </div>    
+    <div id="diagram"></div>
+
+    <script>
+        function createDiagram() {
+            var element = $("#diagram").kendoDiagram({});
+            var diagram = element.data("kendoDiagram");
+            var shape1 = diagram.addShape({x: 100, y: 100});
+            var shape2 = diagram.addShape({ x: 300, y: 100 });
+            diagram.connect(shape1, shape2);
+        }
+
+        $(document).ready(function () {
+            createDiagram();
+            var Point = kendo.dataviz.diagram.Point;
+            var diagram = $("#diagram").data("kendoDiagram");
+
+            var viewModel = kendo.observable({
+                newShapeX: 0,
+                newShapeY: 0,
+                fromShapeIndex: 0,
+                toShapeIndex: 0,
+                selectShapeIndex: 0,
+                zoom: 1,
+                panX: 0,
+                panY: 0,
+                addShape: function () {
+                    diagram.addShape({ x: this.get("newShapeX"), y: this.get("newShapeY") });
+                },
+                addConnection: function () {
+                    var shapes = diagram.shapes;
+                    var total = shapes.length;
+                    var fromIndex = this.get("fromShapeIndex");
+                    var toIndex = this.get("toShapeIndex");
+                    if (fromIndex < total && toIndex < total) {
+                        diagram.connect(shapes[fromIndex], shapes[toIndex]);
+                    }
+                },
+                remove: function () {
+                    diagram.remove(diagram.select());
+                },
+                select: function () {
+                    diagram.select(diagram.shapes[this.get("selectShapeIndex")]);
+                },
+                zoomDiagram: function () {
+                    diagram.zoom(this.get("zoom"));
+                },
+                pan: function () {
+                    diagram.pan(new Point(this.get("panX"), this.get("panY")));
+                }
+            });
+
+            kendo.bind($("#apiOptions"), viewModel);
+        });
+        $(document).bind("kendo:skinChange", createDiagram);
+    </script>
+
+    <style type="text/css">
+        #apiOptions label
+        {
+            display:inline-block;
+        }
+    </style>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

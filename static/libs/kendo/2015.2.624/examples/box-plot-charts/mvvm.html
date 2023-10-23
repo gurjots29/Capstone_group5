@@ -31,6 +31,7 @@
                  data-legend="{ visible: 'false' }"
                  data-series-defaults="{ type: 'boxPlot' }"
                  data-series="[{
+<<<<<<< HEAD
                                 lowerField: 'lower',
                                 q1Field: 'q1',
                                 medianField: 'median',
@@ -48,6 +49,25 @@
         <div style="padding-top: 1em;">
             <h4>Console</h4>
             <div class="console"></div>
+=======
+                                lowerField: 'lower',
+                                q1Field: 'q1',
+                                medianField: 'median',
+                                q3Field: 'q3',
+                                upperField: 'upper',
+                                outliersField: 'outliers',
+                                categoryField: 'year'
+                              }]"
+                 data-category-axis="{ labels: { rotation: '-90' }}"
+                 data-bind="visible: isVisible,
+                            source: monthlyTemperatures,
+                            events: { seriesHover: onSeriesHover }"
+                 style="height: 250px;" ></div>
+        </div>
+        <div style="padding-top: 1em;">
+            <h4>Console</h4>
+            <div class="console"></div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
         </div>
     </div>
     <div class="box wide">
@@ -74,6 +94,7 @@
             },
             monthlyTemperatures: new kendo.data.DataSource({
                 transport: {
+<<<<<<< HEAD
                     read: {
                         url: "../content/dataviz/js/ozone.json",
                         dataType: "json"
@@ -82,6 +103,16 @@
                 sort: {
                     field: "year",
                     dir: "asc"
+=======
+                    read: {
+                        url: "../content/dataviz/js/ozone.json",
+                        dataType: "json"
+                    }
+                },
+                sort: {
+                    field: "year",
+                    dir: "asc"
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 }
             })
         });

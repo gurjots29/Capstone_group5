@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     <div id="example">
     <div id="configurator"></div>
     <div id="pivotgrid"></div>
@@ -84,6 +85,70 @@
         }
     </style>
 </div>
+=======
+    <div id="example">
+    <div id="configurator"></div>
+    <div id="pivotgrid"></div>
+    
+    <div class="responsive-message"></div>
+
+    <script>
+        $(document).ready(function () {
+            var pivotgrid = $("#pivotgrid").kendoPivotGrid({
+                filterable: true,
+                sortable: true,
+                columnWidth: 200,
+                height: 580,
+                dataSource: {
+                    type: "xmla",
+                    columns: [{ name: "[Date].[Calendar]", expand: true }, { name: "[Product].[Category]" } ],
+                    rows: [{ name: "[Geography].[City]" }],
+                    measures: ["[Measures].[Reseller Freight Cost]"],
+                    transport: {
+                        connection: {
+                            catalog: "Adventure Works DW 2008R2",
+                            cube: "Adventure Works"
+                        },
+                        read: "http://demos.telerik.com/olap/msmdpump.dll"
+                    },
+                    schema: {
+                        type: "xmla"
+                    },
+                    error: function (e) {
+                        alert("error: " + kendo.stringify(e.errors[0]));
+                    }
+                }
+            }).data("kendoPivotGrid");
+
+            $("#configurator").kendoPivotConfigurator({
+                dataSource: pivotgrid.dataSource,
+                filterable: true,
+                sortable: true,
+                height: 580
+            });
+        });
+    </script>
+    <style>
+        #pivotgrid {
+            display: inline-block;
+            vertical-align: top;
+            width: 70%;
+        }
+
+        #configurator {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        media screen and (max-width: 1023px) {
+            #pivotgrid,
+            #configurator {
+                display: none;
+            }
+        }
+    </style>
+</div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

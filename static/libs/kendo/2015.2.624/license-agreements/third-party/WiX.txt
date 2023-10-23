@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 Telerik installer packages are created using the WiX toolset version 3.8, licensed under the Microsoft Reciprocal License (MS-RL). 
 
+=======
+Telerik installer packages are created using the WiX toolset version 3.8, licensed under the Microsoft Reciprocal License (MS-RL). 
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 The license and source code for the WiX toolset can be found at: http://wixtoolset.org/about/license/.

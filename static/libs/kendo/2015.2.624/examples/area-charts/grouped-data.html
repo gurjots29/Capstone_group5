@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
     
         <div id="example">
             <div class="demo-section k-content">
@@ -105,6 +106,91 @@
                 $(document).bind("kendo:skinChange", createChart);
             </script>
         </div>
+=======
+    
+        <div id="example">
+            <div class="demo-section k-content">
+                <div id="chart"></div>
+            </div>
+            <script>
+                var stocksDataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: function() {
+                                return "../content/dataviz/dashboards/stock-data-2011.json";
+                            },
+                            dataType: "json"
+                        }
+                    },
+
+                    group: {
+                        field: "symbol"
+                    },
+
+                    sort: {
+                        field: "date",
+                        dir: "asc"
+                    },
+
+                    schema: {
+                        model: {
+                            fields: {
+                                date: {
+                                    type: "date"
+                                }
+                            }
+                        }
+                    }
+                });
+
+                function createChart() {
+                    $("#chart").kendoChart({
+                        title: { text: "Stock Prices" },
+                        dataSource: stocksDataSource,
+                        series: [{
+                            type: "area",
+                            field: "close",
+                            name: "#= group.value # (close)"
+                        }],
+                        legend: {
+                            position: "bottom"
+                        },
+                        valueAxis: {
+                            labels: {
+                                format: "${0}",
+                                skip: 2,
+                                step: 2
+                            },
+                            line: {
+                                visible: false
+                            },
+                            max: 700
+                        },
+                        categoryAxis: {
+                            field: "date",
+                            labels: {
+                                format: "MMM"
+                            },
+                            line: {
+                                visible: false
+                            },
+                            majorGridLines: {
+                                visible: false
+                            }
+                        },
+                        tooltip: {
+                            visible: true,
+                            format: "{0}%",
+                            template: "#= series.name # - #= value #%"
+                        }
+                    });
+                }
+
+                $(document).ready(createChart);
+                $(document).bind("kendo:skinChange", createChart);
+            </script>
+        </div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

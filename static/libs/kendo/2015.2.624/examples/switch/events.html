@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div data-role="view" id="switch-events" data-init="mobileSwitchEventsInit">
     <ul data-role="listview" data-style="inset" data-type="group">
         <li>General Settings
@@ -14,3 +15,21 @@
         kendoConsole.log("switch value was changed to " + (e.checked ? "checked" : "unchecked"), false, "#switch-events");
     }
 </script>
+=======
+<div data-role="view" id="switch-events" data-init="mobileSwitchEventsInit">
+    <ul data-role="listview" data-style="inset" data-type="group">
+        <li>General Settings
+            <ul>
+                <li>Automatic Update <input id="mobile-switch" data-role="switch" data-change="switchChange" /></li>
+            </ul>
+        </li>
+    </ul>
+    <div class="console"></div>
+</div>
+
+<script>
+    function switchChange(e) {
+        kendoConsole.log("switch value was changed to " + (e.checked ? "checked" : "unchecked"), false, "#switch-events");
+    }
+</script>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d

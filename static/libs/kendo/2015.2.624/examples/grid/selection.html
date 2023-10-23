@@ -22,6 +22,7 @@
     
         <a class="offline-button" href="../index.html">Back</a>
     
+<<<<<<< HEAD
             <script src="../content/shared/js/orders.js"></script>
 
         <div id="example">
@@ -98,6 +99,84 @@
                 });
             </script>
         </div>
+=======
+            <script src="../content/shared/js/orders.js"></script>
+
+        <div id="example">
+
+            <div class="demo-section k-header wide">
+                <h4>Grid with multiple row selection enabled</h4>
+                <div id="rowSelection"></div>
+            </div>
+
+            <div class="demo-section k-header wide">
+                <h4>Grid with multiple cell selection enabled</h4>
+                <div id="cellSelection"></div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $("#rowSelection").kendoGrid({
+                        dataSource: {
+                            data: orders,
+                            pageSize: 6
+                        },
+                        selectable: "multiple",
+                        pageable: {
+                            buttonCount: 5
+                        },
+                        scrollable: false,
+                        navigatable: true,
+                        columns: [
+                            {
+                                field: "ShipCountry",
+                                title: "Ship Country",
+                                width: 300
+                            },
+                            {
+                                field: "Freight",
+                                width: 300
+                            },
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:dd/MM/yyyy}"
+                            }
+                        ]
+                    });
+
+                    $("#cellSelection").kendoGrid({
+                        dataSource: {
+                            data: orders,
+                            pageSize: 6
+                        },
+                        selectable: "multiple cell",
+                        pageable: {
+                            buttonCount: 5
+                        },
+                        scrollable: false,
+                        navigatable: true,
+                        columns: [
+                            {
+                                field: "ShipCountry",
+                                title: "Ship Country",
+                                width: 300
+                            },
+                            {
+                                field: "Freight",
+                                width: 300
+                            },
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                format: "{0:dd/MM/yyyy}"
+                            }
+                        ]
+                    });
+                });
+            </script>
+        </div>
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
 
     

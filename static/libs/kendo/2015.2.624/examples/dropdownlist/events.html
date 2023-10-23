@@ -28,7 +28,11 @@
                 <h4 class="title">DropDownList</h4>
                 <input id="dropdownlist" style="width: 100%;"/>
             </div>
+<<<<<<< HEAD
             <div class="box">                
+=======
+            <div class="box">                
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                 <h4>Console log</h4>
                 <div class="console"></div>
             </div>
@@ -53,6 +57,7 @@
                         }
                     };
 
+<<<<<<< HEAD
                     function onDataBound(e) {
                         if ("kendoConsole" in window) {                            
                             kendoConsole.log("event :: dataBound");
@@ -63,14 +68,31 @@
                         if ("kendoConsole" in window) {
                             kendoConsole.log("event :: filtering");
                         }
+=======
+                    function onDataBound(e) {
+                        if ("kendoConsole" in window) {                            
+                            kendoConsole.log("event :: dataBound");
+                        }
+                    };
+
+                    function onFiltering(e) {
+                        if ("kendoConsole" in window) {
+                            kendoConsole.log("event :: filtering");
+                        }
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     }
 
                     var data = [
                         {text: "Item1", value:"1"},
                         {text: "Item2", value:"2"},
                         {text: "Item3", value:"3"}
+<<<<<<< HEAD
                     ];
 
+=======
+                    ];
+
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
                     $("#dropdownlist").kendoDropDownList({
                         dataTextField: "text",
                         dataValueField: "value",
@@ -84,7 +106,11 @@
                         dataBound:onDataBound
                     });
                 });
+<<<<<<< HEAD
             </script>            
+=======
+            </script>            
+>>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
 
         </div>
 
