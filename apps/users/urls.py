@@ -9,9 +9,11 @@ urlpatterns = [
     path('badges/', BadgeListCreateView.as_view(), name='badge-list-create'),
     path('skills/', SkillListCreateView.as_view(), name='skill-list-create'),
     path('volunteers/', VolunteerListCreateView.as_view(), name='volunteer-list-create'),
-    path('volunteers/<int:pk>/', VolunteerDetailView.as_view(), name='volunteer-detail'),
     path('organizations/', OrganizationListCreateView.as_view(), name='organization-list-create'),
     path('profile-organizations/', profile_organizations_view, name='profile-organizations'),
-    path('profile-volunteer/', profile_volunteers_view, name='profile-volunteer'),
+
+   path('profile-volunteer/', VolunteerDetailView.as_view(), name='profile-volunteer'),
+    path('volunteer/<int:pk>/', VolunteerDetailView.as_view(), name='volunteer-detail'),
+    
     path('forgot-password/', forgot_password_view, name='forgot-password'),
 ]

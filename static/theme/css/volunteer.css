@@ -1,3 +1,11 @@
 .hidden {
     display: none;
 }
+
+.badge-icon {
+    width: 50px;   /* or any other size you'd like */
+    height: 50px;
+    border-radius: 50%;  /* this makes it circular */
+    object-fit: cover;   /* this makes sure the image covers the area without distortion */
+}
+

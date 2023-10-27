@@ -1,5 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
 from apps.users.models import Organization, Skill, Volunteer
 # Create your models here.
 #from django.db import models
@@ -46,7 +45,3 @@ class Program(models.Model):
 
     def __str__(self):
         return self.name
-=======
-
-# Create your models here.
->>>>>>> 9fe5041adb8bd46e6986e2837e2f09061ff40e0d
