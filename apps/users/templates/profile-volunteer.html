@@ -9,7 +9,7 @@
 {% block title-page %} Profile Organizations  {% endblock title-page %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/post.css' %}"/>
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
 {% endblock css %}
 
 {% block content %}
@@ -22,14 +22,14 @@
 
     <div class="main-content container-fluid ">
        <div class="row">
-              <div class="col-md-5">
+              <div class="col-md-7">
                 <div class="user-display">
                   <div class="user-display-bg"><img src="{% static 'theme/img/user-profile-display.png' %}" alt="Profile Background"></div>
                   <div class="user-display-bottom">
                     <div class="user-display-avatar"><img src="{% static 'theme/img/avatar-150.png' %}" alt="Avatar"></div>
                     <div class="user-display-info">
-                      <div class="name">root</div>
-                      <div class="nick"><span class="mdi mdi-account"></span> </div>
+                      <div class="name">{{ volunteer.user.username }} </div>
+                      <div class="nick"> </div>
                     </div>
                     <div class="row user-display-details">
                       <div class="col-xs-4">
@@ -48,96 +48,69 @@
                   </div>
                 </div>
                 <div class="user-info-list panel panel-default">
-                  <div class="panel-heading panel-heading-divider">About Me<span class="panel-subtitle">I am a web developer and designer based in Montreal - Canada, I like read books, good music and nature.</span></div>
+                  <div class="panel-heading panel-heading-divider">Bio<span class="panel-subtitle">{{ volunteer.bio}}</span></div>
                   <div class="panel-body">
+                 
                     <table class="no-border no-strip skills">
                       <tbody class="no-border-x no-border-y">
-                        <tr>
-                          <td class="icon"><span class="mdi mdi-case"></span></td>
-                          <td class="item">Ocupation<span class="icon s7-portfolio"></span></td>
-                          <td>Admin</td>
-                        </tr>
-                        <tr>
-                          <td class="icon"><span class="mdi mdi-cake"></span></td>
-                          <td class="item">Birthday<span class="icon s7-gift"></span></td>
-                          <td>16 September 1989</td>
-                        </tr>
-                        <tr>
-                          <td class="icon"><span class="mdi mdi-smartphone-android"></span></td>
-                          <td class="item">Mobile<span class="icon s7-phone"></span></td>
-                          <td>(999) 999-9999</td>
-                        </tr>
-                        <tr>
-                          <td class="icon"><span class="mdi mdi-globe-alt"></span></td>
-                          <td class="item">Location<span class="icon s7-map-marker"></span></td>
-                          <td>Vancouver, Canada</td>
-                        </tr>
-                        <tr>
-                          <td class="icon"><span class="mdi mdi-pin"></span></td>
-                          <td class="item">Website<span class="icon s7-global"></span></td>
-                          <td>www.website.com</td>
-                        </tr>
+                          <tr>
+                              <!-- Aquí asumí que el modelo User al que está vinculado Volunteer tiene fields first_name y last_name -->
+                              <td class="icon"><span class="mdi mdi-case"></span></td>
+                              <td class="item">Name<span class="icon s7-portfolio"></span></td>
+                              <td>{{ volunteer.user.first_name }} {{ volunteer.user.last_name }}</td>
+                          </tr>
+                          <tr>
+                              <td class="icon"><span class="mdi mdi-cake"></span></td>
+                              <td class="item">Birthday<span class="icon s7-gift"></span></td>
+                              <td>{{ volunteer.date_of_birth }}</td>
+                          </tr>
+                          <tr>
+                              <td class="icon"><span class="mdi mdi-smartphone-android"></span></td>
+                              <td class="item">Phone<span class="icon s7-phone"></span></td>
+                              <td>{{ volunteer.phone_number }}</td>
+                          </tr>
+                          <tr>
+                              <td class="icon"><span class="mdi mdi-globe-alt"></span></td>
+                              <td class="item">Location<span class="icon s7-map-marker"></span></td>
+                              <td>{{ volunteer.location }}</td>
+                          </tr>
+                          <!-- Agrega otros campos según lo requieras -->
                       </tbody>
-                    </table>
+                  </table>
                   </div>
                 </div>
               </div>
-              <div class="col-md-7">
-                <div class="widget widget-fullwidth widget-small">
-                  <div class="widget-head xs-pb-30">
-                    <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync"></span><span class="icon mdi mdi-close"></span></div>
-                    <div class="title">Development Activity</div>
+              <div class="col-md-5">
+                <div class="user-info-list panel panel-default">
+                  <div class="panel-heading panel-heading-divider">Skills
                   </div>
-                  <div class="widget-chart-container">
-                    <div id="bar-chart1" style="height: 180px;"></div>
-                    <table class="table table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th style="width:37%;">User</th>
-                          <th style="width:36%;">Commit</th>
-                          <th>Date</th>
-                          <th class="actions"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td class="user-avatar"> <img src="assets/img/avatar6.png" alt="Avatar">Penelope Thornton</td>
-                          <td>Initial commit</td>
-                          <td>Aug 6, 2015</td>
-                          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-delete"></i></a></td>
-                        </tr>
-                        <tr>
-                          <td class="user-avatar"> <img src="assets/img/avatar4.png" alt="Avatar">Benji Harper</td>
-                          <td>Main structure markup</td>
-                          <td>Jul 28, 2015</td>
-                          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-delete"></i></a></td>
-                        </tr>
-                        <tr>
-                          <td class="user-avatar"> <img src="assets/img/avatar5.png" alt="Avatar">Justine Myranda</td>
-                          <td>Left sidebar adjusments</td>
-                          <td>Jul 15, 2015</td>
-                          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-delete"></i></a></td>
-                        </tr>
-                        <tr>
-                          <td class="user-avatar"> <img src="assets/img/avatar3.png" alt="Avatar">Sherwood Clifford</td>
-                          <td>Topbar dropdown style</td>
-                          <td>Jun 30, 2015</td>
-                          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-delete"></i></a></td>
-                        </tr>
-                        <tr>
-                          <td class="user-avatar"> <img src="assets/img/avatar.png" alt="Avatar">Kristopher Donny</td>
-                          <td>Left sidebar adjusments</td>
-                          <td>Jul 15, 2015</td>
-                          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-delete"></i></a></td>
-                        </tr>
-                        <tr>
-                          <td class="user-avatar"> <img src="assets/img/avatar2.png" alt="Avatar">Adeline Shepherd</td>
-                          <td>Topbar dropdown style</td>
-                          <td>Jun 30, 2015</td>
-                          <td class="actions"><a href="#" class="icon"><i class="mdi mdi-delete"></i></a></td>
-                        </tr>
+                  <div class="panel-body">
+                    
+                    <table class="no-border no-strip skills">
+                      <tbody class="no-border-x no-border-y">
+                        {% for skill in volunteer.skills.all %}
+                          <tr>
+                              <td><span class="icon s7-portfolio">{{ skill.name}}</span> </td>
+                          </tr>
+                          {% endfor %}
                       </tbody>
-                    </table>
+                  </table>
+                  
+                  </div>
+                </div>
+                <div class="user-info-list panel panel-default">
+                  <div class="panel-heading panel-heading-divider">Badges</div>
+                  <div class="panel-body">
+                 
+                    <table class="no-border no-strip skills">
+                      <tbody class="no-border-x no-border-y">
+                        {% for badge in volunteer.badges.all %}
+                          <tr>
+                              <td> <img src="{{ badge.image.url }}" alt="{{ badge.name }}" class="badge-icon"> {{ badge.name }} </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
                   </div>
                 </div>
               </div>

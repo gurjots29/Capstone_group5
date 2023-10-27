@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login,logout
-
+from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import generics
+from django.views.generic.detail import DetailView
 from .models import Badge, Skill, Volunteer, Organization
 from .serializers import BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer
 from .forms import LoginForm
@@ -19,10 +21,16 @@ class VolunteerListCreateView(generics.ListCreateAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
-class VolunteerDetailView(generics.RetrieveAPIView):
-    queryset = Volunteer.objects.all()
-    serializer_class = VolunteerSerializer
+class VolunteerDetailView(DetailView):
+    model = Volunteer
+    template_name = 'profile-volunteer.html'
+    context_object_name = 'volunteer'
 
+    def get_object(self, queryset=None):
+        try:
+            return self.request.user.volunteer
+        except Volunteer.DoesNotExist:
+            raise Http404("No Volunteer associated with this user.")
 
 class OrganizationListCreateView(generics.ListCreateAPIView):
     queryset = Organization.objects.all()
