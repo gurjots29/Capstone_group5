@@ -2,6 +2,7 @@
 
 # Create your views here.
 from rest_framework import generics
+from django.shortcuts import render
 from .models import Event, RegistrationEvents, Program
 from .serializers import EventSerializer, RegistrationEventsSerializer, ProgramSerializer
 
@@ -16,3 +17,6 @@ class RegistrationEventsViewSet(generics.ListCreateAPIView):
 class ProgramViewSet(generics.ListCreateAPIView):
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
+
+def events_management_view(request):
+    return render(request, 'events-management.html')

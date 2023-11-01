@@ -1,0 +1,181 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+
+{% load custom_tags %}
+
+{% block titulo %} Home {% endblock titulo %}
+
+{% block title-page %} Profile Organizations  {% endblock title-page %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+{% endblock css %}
+
+{% block content %}
+
+<div class="be-content">
+
+    <div class="page-head">
+       <h2 class="page-head-title" id="profile" data-opcion="inicio">Organizations Volunteer</h2>
+    </div>
+
+    <div class="main-content container-fluid ">
+       <div class="row">
+              <div class="col-md-7">
+                <div class="user-display">
+                  <div class="user-display-bg"><img src="{{ organization.background_image.url }}" alt="Profile Background"></div>
+                  <div class="user-display-bottom">
+                    <div class="user-display-avatar"><img src="{{ organization.logo.url }}" alt=" Avatar"> </div>
+                    <div class="user-display-info">
+                      <div class="name"> </div>
+                      <div class="nick"> </div>
+                    </div>
+                    <div class="row user-display-details">
+                      <div class="col-xs-4">
+                        <div class="title">Issues</div>
+                        <div class="counter">26</div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="title">Commits</div>
+                        <div class="counter">26</div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="title">Followers</div>
+                        <div class="counter">26</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <form id="organization-form">
+                  {% csrf_token %}
+                <div class="user-info-list panel panel-default">
+                  <div class="panel-heading panel-heading-divider">
+                  <div class="value-display" >Description <span class="panel-subtitle">{{ organization.description }}</span></div>
+                  <div class="value-edit" style="display: none;">Description   <textarea name="description" rows="5" id="desciption-input" cols="50">{{ organization.description }}</textarea></div>
+                </div> 
+                  <div class="panel-body">
+                      <table class="no-border no-strip skills">
+                          <tbody class="no-border-x no-border-y">
+                            <tr>
+                              <td class="icon"><span class="mdi mdi-email-open"></span></td>
+                              <td class="item">Name<span class="icon s7-email"></span></td>
+                              <td class="value-display">{{ organization.name }}</td>
+                              <td class="value-edit" style="display: none;">
+                                  <input type="tel" name="name" value="{{ organization.email }}" id="name-input">
+                              </td>
+                           </tr>
+                            <tr>
+                              <td class="icon"><span class="mdi mdi-email-open"></span></td>
+                              <td class="item">Email<span class="icon s7-email"></span></td>
+                              <td class="value-display">{{ organization.email }}</td>
+                              <td class="value-edit" style="display: none;">
+                                  <input type="tel" name="email" value="{{ organization.email }}" id="email-input">
+                              </td>
+                           </tr>
+                              <tr>
+                                  <td class="icon"><span class="mdi mdi-smartphone-android"></span></td>
+                                  <td class="item">Phone<span class="icon s7-phone"></span></td>
+                                  <td class="value-display">{{ organization.phone_number }}</td>
+                                  <td class="value-edit" style="display: none;">
+                                      <input type="tel" name="phone" value="{{ organization.phone_number }}" id="phone-input">
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td class="icon"><span class="mdi mdi-globe-alt"></span></td>
+                                  <td class="item">Website<span class="icon s7-map-marker"></span></td>
+                                  <td class="value-display">{{ organization.website}}</td>
+                                  <td class="value-edit" style="display: none;">
+                                      <input type="text" name="website" value="{{ organization.website }}" id="website-input">
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  
+                      <button type="button" id="edit-button" class="btn btn-space btn-primary">Edit</button>
+                      <button type="submit" id="save-button" class="btn btn-space btn-success" style="display: none;">Save</button>
+                  </div>
+                </div>
+              </form>
+              </div>
+            
+              <div class="col-md-5">
+                <div class="user-info-list panel panel-default">
+                  <div class="panel-heading panel-heading-divider">Skills
+                  </div>
+                  <div class="panel-body">
+  
+                  
+                  </div>
+                </div>
+                <div class="user-info-list panel panel-default">
+                  <div class="panel-heading panel-heading-divider">Badges</div>
+                  <div class="panel-body">
+                 
+                   
+                  </div>
+                </div>
+              </div>
+            </div> 
+     </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let organizationId = "{{ organization.id }}";
+    let csrfToken = "{{ csrf_token }}";
+
+  document.getElementById("edit-button").addEventListener("click", function() {
+    let displayElements = document.querySelectorAll(".value-display");
+    let editElements = document.querySelectorAll(".value-edit");
+
+    displayElements.forEach(element => element.style.display = "none");
+    editElements.forEach(element => element.style.display = "");
+
+    this.style.display = "none";
+    document.getElementById("save-button").style.display = "";
+   });
+   document.getElementById("organization-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let formData = new FormData(this);
+
+    let data = {
+        name: formData.get("name"),
+        description: formData.get("description"),
+        email: formData.get("email"),
+        phone_number: formData.get("phone"),
+        website: formData.get("website"),
+    };
+
+    fetch('/api/organization/' + organizationId + '/', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        location.reload(); 
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Hubo un error al actualizar los datos.");
+    });
+});
+});
+
+</script>
+{% endblock scripts %}

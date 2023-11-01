@@ -44,11 +44,15 @@
     <div class="be-wrapper be-fixed-sidebar">
         <nav class="navbar navbar-default navbar-fixed-top be-top-header">
           <div class="container-fluid">
-            <div class="navbar-header"><img src="{% static 'media/logo-vertical.png' %}" alt="VolunteerConnect" width="200" height="40" class="logo-img">
+            <div class="navbar-header">
+              <img src="{% static 'media/logo-vertical.png' %}" alt="VolunteerConnect" width="200" height="40" class="logo-img">
             </div>
-           
-           
-            <div class="be-right-navbar">
+            <div class="be-right-navbar be-right-navbar-flex">
+              <div class="page-title"><span>My Volunteer Platform</span> </div>
+              <div class="input-group input-group-sm">
+                <input type="text" name="search" placeholder="Search..." class="form-control search-input"><span class="input-group-btn">
+              </div>
+                      
               <ul class="nav navbar-nav navbar-right be-user-nav">
                 <li class="dropdown">
                   <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
@@ -80,8 +84,8 @@
                   </ul>
                 </li>
               </ul>
-
-              <div class="page-title"><span>My Volunteer Platform</span> </div>
+             
+              
               <ul class="nav navbar-nav navbar-right be-icons-nav">
                 <li class="dropdown"><a href="#" role="button" aria-expanded="false" class="be-toggle-right-sidebar"><span class="icon mdi mdi-settings"></span></a></li>
                 <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>

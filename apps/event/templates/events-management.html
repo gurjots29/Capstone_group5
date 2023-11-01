@@ -1,0 +1,35 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block titulo %} Home {% endblock titulo %}
+
+{% block title-page %} My Organizations {% endblock title-page %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+<link rel="stylesheet" href="{% static 'thime/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
+{% endblock css %}
+
+{% block content %}
+
+<div class="be-content">
+    <div class="page-head">
+       <h2 class="page-head-title" id="profile" data-opcion="inicio"> Events Management</h2>
+    </div>
+
+    <div class="main-content container-fluid ">
+       <div class="row">
+              <div class="col-sm-12">
+           
+             </div>           
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}
