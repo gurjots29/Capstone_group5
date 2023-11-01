@@ -8,29 +8,29 @@
             <span>Home</span>
         </a>
     </li>
-    {%  if user.username == "root" %}
+
         <li class="parent"><a href="#"><i class="icon mdi mdi-money"></i><span>Organizations</span></a>
             <ul class="sub-menu">
-                    <li id="Profile">
-                        <a href="{% url 'users:profile-organizations' %}">
-                            <span>Profile</span>
+                    <li id="My organizations">
+                        <a href="{% url 'users:my-organizations' %}">
+                            <span>My organizations</span>
                         </a>
                     </li>
 
-                    <li id="Network Managment">
-                        <a href="{% url 'users:profile-organizations' %}">
-                            <span>Network Managment</span>
+                    <li id="Memberships">
+                        <a href="{% url 'users:organization-memberships' %}">
+                            <span>Memberships</span>
                         </a>
                     </li>
 
                     <li id="Event Managment">
-                        <a href="{% url 'users:profile-organizations' %}">
-                            <span>Event Managment</span>
+                        <a href="{% url 'event:events-management' %}">
+                            <span>Events</span>
                         </a>
                     </li>
                 
                     <li id="Recruitment Managment">
-                        <a href="{% url 'users:profile-organizations' %}">
+                        <a href="">
                             <span>Recruitment Managment</span>
                         </a>
                     </li>
@@ -38,5 +38,5 @@
 
               </ul>
         </li>
-    {% endif %}
+  
 </ul>

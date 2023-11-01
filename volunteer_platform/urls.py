@@ -12,9 +12,10 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('home/', include('apps.home.urls')),
     path('admin/', admin.site.urls),
-    path('', include('apps.users.urls')),
+    path('', include(('apps.users.urls', 'users'), namespace='users')),
     path('post/', include('apps.post.urls')),
-    path('event/', include('apps.event.urls')),
+   # path('event/', include('apps.event.urls')),
+   path('event/', include(('apps.event.urls', 'event'), namespace='event')),
 ]
 
 if settings.DEBUG:
