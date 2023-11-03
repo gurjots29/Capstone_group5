@@ -3,33 +3,54 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block titulo %} Home {% endblock titulo %}
-
-{% block title-page %} My Organizations {% endblock title-page %}
-
+{% block titulo %} Events {% endblock titulo %}
+{% block title-page %} Profile Organizations  {% endblock title-page %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
-<link rel="stylesheet" href="{% static 'thime/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
 {% endblock css %}
 
 {% block content %}
-
 <div class="be-content">
-    <div class="page-head">
-       <h2 class="page-head-title" id="profile" data-opcion="inicio"> Events Management</h2>
+    <div class="page-head"> 
+        <h2 class="page-head-title" id="profile" data-opcion="inicio">Events</h2>
     </div>
 
-    <div class="main-content container-fluid ">
-       <div class="row">
-              <div class="col-sm-12">
-           
-             </div>           
+    <div class="main-content container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <!-- Your content for events will go here -->
+            </div>
+            <div class="col-md-3 nova-sidebar">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
+                            <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
+                                Events
+                            </div>
+                            <div class="panel-body">
+                                <table class="no-border no-strip skills">
+                                    <tbody class="no-border-x no-border-y">
+                                        <tr>
+                                            <td class="">
+                                                <div class="col-md-12">
+                                                    <i class="fa fa-calendar" aria-hidden="true"></i> Event: date: Title Event
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- You can add JavaScript or other scripts here if needed -->
+
 {% endblock content %}
 
 {% block scripts %}
-
 {% endblock scripts %}
