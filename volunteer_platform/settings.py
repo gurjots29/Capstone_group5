@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.post',
     'apps.event',
-    'apps.home'
+    'apps.home',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -115,7 +116,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+     'social_core.backends.google.GoogleOAuth2',
 ]
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'CLIENT_ID'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'CLIENT_SECRET'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

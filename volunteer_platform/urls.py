@@ -16,6 +16,8 @@ urlpatterns = [
     path('post/', include('apps.post.urls')),
    # path('event/', include('apps.event.urls')),
    path('event/', include(('apps.event.urls', 'event'), namespace='event')),
+    path('auth/', include('social_django.urls', namespace='social')),
+
 ]
 
 if settings.DEBUG:
