@@ -1,0 +1,5 @@
+<label for="email" class="text">Email* :</label>
+    <input type="text" placeholder="Enter Email" name="email" >  <br/>                
+ 
+     <label for="psw" class="text">Password* :</label>
+     <input type="password" placeholder="Enter Password" name="psw" ><br/>
