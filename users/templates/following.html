@@ -1,0 +1,131 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+
+{% load custom_tags %}
+
+{% block titulo %} Home {% endblock titulo %}
+
+{% block title-page %} Profile Organizations  {% endblock title-page %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+<link rel="stylesheet" href="{% static 'theme/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
+{% endblock css %}
+
+{% block content %}
+
+<div class="be-content">
+
+    <div class="page-head">
+        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Following</h2>
+    </div>
+
+    <div class="main-content container-fluid ">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="user-display">
+                    <div class="user-display-bg">
+                        {% if user.background_image %}
+                        <img src="{{ user.background_image.url }}" alt="Profile Background">
+                        {% else %}
+                        <img src="{% static 'media/bg2.jpg' %}">
+                        {% endif %}
+                    </div>
+                    <div class="user-display-bottom">
+                        <div class="user-display-avatar">
+                            {% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt=" Avatar">
+                            {% else %}
+                            <img src="{% static 'media/avatar.png' %}">
+                            {% endif %}
+
+                        </div>
+                        <div class="user-display-info">
+                            <div class="name">
+                                {% if user.first_name and user.last_name %}
+                                {{ user.first_name }} {{ user.last_name }}
+                                {% else %}
+                                {{ user.username }}
+                                {% endif %}
+                            </div>
+                            <div class="nick">
+                                {% if user.headline %}
+                                {{ user.headline }}
+                                {% else %}
+                                <p>Put your headline</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row user-display-details">
+                            <div class="col-xs-4">
+                                <div class="title">Following</div>
+                                <div class="counter">{{ user.following.count }}</div>
+                            </div>
+                            <div class="col-xs-4">
+                                <a href="{% url 'users:followers' user_id=user.id %}">
+                                    <div class="title">Followers</div>
+                                </a>
+                                     <div class="counter">{{ user.followers.count }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="user-display">
+                    <div class="user-display-bottom">
+                        <div class="row user-display-details">
+                            <div class="title">You are following {{ user.following.count }} users now !!</div>
+                            {% for relationship in relationships %}
+                            <div class="post-header">
+                                <a href="{% url 'users:profile' user_id=relationship.to_user.id %}">
+                                    {% if relationship.to_user.profile_image %}
+                                    <img src="{{ relationship.to_user.profile_image.url }}">
+                                    {% else %}
+                                    <img src="{% static 'media/avatar.png' %}">
+                                    {% endif %}
+                                    <span>
+                                        {% if relationship.to_user.first_name and relationship.to_user.last_name %}
+                                        {{ relationship.to_user.first_name }} {{ relationship.to_user.last_name}}
+                                        {% else %}
+                                        {{ relationship.to_user.username }}
+                                        {% endif %}
+                                        <div> {{ relationship.to_user.headline }} </div>
+                                    </span>
+
+                                </a>
+                                {% if user != relationship.to_user %}
+                                <form action="{% url 'users:follow' user_id=relationship.to_user.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary">
+                                        {% if relationship.to_user in user.following.all %}
+                                        Unfollow
+                                        {% else %}
+                                        Follow
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

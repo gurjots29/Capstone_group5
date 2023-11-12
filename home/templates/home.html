@@ -1,0 +1,323 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block titulo %} Home {% endblock titulo %}
+{% block title-page %} Profile Organizations  {% endblock title-page %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+
+{% endblock css %}
+
+{% block content %}
+<div class="be-content">
+    <div class="page-head">
+        <h2 class="page-head-title" id="profile" data-opcion="inicio">User Feed</h2>
+    </div>
+
+    <div class="main-content container-fluid ">
+        <div class="row">
+            <div class="col-md-9">
+                <!-- Botón para activar el modal de crear post -->
+                <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#createPostModal">
+                    Create Post
+                </button>
+
+                <!-- Modal de Crear Post -->
+                <div class="modal fade" id="createPostModal" tabindex="-1" role="dialog"
+                     aria-labelledby="createPostModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="createPostModalLabel">Create Post</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="postForm" method="POST" action="#">
+                                    {% csrf_token %}
+                                    <!-- Title Input Field -->
+                                    <div class="form-group">
+                                        <label for="postTitle">Title:</label>
+                                        <input type="text" class="form-control" id="postTitle" name="title">
+                                    </div>
+
+                                    <!-- Content Textarea -->
+                                    <div class="form-group">
+                                        <label for="postContent">Content:</label>
+                                        <textarea class="form-control" id="postContent" name="content"
+                                                  rows="6"></textarea>
+                                    </div>
+
+                                    <!-- File Input Field -->
+                                    <div class="form-group">
+                                        <label for="postFile">File:</label>
+                                        <input type="file" class="form-control-file" id="postFile"
+                                               name="{{ form.file.name }}">
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% for post in posts %}
+                <article id="post-{{ post.id }}" class="post">
+                <div class="user-info-list panel panel-default panel-border">
+                    <header class="post-header">
+                        <a href="{% url 'users:profile' user_id=post.user.id %}">
+                            {% if post.user.profile_image %}
+                                <img src="{{ post.user.profile_image.url }}" alt="">
+                            {% else %}
+                                 <img src="{% static 'media/avatar.png' %}">
+                            {% endif %}
+                            <span>
+                                {% if post.user.first_name and post.user.last_name %}
+                                {{ post.user.first_name }} {{ post.user.last_name }}
+                                {% else %}
+                                {{ post.user.username }}
+                                {% endif %}
+                                <div> {{ post.user.headline }} </div>
+                                <div> time </div>
+                            </span>
+
+                            <!---<span>{{ post.created_at|date:"F d, h:i A" }}</span>  --->
+                        </a>
+                    </header>
+
+                    <div class="panel-body">
+                        <section class="post-contenido">
+                            {{ post.content }}
+                        </section>
+                        {% if post.file %}
+                        <!-- Check if a file is attached to the post -->
+                        <img src="{{ post.file.url }}" class="img-fluid mb-3" style="max-width: 600px; height: 600;"
+                             alt="Post Image">
+                        {% endif %}
+
+                        <!-- Comments -->
+                        <h3 class="mt-3">Comments:</h3>
+                        {% if post.comments.all %}
+                        <ul class="list-group">
+                            {% for comment in post.comments.all %}
+                            <li class="list-group-item">
+                                <strong>{{ comment.user.username }}</strong> said: {{ comment.text }}
+                                <span class="text-muted"> ({{ comment.created_at | date:"F d, Y h:i A" }})</span>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No comments yet.</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted">No comments yet.</p>
+                        {% endif %}
+
+                        <!-- Form to add comments -->
+                        <button type="button" class="btn btn-secondary mt-3 add-comment-btn"
+                                data-post-id="{{ post.id }}">Add Comment
+                        </button>
+                        <form class="commentForm hidden" method="post" data-post-id="{{ post.id }}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ form.text.id_for_label }}">Add a comment:</label>
+                                <textarea class="form-control" id="{{ form.text }}" name="text" rows="6"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                </article>
+                {% empty %}
+                <p class="mt-4">No posts available.</p>
+                {% endfor %}
+            </div>
+            <div class="col-md-3 nova-sidebar">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
+                            <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
+                                Events
+                            </div>
+                            <div class="panel-body">
+                                <table class="no-border no-strip skills">
+                                    <tbody class="no-border-x no-border-y">
+                                    <tr>
+                                        <td class="">
+                                            <div class="col-md-12">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i> Event: date: Title
+                                                Event
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para enviar el formulario por AJAX -->
+<script>
+ document.addEventListener('DOMContentLoaded', (event) => {
+
+const postForm = document.getElementById('postForm');
+
+if (postForm) {
+    postForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const titleElement = document.getElementById('postTitle');
+        const contentElement = document.getElementById('postContent');
+        const fileElement = document.getElementById('postFile');
+
+        if (!titleElement || !contentElement) {
+            console.error("Error: No se encontraron los elementos del formulario.");
+            return;
+        }
+
+        const title = titleElement.value.trim();
+        const content = contentElement.value.trim();
+
+        if (!title || !content) {
+            alert('Ambos campos, título y contenido, son obligatorios.');
+            return;
+        }
+
+        const formData = new FormData(postForm);
+
+        // Verificar si se ha seleccionado un archivo y agregarlo al formData
+        if (fileElement.files.length > 0) {
+            formData.append('file', fileElement.files[0]);
+        }
+
+        const headers = new Headers();
+        headers.append('X-CSRFToken', getCookie('csrftoken'));
+
+        fetch("/post/postlist/", {
+            method: "POST",
+            headers: headers,
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errorText => {
+                    throw new Error(errorText || 'La respuesta de la red no fue correcta');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.id) {
+                alert("¡Publicación creada con éxito!");
+                location.reload();  // Recargar la página
+            } else {
+                alert("Error: " + JSON.stringify(data));
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Ocurrió un error: " + error.message);
+        });
+    });
+}
+
+function getCookie(name) {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+  // Function to get CSRF token
+  function getCSRFToken() {
+      const name = "csrftoken=";
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookieArray = decodedCookie.split(';');
+
+      for (let i = 0; i < cookieArray.length; i++) {
+          let cookie = cookieArray[i];
+          while (cookie.charAt(0) === ' ') {
+              cookie = cookie.substring(1);
+          }
+          if (cookie.indexOf(name) === 0) {
+              return cookie.substring(name.length, cookie.length);
+          }
+      }
+      return "";
+  }
+
+
+  let commentForms = document.querySelectorAll('.commentForm');
+      commentForms.forEach(form => {
+      form.addEventListener("submit", function(event) {
+          event.preventDefault();
+
+          let textArea = this.querySelector('textarea[name="text"]');
+          if (!textArea.value.trim()) {
+              alert('The comment field is required.');
+              return;
+          }
+
+          let postId = this.getAttribute('data-post-id');
+          let formData = new FormData();
+          formData.append('csrfmiddlewaretoken', getCSRFToken());
+          formData.append('text', textArea.value);
+          formData.append('post', postId);
+
+          let headers = new Headers();
+          headers.append('X-CSRFToken', getCookie('csrftoken'));
+
+          fetch("/post/comment/", {
+              method: "POST",
+              headers: headers,
+              body: formData
+          })
+          .then(response => {
+              if (!response.ok) {
+                  return response.text().then(errorText => {
+                      console.log("Error details:", errorText);
+                      throw new Error('Network response was not ok');
+                  });
+              }
+              return response.json();
+          })
+          .then(data => {
+              if (data.id) {
+                  alert("Comment added successfully!");
+                  location.reload();
+              } else {
+                  alert("Error: " + JSON.stringify(data));
+              }
+          })
+          .catch(error => {
+              console.error("Error:", error);
+              alert("An error occurred. Please try again.");
+          });
+      });
+  });
+
+
+    // Event listeners for each comment button
+    let commentButtons = document.querySelectorAll('.add-comment-btn');
+    commentButtons.forEach(btn => {
+        btn.addEventListener("click", function() {
+            let postId = this.getAttribute('data-post-id');
+            let form = document.querySelector(`.commentForm[data-post-id="${postId}"]`);
+            form.classList.toggle('hidden'); // Mostrar/Ocultar el formulario al hacer click
+        });
+    });
+
+});
+
+</script>
+{% endblock content %}
+
+{% block scripts %}
+{% endblock scripts %}

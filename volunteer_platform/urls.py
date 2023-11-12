@@ -10,14 +10,12 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('home/', include('apps.home.urls')),
+    path('home/', include('home.urls')),
     path('admin/', admin.site.urls),
-    path('', include(('apps.users.urls', 'users'), namespace='users')),
-    path('post/', include('apps.post.urls')),
+    path('', include(('users.urls', 'users'), namespace='users')),
+    path('post/', include('post.urls')),
    # path('event/', include('apps.event.urls')),
-   path('event/', include(('apps.event.urls', 'event'), namespace='event')),
-    path('auth/', include('social_django.urls', namespace='social')),
-
+    path('event/', include(('event.urls', 'event'), namespace='event')),
 ]
 
 if settings.DEBUG:

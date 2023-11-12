@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <title>My Volunteer Site</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Volunteer Platform ">
+    <meta name="author" content="Team 5">
+    <title>{% block titulo %} Sing in {% endblock titulo %}</title>
+
+    <!-- Material Desing Icons -->
+    <link rel="stylesheet" href="{% static 'theme/lib/material-design-icons/css/material-design-iconic-font.min.css' %}" type="text/css" />
+
+    <!-- Perfect Scrollbar -->
+    <link rel="stylesheet" href="{% static 'theme/lib/perfect-scrollbar/css/perfect-scrollbar.min.css' %}" type="text/css" />
+
+    <!-- Pace -->
+    <script src="{% static 'libs/pace/1.0.0/pace.js' %} " type="text/javascript"></script>
+
+    <!-- Select 2 -->
+    <link rel="stylesheet" href="{% static 'libs/select2/4.0.3/dist/css/select2.min.css' %}"/>
+
+    <!-- Main Theme CSS -->
+    <link rel="stylesheet" href="{% static 'theme/css/style.css' %}" type="text/css"/>
+    
+
+
+</head>
+<body class="be-splash-screen">
+    {% for message in messages %}
+        <div class="alert" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+    {% block content %}
+
+    <div class="be-wrapper be-login">
+        <div class="be-content">
+            <div class="main-content container-fluid">
+                <div class="splash-container">
+
+                    <div class="panel panel-default panel-border-color nova-border-top-pantone">
+                        <div class="panel-heading">
+                            <img src="{% static 'media/logo.png' %}" alt="VolunteerConnect" width="320" height="120" class="logo-img">
+                            <span class="splash-description"><strong>1.0</strong></span>
+                        </div>
+                        <div class="panel-body">
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input id="username" type="text" name="username" placeholder="Username" autocomplete="off" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input id="email" type="email" name="email" placeholder="Email" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input id="password" type="password" name="password" placeholder="Password" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <input id="confirm_password" type="password" name="confirm_password" placeholder="Confirm Password" class="form-control">
+                                </div>
+                                <div class="form-group login-submit">
+                                    <button data-dismiss="modal" type="submit" class="btn">Sign up</button>
+                                </div>
+                                <div class="splash-footer">
+                                    <span> <a href="{% url 'users:login' %}">Login</a></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Include your additional signup content here -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+
+    <!-- Include your JavaScript files here -->
+        <!-- jQuery -->
+        <script src="{% static 'theme/lib/jquery/jquery.min.js' %}" type="text/javascript"></script>
+
+        <!-- Bootstrap-->
+        <script src="{% static 'theme/lib/bootstrap/dist/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    
+        <!-- Perfect Scrollbar -->
+        <script src="{% static 'theme/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js' %}" type="text/javascript"></script>
+    
+        <!-- Pace -->
+        <script src="{% static 'libs/pace/1.0.0/pace.js' %} " type="text/javascript"></script>
+    
+        <!-- Moment -->
+        <script src="{% static 'libs/momentjs/2.18.1/moment.js' %}"></script>
+    
+        <!-- Pace -->
+        <script src="{% static 'libs/pace/1.0.0/pace.js' %} " type="text/javascript"></script>
+    
+        <!-- Select 2 -->
+        <script src="{% static 'libs/select2/4.0.3/dist/js/select2.min.js' %}"></script>
+    
+        <!-- Main Theme js -->
+        <script src="{% static 'theme/js/main.js' %}"></script>
+    
+    
+        <script type="text/javascript">
+            $(document).ready(function(){
+               //initialize the javascript
+               App.init();
+            });
+        </script>
+
+  </body>
+</html>

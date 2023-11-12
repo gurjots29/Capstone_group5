@@ -1,5 +1,5 @@
 """
-WSGI config for volunteer_platform project.
+WSGI config for config project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
