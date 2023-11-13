@@ -4,7 +4,10 @@ from .views import (user_logout,user_login,forgot_password_view,profile_organiza
                     BadgeListCreateView, SkillListCreateView, VolunteerListCreateView, 
                     OrganizationListCreateView,VolunteerDetailView, AddSkillToVolunteerView,
     RemoveSkillFromVolunteerView, my_organizations_view ,OrganizationDetailView,
-    OrganizationRetrieveUpdateDestroyView, organization_memberships_view,user_signup
+    OrganizationRetrieveUpdateDestroyView, organization_memberships_view,user_signup, update_profile_picture,
+    update_background_image,update_profile_logo,update_obackground_image,AddInterestToVolunteerView, 
+    RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
+    organization_match_view,VolunteerRelationships,unfollow_volunteer
 )
 app_name = 'users'
 
@@ -26,12 +29,26 @@ urlpatterns = [
     path('api/volunteer/<int:id>/', VolunteerRetrieveUpdateDestroyView.as_view(), name='volunteer-detail-update-delete'),
     path('api/volunteer/<int:id>/add_skill/', AddSkillToVolunteerView.as_view(), name='add-skill-to-volunteer'),
     path('api/volunteer/<int:id>/remove_skill/', RemoveSkillFromVolunteerView.as_view(), name='remove-skill-from-volunteer'),
-
+    path('api/volunteer/<int:id>/update_profile_picture/', update_profile_picture, name='update-profile-picture'),
+    path('api/volunteer/<int:id>/update_background_image/', update_background_image, name='update-background-image'),
+    path('api/volunteer/<int:id>/add_interest/', AddInterestToVolunteerView.as_view(), name='add-intereest-to-volunteer'),
+    path('api/volunteer/<int:id>/remove_interest/', RemoveInterestFromVolunteerView.as_view(), name='remove-interest-from-volunteer'),
+    path("relationships/", VolunteerRelationships, name="relationships"),
+    path('unfollow_volunteer/<int:volunteer_id>/', unfollow_volunteer, name='unfollow-volunteer'),
+ 
     #Organizations
     path('my-organizations/', my_organizations_view, name='my-organizations'),
     path('organizations/', OrganizationListCreateView.as_view(), name='organizations-list-create'),
     path('organizations/<int:pk>/', OrganizationDetailView.as_view(), name='organization-detail'),
     path('api/organization/<int:id>/', OrganizationRetrieveUpdateDestroyView.as_view(), name='update-organization'),
+    path('api/organization/<int:id>/update_profile_logo/', update_profile_logo, name='update-profile-logo'),
+    path('api/organization/<int:id>/update_background_image/', update_obackground_image, name='update-obackground-image'),
+    path('api/organization/<int:id>/add_interest/', AddInterestToOrganizationView.as_view(), name='add-intereest-to-organization'),
+    path('api/organization/<int:id>/remove_interest/', RemoveInterestFromOrganizationView.as_view(), name='remove-interest-from-organization'),
+    path('organization-match/', organization_match_view, name='organization-match'),
+   
+
+
     path('profile-organization/<int:org_id>/', OrganizationDetailView.as_view(), name='organization-detail'),
    
     path('organization-memberships/', organization_memberships_view, name='organization-memberships'),

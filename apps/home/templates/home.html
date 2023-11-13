@@ -1,13 +1,15 @@
 {% extends 'based_layout.html' %}
 
 {% load static %}
+
 {% load custom_tags %}
 
 {% block titulo %} Home {% endblock titulo %}
-{% block title-page %} Profile Organizations  {% endblock title-page %}
-{% block css %}
-    <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
 
+{% block title-page %} User Feed {% endblock title-page %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
 {% endblock css %}
 
 {% block content %}
@@ -139,162 +141,162 @@
   </div>
 </div>
 
-<!-- Script para enviar el formulario por AJAX -->
-<script>
- document.addEventListener('DOMContentLoaded', (event) => {
-
-const postForm = document.getElementById('postForm');
-
-if (postForm) {
-    postForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const titleElement = document.getElementById('postTitle');
-        const contentElement = document.getElementById('postContent');
-        const fileElement = document.getElementById('postFile');
-
-        if (!titleElement || !contentElement) {
-            console.error("Error: No se encontraron los elementos del formulario.");
-            return;
-        }
-
-        const title = titleElement.value.trim();
-        const content = contentElement.value.trim();
-
-        if (!title || !content) {
-            alert('Ambos campos, título y contenido, son obligatorios.');
-            return;
-        }
-
-        const formData = new FormData(postForm);
-
-        // Verificar si se ha seleccionado un archivo y agregarlo al formData
-        if (fileElement.files.length > 0) {
-            formData.append('file', fileElement.files[0]);
-        }
-
-        const headers = new Headers();
-        headers.append('X-CSRFToken', getCookie('csrftoken'));
-
-        fetch("/post/postlist/", {
-            method: "POST",
-            headers: headers,
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(errorText => {
-                    throw new Error(errorText || 'La respuesta de la red no fue correcta');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.id) {
-                alert("¡Publicación creada con éxito!");
-                location.reload();  // Recargar la página
-            } else {
-                alert("Error: " + JSON.stringify(data));
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Ocurrió un error: " + error.message);
-        });
-    });
-}
-
-function getCookie(name) {
-    const value = "; " + document.cookie;
-    const parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
-}
-
-  // Function to get CSRF token
-  function getCSRFToken() {
-      const name = "csrftoken=";
-      const decodedCookie = decodeURIComponent(document.cookie);
-      const cookieArray = decodedCookie.split(';');
-
-      for (let i = 0; i < cookieArray.length; i++) {
-          let cookie = cookieArray[i];
-          while (cookie.charAt(0) === ' ') {
-              cookie = cookie.substring(1);
-          }
-          if (cookie.indexOf(name) === 0) {
-              return cookie.substring(name.length, cookie.length);
-          }
-      }
-      return "";
-  }
-
-
-  let commentForms = document.querySelectorAll('.commentForm');
-      commentForms.forEach(form => {
-      form.addEventListener("submit", function(event) {
-          event.preventDefault();
-
-          let textArea = this.querySelector('textarea[name="text"]');
-          if (!textArea.value.trim()) {
-              alert('The comment field is required.');
-              return;
-          }
-
-          let postId = this.getAttribute('data-post-id');
-          let formData = new FormData();
-          formData.append('csrfmiddlewaretoken', getCSRFToken());
-          formData.append('text', textArea.value);
-          formData.append('post', postId);
-
-          let headers = new Headers();
-          headers.append('X-CSRFToken', getCookie('csrftoken'));  
-
-          fetch("/post/comment/", {
-              method: "POST",
-              headers: headers,
-              body: formData
-          })
-          .then(response => {
-              if (!response.ok) {
-                  return response.text().then(errorText => {
-                      console.log("Error details:", errorText);
-                      throw new Error('Network response was not ok');
-                  });
-              }
-              return response.json();
-          })
-          .then(data => {
-              if (data.id) {  
-                  alert("Comment added successfully!");
-                  location.reload();  
-              } else {
-                  alert("Error: " + JSON.stringify(data));
-              }
-          })
-          .catch(error => {
-              console.error("Error:", error);
-              alert("An error occurred. Please try again.");
-          });
-      });
-  });
-
-
-    // Event listeners for each comment button
-    let commentButtons = document.querySelectorAll('.add-comment-btn');
-    commentButtons.forEach(btn => {
-        btn.addEventListener("click", function() {
-            let postId = this.getAttribute('data-post-id');
-            let form = document.querySelector(`.commentForm[data-post-id="${postId}"]`);
-            form.classList.toggle('hidden'); // Mostrar/Ocultar el formulario al hacer click
-        });
-    });
-
-});
-
-</script>
 {% endblock content %}
 
 {% block scripts %}
+<!-- Script para enviar el formulario por AJAX -->
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+   
+   const postForm = document.getElementById('postForm');
+   
+   if (postForm) {
+       postForm.addEventListener('submit', function(event) {
+           event.preventDefault();
+   
+           const titleElement = document.getElementById('postTitle');
+           const contentElement = document.getElementById('postContent');
+           const fileElement = document.getElementById('postFile');
+   
+           if (!titleElement || !contentElement) {
+               console.error("Error: No se encontraron los elementos del formulario.");
+               return;
+           }
+   
+           const title = titleElement.value.trim();
+           const content = contentElement.value.trim();
+   
+           if (!title || !content) {
+               alert('Ambos campos, título y contenido, son obligatorios.');
+               return;
+           }
+   
+           const formData = new FormData(postForm);
+   
+           // Verificar si se ha seleccionado un archivo y agregarlo al formData
+           if (fileElement.files.length > 0) {
+               formData.append('file', fileElement.files[0]);
+           }
+   
+           const headers = new Headers();
+           headers.append('X-CSRFToken', getCookie('csrftoken'));
+   
+           fetch("/post/postlist/", {
+               method: "POST",
+               headers: headers,
+               body: formData
+           })
+           .then(response => {
+               if (!response.ok) {
+                   return response.text().then(errorText => {
+                       throw new Error(errorText || 'La respuesta de la red no fue correcta');
+                   });
+               }
+               return response.json();
+           })
+           .then(data => {
+               if (data.id) {
+                   alert("¡Publicación creada con éxito!");
+                   location.reload();  // Recargar la página
+               } else {
+                   alert("Error: " + JSON.stringify(data));
+               }
+           })
+           .catch(error => {
+               console.error("Error:", error);
+               alert("Ocurrió un error: " + error.message);
+           });
+       });
+   }
+   
+   function getCookie(name) {
+       const value = "; " + document.cookie;
+       const parts = value.split("; " + name + "=");
+       if (parts.length == 2) return parts.pop().split(";").shift();
+   }
+   
+     // Function to get CSRF token
+     function getCSRFToken() {
+         const name = "csrftoken=";
+         const decodedCookie = decodeURIComponent(document.cookie);
+         const cookieArray = decodedCookie.split(';');
+   
+         for (let i = 0; i < cookieArray.length; i++) {
+             let cookie = cookieArray[i];
+             while (cookie.charAt(0) === ' ') {
+                 cookie = cookie.substring(1);
+             }
+             if (cookie.indexOf(name) === 0) {
+                 return cookie.substring(name.length, cookie.length);
+             }
+         }
+         return "";
+     }
+   
+   
+     let commentForms = document.querySelectorAll('.commentForm');
+         commentForms.forEach(form => {
+         form.addEventListener("submit", function(event) {
+             event.preventDefault();
+   
+             let textArea = this.querySelector('textarea[name="text"]');
+             if (!textArea.value.trim()) {
+                 alert('The comment field is required.');
+                 return;
+             }
+   
+             let postId = this.getAttribute('data-post-id');
+             let formData = new FormData();
+             formData.append('csrfmiddlewaretoken', getCSRFToken());
+             formData.append('text', textArea.value);
+             formData.append('post', postId);
+   
+             let headers = new Headers();
+             headers.append('X-CSRFToken', getCookie('csrftoken'));  
+   
+             fetch("/post/comment/", {
+                 method: "POST",
+                 headers: headers,
+                 body: formData
+             })
+             .then(response => {
+                 if (!response.ok) {
+                     return response.text().then(errorText => {
+                         console.log("Error details:", errorText);
+                         throw new Error('Network response was not ok');
+                     });
+                 }
+                 return response.json();
+             })
+             .then(data => {
+                 if (data.id) {  
+                     alert("Comment added successfully!");
+                     location.reload();  
+                 } else {
+                     alert("Error: " + JSON.stringify(data));
+                 }
+             })
+             .catch(error => {
+                 console.error("Error:", error);
+                 alert("An error occurred. Please try again.");
+             });
+         });
+     });
+   
+   
+       // Event listeners for each comment button
+       let commentButtons = document.querySelectorAll('.add-comment-btn');
+       commentButtons.forEach(btn => {
+           btn.addEventListener("click", function() {
+               let postId = this.getAttribute('data-post-id');
+               let form = document.querySelector(`.commentForm[data-post-id="${postId}"]`);
+               form.classList.toggle('hidden'); // Mostrar/Ocultar el formulario al hacer click
+           });
+       });
+   
+   });
+   
+   </script>
 {% endblock scripts %}
 
 

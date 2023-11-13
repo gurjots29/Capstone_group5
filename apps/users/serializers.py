@@ -32,7 +32,7 @@ class VolunteerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Volunteer
-        fields = ('id', 'phone_number', 'experiences', 'interests', 'location', 'date_of_birth', 'user', 'badges', 'skills')
+        fields = ('id', 'phone_number', 'experiences', 'location', 'date_of_birth', 'user', 'badges', 'skills')
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop('user', None)
