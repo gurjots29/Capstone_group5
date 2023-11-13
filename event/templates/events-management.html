@@ -4,42 +4,81 @@
 {% load custom_tags %}
 
 {% block titulo %} Events {% endblock titulo %}
-{% block title-page %} Profile Organizations  {% endblock title-page %}
+{% block title-page %} Events Management {% endblock title-page %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'thime/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
 {% endblock css %}
 
 {% block content %}
 <div class="be-content">
-    <div class="page-head"> 
-        <h2 class="page-head-title" id="profile" data-opcion="inicio">Events</h2>
+    <div class="page-head">
+        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Events Management</h2>
     </div>
 
     <div class="main-content container-fluid">
         <div class="row">
-            <div class="col-md-9">
-                <!-- Your content for events will go here -->
-            </div>
-            <div class="col-md-3 nova-sidebar">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
-                            <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
-                                Events
+            <div class="col-sm-12">
+                <div class="panel panel-default panel-table">
+                    <div class="panel-heading">
+                        <div class="tools dropdown">
+                            <span class="icon mdi mdi-download"></span>
+                            <a href="#" type="button" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="false">
+                                <span class="icon mdi mdi-more-vert"></span>
+                            </a>
+                            <ul role="menu" class="dropdown-menu pull-right">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" id="add-button" class="btn btn-space btn-primary">New Event</button>
+                    </div>
+                    <!-- Modal for adding new event -->
+                    <div id="addEventModal" class="modal fade" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">New Event</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="eventForm">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="title">Title</label>
+                                            <input type="text" class="form-control" id="title" required>
+                                        </div>
+                                        <!-- Add other event fields as needed -->
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="saveEvent">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                <table class="no-border no-strip skills">
-                                    <tbody class="no-border-x no-border-y">
-                                        <tr>
-                                            <td class="">
-                                                <div class="col-md-12">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i> Event: date: Title Event
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div id="eventTable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                            <table id="eventTable" class="table table-striped table-hover table-fw-widget dataTable no-footer" role="grid" aria-describedby="eventTable_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th>Title</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Location</th>
+                                        <!-- Add other event fields as needed -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Event data will be dynamically added here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -48,9 +87,72 @@
     </div>
 </div>
 
-<!-- You can add JavaScript or other scripts here if needed -->
-
 {% endblock content %}
 
 {% block scripts %}
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("/api_createevent/")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        const table = $('#eventTable').DataTable({
+            data: data,
+            columns: [
+                { data: 'title' },
+                { data: 'start_time' },
+                { data: 'end_time' },
+                { data: 'location' },
+                // Add other event fields as needed
+            ]
+        });
+    })
+    .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+    });
+
+    // New
+    document.getElementById("add-button").addEventListener("click", function() {
+        $("#addEventModal").modal("show");
+    });
+
+    document.getElementById("saveEvent").addEventListener("click", function() {
+        const data = {
+            title: document.getElementById("title").value,
+            // Add other event fields as needed
+        };
+
+        fetch("/api_createevent/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => {
+                    console.error("Error details:", error);
+                    throw new Error("Network response was not ok");
+                });
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            $("#addEventModal").modal("hide");
+            // Update your table here with the newly created event
+            location.reload();
+        })
+        .catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+        });
+    });
+});
+</script>
 {% endblock scripts %}
