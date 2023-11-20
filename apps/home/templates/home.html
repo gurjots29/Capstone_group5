@@ -4,7 +4,7 @@
 
 {% load custom_tags %}
 
-{% block titulo %} Home {% endblock titulo %}
+{% block qualification %} Home {% endblock qualification %}
 
 {% block title-page %} User Feed {% endblock title-page %}
 
@@ -21,10 +21,10 @@
     <div class="main-content container-fluid ">
       <div class="row">
           <div class="col-md-9">
-                <!-- Botón para activar el modal de crear post -->
+                <!-- Button to activate the create post modal -->
                 <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#createPostModal">Create Post</button>
 
-                 <!-- Modal de Crear Post -->
+                 <!-- Create Post Modal -->
                  <div class="modal fade" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createPostModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                        <div class="modal-content">
@@ -43,7 +43,7 @@
                                         <input type="text" class="form-control" id="postTitle" name="title">
                                     </div>
 
-                                    <!-- Content Textarea -->
+                                    <!-- Content Text area -->
                                     <div class="form-group">
                                         <label for="postContent">Content:</label>
                                         <textarea class="form-control" id="postContent" name="content" rows="6"></textarea>
@@ -127,7 +127,19 @@
                               <tr>
                                <td class="">
                                 <div class="col-md-12">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i> Event: date: Title Event 
+                                        <ul>
+                                        {% for event in upcoming_events %}
+                                            <li class="fa fa-calendar">
+                                                <h3>{{ event.title }}</h3>
+                                                <p>Inicio: {{ event.start_time }}</p>
+                                                <p>Finaliza: {{ event.end_time }}</p>
+                                                <!-- Other event details -->
+                                            </li>
+                                        {% empty %}
+                                            <li>There are no upcoming events.</li>
+                                        {% endfor %}
+                                        </ul>
+
                                   </div>
                                </td>
                                </tr>
@@ -144,7 +156,7 @@
 {% endblock content %}
 
 {% block scripts %}
-<!-- Script para enviar el formulario por AJAX -->
+<!-- Script to send the form via AJAX -->
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
    
@@ -173,7 +185,7 @@
    
            const formData = new FormData(postForm);
    
-           // Verificar si se ha seleccionado un archivo y agregarlo al formData
+           // Check if a file has been selected and add it to the formData
            if (fileElement.files.length > 0) {
                formData.append('file', fileElement.files[0]);
            }
@@ -197,7 +209,7 @@
            .then(data => {
                if (data.id) {
                    alert("¡Publicación creada con éxito!");
-                   location.reload();  // Recargar la página
+                   location.reload();  // Reload the page
                } else {
                    alert("Error: " + JSON.stringify(data));
                }
@@ -290,7 +302,7 @@
            btn.addEventListener("click", function() {
                let postId = this.getAttribute('data-post-id');
                let form = document.querySelector(`.commentForm[data-post-id="${postId}"]`);
-               form.classList.toggle('hidden'); // Mostrar/Ocultar el formulario al hacer click
+               form.classList.toggle('hidden'); // Show/Hide the form when clicked
            });
        });
    
