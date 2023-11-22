@@ -84,7 +84,11 @@
                     </li>
                     {% get_volunteer_id as volunteer_id %}
                     <li> 
-                        <a href="{% url 'users:volunteer-detail' volunteer_id %}">
+                      {% if volunteer_id %}
+                      <a href="{% url 'users:volunteer-detail' volunteer_id %}">Link to Volunteer Profile</a>
+                       {% else %}
+                      <a href="" >Link to Volunteer Profile</a> <!-- Enlace con href vacío -->
+                       {% endif %}
                             <span class="icon mdi mdi-settings"></span> Profile
                         </a>
                     </li>
