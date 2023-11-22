@@ -7,7 +7,7 @@ from .views import (user_logout,user_login,forgot_password_view,profile_organiza
     OrganizationRetrieveUpdateDestroyView, organization_memberships_view,user_signup, update_profile_picture,
     update_background_image,update_profile_logo,update_obackground_image,AddInterestToVolunteerView, 
     RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
-    organization_match_view,VolunteerRelationships,unfollow_volunteer
+    VolunteerMatchView,VolunteerRelationships,unfollow_volunteer,follow_volunteer,follow_organization,unfollow_organization
 )
 app_name = 'users'
 
@@ -17,8 +17,8 @@ urlpatterns = [
     path('logout/', user_logout, name='user_logout'),
     path('badges/', BadgeListCreateView.as_view(), name='badge-list-create'),
     path('forgot-password/', forgot_password_view, name='forgot-password'),
-     path('sign-up/', user_signup, name='sign-up'),
-    
+    path('sign-up/', user_signup, name='sign-up'),
+
     path('skills/', SkillListCreateView.as_view(), name='skill-list-create'),
     path('api/skills/<int:id>/', SkillRetrieveUpdateDestroyView.as_view(), name='skills-detail'),
 
@@ -35,7 +35,8 @@ urlpatterns = [
     path('api/volunteer/<int:id>/remove_interest/', RemoveInterestFromVolunteerView.as_view(), name='remove-interest-from-volunteer'),
     path("relationships/", VolunteerRelationships, name="relationships"),
     path('unfollow_volunteer/<int:volunteer_id>/', unfollow_volunteer, name='unfollow-volunteer'),
- 
+    path('volunteer/<int:volunteer_id>/follow', follow_volunteer, name='follow-volunteer'),
+
     #Organizations
     path('my-organizations/', my_organizations_view, name='my-organizations'),
     path('organizations/', OrganizationListCreateView.as_view(), name='organizations-list-create'),
@@ -45,11 +46,13 @@ urlpatterns = [
     path('api/organization/<int:id>/update_background_image/', update_obackground_image, name='update-obackground-image'),
     path('api/organization/<int:id>/add_interest/', AddInterestToOrganizationView.as_view(), name='add-intereest-to-organization'),
     path('api/organization/<int:id>/remove_interest/', RemoveInterestFromOrganizationView.as_view(), name='remove-interest-from-organization'),
-    path('organization-match/', organization_match_view, name='organization-match'),
-   
+    path('organization-match/', VolunteerMatchView.as_view(), name='organization-match'),
+    path('unfollow_organization/<int:organization_id>/', unfollow_organization, name='unfollow-organization'),
+    path('organization/<int:organization_id>/follow', follow_organization, name='follow-organization'),
+    
 
 
-    path('profile-organization/<int:org_id>/', OrganizationDetailView.as_view(), name='organization-detail'),
+    path('profile-organization/<int:pk>/', OrganizationDetailView.as_view(), name='organization-detail'),
    
     path('organization-memberships/', organization_memberships_view, name='organization-memberships'),
 

@@ -127,19 +127,7 @@
                               <tr>
                                <td class="">
                                 <div class="col-md-12">
-                                        <ul>
-                                        {% for event in upcoming_events %}
-                                            <li class="fa fa-calendar">
-                                                <h3>{{ event.title }}</h3>
-                                                <p>Inicio: {{ event.start_time }}</p>
-                                                <p>Finaliza: {{ event.end_time }}</p>
-                                                <!-- Other event details -->
-                                            </li>
-                                        {% empty %}
-                                            <li>There are no upcoming events.</li>
-                                        {% endfor %}
-                                        </ul>
-
+                                    <i class="fa fa-calendar" aria-hidden="true"></i> Event: date: Title Event 
                                   </div>
                                </td>
                                </tr>
