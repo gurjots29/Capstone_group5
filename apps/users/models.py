@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User  
 from django.core.exceptions import ValidationError
+from django.db.models import JSONField
 
 class Category(models.Model):
     CATEGORY_TYPES = (
@@ -62,6 +63,12 @@ class Volunteer(models.Model):
     location = models.CharField(max_length=255, blank=True, null=True)  # Consider using a more detailed location model or a library like django-cities for more granularity
     date_of_birth = models.DateField(null=True, blank=True)
     headline = models.TextField(max_length=80, blank=True)
+    encoded_data = JSONField(default=dict)
+
+    @staticmethod
+    def apply_one_hot_encoding(interests):
+        encoded_data = {interest: True for interest in interests}
+        return encoded_data
 
     following_volunteers = models.ManyToManyField(
         'self',
@@ -91,6 +98,13 @@ class Organization(models.Model):
     volunteers = models.ManyToManyField(Volunteer, through='OrganizationMembership', related_name='organizations')
     interests = models.ManyToManyField(Interest, related_name='interested_organizations', blank=True)
     required_skills = models.ManyToManyField(Skill, related_name='required_by_organizations', blank=True)
+    encoded_interests_skills = JSONField(default=dict)
+    location = models.CharField(max_length=255, blank=True, null=True)
+
+    @staticmethod
+    def apply_one_hot_encoding(interests):
+        encoded_data = {interest: True for interest in interests}
+        return encoded_data
     
     followers_volunteers = models.ManyToManyField(
         'Volunteer',

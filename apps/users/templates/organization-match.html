@@ -21,8 +21,73 @@
     <div class="main-content container-fluid ">
        <div class="row">
               <div class="col-sm-12">
-           
-             </div>           
+                <div class="panel panel-default panel-table">
+                    
+             <div class="panel-body">
+                <div class="table-responsive noSwipe">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th style="width:5%;">
+                          <div class="be-checkbox be-checkbox-sm">
+                            <input id="check1" type="checkbox">
+                            <label for="check1"></label>
+                          </div>
+                        </th>
+                        <th style="width:20%;">Organization</th>
+                        <th style="width:17%;">Description</th>
+                        <th style="width:15%;">Distance</th>
+                        <th style="width:10%;">Website</th>
+                        <th style="width:10%;">Location</th>
+                        <th style="width:10%;"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for match in matches %}
+                      <tr>
+                        <td>
+                          <div class="be-checkbox be-checkbox-sm">
+                            <input id="check2" type="checkbox">
+                            <label for="check2"></label>
+                          </div>
+                        </td>
+                        <td class="user-avatar cell-detail user-info">
+                            {% if match.organization.logo %}
+                            <!-- Si hay una imagen de fondo, mostrarla -->
+                            <img src="{{ match.organization.logo.url }}" alt="Avatar" id="current-profile-logo">
+                           {% else %}
+                           <img src="{% static 'theme/img/logo-default.png' %}" alt="Avatar" id="current-profile-logo">
+                           {% endif %}
+                         <span>{{ match.organization.name }}</span></td>
+                        <td class="cell-detail"> <span>{{ match.organization.description }}</span></td>
+                        <td class="milestone">{{ match.distance|floatformat:2 }} km</span> </td>
+                        <td class="cell-detail"><span>{{ match.organization.website }}</span></td>
+                        <td class="cell-detail"><span>{{ match.organization.location }}</span></td>
+                        <td class="text-right">
+                          <div class="btn-group btn-hspace">
+                            <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Open <span class="icon-dropdown mdi mdi-chevron-down"></span></button>
+                            <ul role="menu" class="dropdown-menu pull-right">
+                              <li><a href="#">Action</a></li>
+                              <li><a href="#">Another action</a></li>
+                              <li><a href="#">Something else here</a></li>
+                              <li class="divider"></li>
+                              <li><a href="#">Separated link</a></li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+        
+                   
+                    {% empty %}
+                    <p>No matches found.</p>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+              </div>
+                  </div>
+             
         </div>
     </div>
 </div>
@@ -30,5 +95,11 @@
 {% endblock content %}
 
 {% block scripts %}
-
+<script type="text/javascript">
+    $(document).ready(function(){
+        //initialize the javascript
+        App.init();
+        App.tableFilters();
+    });
+  </script>
 {% endblock scripts %}
