@@ -169,7 +169,6 @@ class RemoveInterestFromOrganizationView(APIView):
             return Response({"error": "Interest not found in the volunteer's interests."}, status=status.HTTP_400_BAD_REQUEST)
         
 
-
 class OrganizationDetailView(DetailView):
     model = Organization
     template_name = 'profile-organization.html'
@@ -201,9 +200,6 @@ class OrganizationRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
         
 def my_organizations_view(request):
     return render(request, 'my-organizations.html')
-
-def organization_match_view(request):
-    return render(request, 'organization-match.html')
 
 def profile_organizations_view(request):
     return render(request, 'profile-organization.html')
@@ -363,7 +359,6 @@ def VolunteerRelationships(request):
         "following": following,  # Lista de voluntarios seguidos
     }
     return render(request, "relationships.html", context)
-
 
 @login_required
 def unfollow_volunteer(request, volunteer_id):
