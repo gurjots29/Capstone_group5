@@ -114,39 +114,29 @@
                            <p class="mt-4">No posts available.</p>   
                    {% endfor %}  
              </div>         
-             <div class="col-md-3 nova-sidebar">
-                <div class="row">
-                  <div class="col-md-12">
-                      <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
-                          <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
-                                 Events <a href="{% url 'event:view-events' %}">
-                                    <span>all</span>
-                                </a>
+             <div class="col-md-3">
+                 <div class="row"> 
+                        <div class="panel panel-default fullcalendar-external-events">
+                          <div class="panel-heading panel-heading-divider"><div class="panel-heading panel-heading-default nova-panel-heading-formulario">
+                            Events <a href="{% url 'event:view-events' %}">
+                               <span>all</span>
+                           </a>
+                           </div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="external-events">
+                                {% for event in upcoming_events %}
+                              <div class="fc-event">
+                                {{ event.start_time }} {{ event.title }}
+                                 </div>
+                              {% empty %}
+                              <label for="drop-remove">No upcoming events.</label> 
+                              {% endfor %}
+                             
+                            </div>
                           </div>
-                     </div>
-                          <div class="panel-body">
-                             <table class="no-border no-strip skills">
-                             <tbody class="no-border-x no-border-y">
-                              <tr>
-                               <td class="">
-                                <div class="col-md-12">
-                                    <ul>
-                                        {% for event in upcoming_events %}
-                                            <li class="fa fa-calendar">
-                                                <h3>{{ event.title }}</h3>
-                                                <p>Inicio: {{ event.start_time }}</p>
-                                                <p>Finaliza: {{ event.end_time }}</p>
-                                             </li>
-                                        {% empty %}
-                                            <li>No upcoming events.</li>
-                                        {% endfor %}
-                                        </ul>
-                                  </div>
-                               </td>
-                               </tr>
-                            </tbody>
-                            </table>
-                       </div>
+                        </div>
+                      </div>
                   </div>
              </div>
           </div>
