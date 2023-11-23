@@ -119,15 +119,28 @@
                   <div class="col-md-12">
                       <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
                           <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
-                                 Events
+                                 Events <a href="{% url 'event:view-events' %}">
+                                    <span>all</span>
+                                </a>
                           </div>
+                     </div>
                           <div class="panel-body">
                              <table class="no-border no-strip skills">
                              <tbody class="no-border-x no-border-y">
                               <tr>
                                <td class="">
                                 <div class="col-md-12">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i> Event: date: Title Event 
+                                    <ul>
+                                        {% for event in upcoming_events %}
+                                            <li class="fa fa-calendar">
+                                                <h3>{{ event.title }}</h3>
+                                                <p>Inicio: {{ event.start_time }}</p>
+                                                <p>Finaliza: {{ event.end_time }}</p>
+                                             </li>
+                                        {% empty %}
+                                            <li>No upcoming events.</li>
+                                        {% endfor %}
+                                        </ul>
                                   </div>
                                </td>
                                </tr>

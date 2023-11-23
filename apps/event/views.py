@@ -2,9 +2,14 @@
 
 # Create your views here.
 from rest_framework import generics
+from rest_framework.response import Response
 from django.shortcuts import render
+from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from django.shortcuts import redirect
 
-from apps.users.models import Organization, Skill, Volunteer
+from apps.users.models import Organization, Skill, Volunteer, OrganizationMembership
 from .models import Event, RegistrationEvents, Program
 from .serializers import EventSerializer, RegistrationEventsSerializer, ProgramSerializer
 from rest_framework import serializers
@@ -29,6 +34,18 @@ class EventViewSet(generics.ListCreateAPIView):
     #         raise serializers.ValidationError(str(e))
 
 
+
+class CreateEventView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = EventSerializer(data=request.data)
+        if serializer.is_valid():
+            event = serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
 class RegistrationEventsViewSet(generics.ListCreateAPIView):
     queryset = RegistrationEvents.objects.all()
     serializer_class = RegistrationEventsSerializer
@@ -39,17 +56,65 @@ class ProgramViewSet(generics.ListCreateAPIView):
     serializer_class = ProgramSerializer
 
 
+
 def events_management_view(request):
-    event_fields = [field.name for field in Event._meta.get_fields()]
     
-    # Query related models
-    organizations = Organization.objects.all()
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    volunteer = get_object_or_404(Volunteer, user=request.user)
+
+    admin_owner_roles = ['admin', 'owner']
+    organization_ids = OrganizationMembership.objects.filter(
+    volunteer=volunteer, 
+    role__in=admin_owner_roles
+    ).values_list('organization_id', flat=True)
+
+    organizations = Organization.objects.filter(id__in=organization_ids)
+
+
     programs = Program.objects.all()
     skills = Skill.objects.all()
+   
+   # Filter events belonging to the filtered organizations
+    events = Event.objects.filter(organization__id__in=organization_ids)
 
     return render(request, 'events-management.html', {
-        'event_fields': event_fields,
         'organizations': organizations,
         'programs': programs,
         'skills': skills,
+        'events': events,  # Agregar eventos al contexto
+    })
+
+
+
+
+
+def events_view(request):
+    
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    volunteer = get_object_or_404(Volunteer, user=request.user)
+
+    admin_owner_roles = ['admin', 'owner']
+    organization_ids = OrganizationMembership.objects.filter(
+    volunteer=volunteer, 
+    role__in=admin_owner_roles
+    ).values_list('organization_id', flat=True)
+
+    organizations = Organization.objects.filter(id__in=organization_ids)
+
+
+    programs = Program.objects.all()
+    skills = Skill.objects.all()
+   
+   # Filter events belonging to the filtered organizations
+    events = Event.objects.filter(organization__id__in=organization_ids)
+
+    return render(request, 'view-events.html', {
+        'organizations': organizations,
+        'programs': programs,
+        'skills': skills,
+        'events': events,  # Agregar eventos al contexto
     })
