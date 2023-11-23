@@ -56,61 +56,129 @@
                                 </div>
                                 <div class="modal-body">
                                     <form id="eventForm" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        {% for field in event_fields %}
-                                        <div class="form-group">
-                                            <label for="{{ field }}">{{ field|title }}</label>
-                                            {% if field == 'organization' %}
-                                            <select class="form-control" id="{{ field }}" name="{{ field }}" required>
-                                                {% for org in organizations %}
-                                                <option value="{{ org.id }}">{{ org.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            {% elif field == 'program' %}
-                                            <select class="form-control" id="{{ field }}" name="{{ field }}" required>
-                                                {% for prog in programs %}
-                                                <option value="{{ prog.id }}">{{ prog.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            {% elif field == 'skills_required' %}
-                                            <select class="form-control" id="{{ field }}" name="{{ field }}" required>
-                                                {% for skill in skills %}
-                                                <option value="{{ skill.id }}">{{ skill.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            {% elif field == 'image' %}
-                                            <input type="file" class="form-control-file" id="{{ field }}"
-                                                name="{{ field }}" required>
-                                            {% elif field == 'privacy' %}
-                                            <select class="form-control" id="{{ field }}" name="{{ field }}" required>
-                                                <option value="public">Public</option>
-                                                <option value="private">Private</option>
-                                                <option value="invite-only">Invite Only</option>
-                                            </select>
-                                            {% else %}
-                                            <input type="text" class="form-control" id="{{ field }}" name="{{ field }}"
-                                                required>
-                                            {% endif %}
-                                            <!-- Add error message element -->
-                                            <span id="{{ field }}Error" class="text-danger"></span>
-                                        </div>
-                                        {% endfor %}
+                                      {% csrf_token %}
+                                      <!-- Title -->
+                                      <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control" id="title" name="title" required>
+                                      </div>
+                            
+                                      <!-- Start Time -->
+                                      <div class="form-group">
+                                        <label for="start_time">Start Time</label>
+                                        <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+                                      </div>
+                            
+                                      <!-- End Time -->
+                                      <div class="form-group">
+                                        <label for="end_time">End Time</label>
+                                        <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+                                      </div>
+                            
+                                      <!-- Location -->
+                                      <div class="form-group">
+                                        <label for="location">Location</label>
+                                        <input type="text" class="form-control" id="location" name="location" required>
+                                      </div>
+                            
+                                      <!-- Google Maps Location -->
+                                      <div class="form-group">
+                                        <label for="google_maps_location">Google Maps Location</label>
+                                        <input type="url" class="form-control" id="google_maps_location" name="google_maps_location" required>
+                                      </div>
+                            
+                                      <!-- Image -->
+                                      <div class="form-group">
+                                        <label for="image">Image</label>
+                                        <input type="file" class="form-control-file" id="image" name="image">
+                                      </div>
+                            
+                                      <!-- Organization -->
+                                      <!-- Aquí asumo que tienes una lista de organizaciones disponibles -->
+                                      <div class="form-group">
+                                        <label for="organization">Organization</label>
+                                        <select class="form-control" id="organization" name="organization">
+                                          {% for org in organizations %}
+                                          <option value="{{ org.id }}">{{ org.name }}</option>
+                                          {% endfor %}
+                                          {% empty %}
+                                                <option>No organizations available</option>
+                                          {% endfor %}
+                                        </select>
+                                      </div>
+                            
+                                      <!-- Program -->
+                                      <!-- Similar para programas, asumiendo que tienes una lista de programas -->
+                                      <div class="form-group">
+                                        <label for="program">Program</label>
+                                        <select class="form-control" id="program" name="program">
+                                          {% for prog in programs %}
+                                          <option value="{{ prog.id }}">{{ prog.name }}</option>
+                                          {% endfor %}
+                                        </select>
+                                      </div>
+                            
+                                      <!-- Skills Required -->
+                                      <!-- Similar para habilidades, asumiendo que tienes una lista de habilidades -->
+                                      <div class="form-group">
+                                        <label for="skills_required">Skills Required</label>
+                                        <select class="form-control" id="skills_required" name="skills_required">
+                                          {% for skill in skills %}
+                                          <option value="{{ skill.id }}">{{ skill.name }}</option>
+                                          {% endfor %}
+                                        </select>
+                                      </div>
+                            
+                                      <!-- Max Participants -->
+                                      <div class="form-group">
+                                        <label for="max_participants">Max Participants</label>
+                                        <input type="number" class="form-control" id="max_participants" name="max_participants" required>
+                                      </div>
+                            
+                                      <!-- Total Hours -->
+                                      <div class="form-group">
+                                        <label for="total_hours">Total Hours</label>
+                                        <input type="number" class="form-control" id="total_hours" name="total_hours" required>
+                                      </div>
+                            
+                                      <!-- Privacy -->
+                                      <div class="form-group">
+                                        <label for="privacy">Privacy</label>
+                                        <select class="form-control" id="privacy" name="privacy" required>
+                                          <option value="public">Public</option>
+                                          <option value="private">Private</option>
+                                          <option value="invite-only">Invite Only</option>
+                                        </select>
+                                      </div>
                                     </form>
-                                </div>
+                                  </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="saveEvent">Save</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-
-
+                    </div>                    
                     <div class="container">
                         <div class="row" id="eventCards">
-                            <!-- Event cards will be dynamically added here -->
+                            <div id="eventCards">
+                                {% for event in events %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ event.title }}</h5>
+                                            <p class="card-text">Start Time: {{ event.start_time }}</p>
+                                            <p class="card-text">End Time: {{ event.end_time }}</p>
+                                            <p class="card-text">Location: {{ event.location }}</p>
+                                            <button class="btn btn-primary" onclick="">Edit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <p>No events found.</p>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,39 +194,6 @@
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-        fetch("/event/events/")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(data => {
-                const eventCardsContainer = document.getElementById('eventCards');
-
-                data.results.forEach(event => {
-                    const card = document.createElement('div');
-                    card.className = 'col-md-4 mb-4';
-
-                    card.innerHTML = `
-                    <div class="card">
-                        <img src="${event.image}" class="card-img-top" alt="${event.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">${event.title}</h5>
-                            <p class="card-text">Start Time: ${event.start_time}</p>
-                            <p class="card-text">End Time: ${event.end_time}</p>
-                            <p class="card-text">Location: ${event.location}</p>
-                            <!-- Add other event fields as needed -->
-                        </div>
-                    </div>
-                `;
-                    eventCardsContainer.appendChild(card);
-                });
-            })
-            .catch(error => {
-                console.error("There was a problem with the fetch operation:", error);
-            });
-
         // New
         document.getElementById("add-button").addEventListener("click", function () {
             $("#addEventModal").modal("show");
@@ -190,24 +225,21 @@
             }
 
             // Perform the AJAX request
-            fetch("/event/events/", {
+            fetch("/event/new/", {
                 method: "POST",
                 headers: {
                     // Don't set Content-Type for FormData, let the browser set it automatically
-                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                    "X-CSRFToken": document.querySelector("#eventForm [name=csrfmiddlewaretoken]").value
                 },
                 body: formData
             })
-                .then(response => {
-                    console.log(response);
-                    if (!response.ok) {
-                        return response.json().then(error => {
-                            console.error("Error details:", error);
-                            throw new Error("Network response was not ok");
-                        });
-                    }
-                    return response.json();
-                })
+            
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+                }
+            return response.json();
+            })
                 .then(data => {
                     $("#addEventModal").modal("hide");
                     // Update your table here with the newly created event
