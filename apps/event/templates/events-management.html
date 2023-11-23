@@ -100,7 +100,6 @@
                                         <select class="form-control" id="organization" name="organization">
                                           {% for org in organizations %}
                                           <option value="{{ org.id }}">{{ org.name }}</option>
-                                          {% endfor %}
                                           {% empty %}
                                                 <option>No organizations available</option>
                                           {% endfor %}
