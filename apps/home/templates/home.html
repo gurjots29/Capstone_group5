@@ -119,20 +119,19 @@
                         <div class="panel panel-default fullcalendar-external-events">
                           <div class="panel-heading panel-heading-divider"><div class="panel-heading panel-heading-default nova-panel-heading-formulario">
                             Events <a href="{% url 'event:view-events' %}">
-                               <span>all</span>
+                                <span class="label label-primary">All</span>
                            </a>
                            </div>
                         </div>
                         <div class="panel-body">
-                            <div id="external-events">
+                            <ul class="nav">
                                 {% for event in upcoming_events %}
-                              <div class="fc-event">
-                                {{ event.start_time }} {{ event.title }}
-                                 </div>
-                              {% empty %}
-                              <label for="drop-remove">No upcoming events.</label> 
+                                  <li> <i class="icon mdi mdi-calendar"> </i>
+                                  {{ event.start_time }} {{ event.title }}   </li>
+                               {% empty %}
+                               <li> <i class="icon mdi mdi-calendar"> No upcoming events.</li> 
                               {% endfor %}
-                             
+                              </ul>
                             </div>
                           </div>
                         </div>
