@@ -45,24 +45,16 @@
                     </div>
                     <div class="row user-display-details">
                       <div class="col-xs-4">
-                        <div class="title"></div>
-                        <div class="counter"></div>
+                        <div class="title">Issues</div>
+                        <div class="counter">26</div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="title">Commits</div>
+                        <div class="counter">26</div>
                       </div>
                       <div class="col-xs-4">
                         <div class="title">Followers</div>
                         <div class="counter">26</div>
-                      </div>
-                      <div class="col-xs-4">
-                        <div class="title"></div>
-                        <div class="counter">
-                            {% if not user_is_admin_or_owner %}
-                            <form id="follow-form">
-                            {% csrf_token %}
-                            <button type="button" class="btn btn-space btn-success btn-follow" data-organization-id="{{ organization.id }}">Follow</button>
-                            </form>  
-                            {% endif %}
-
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -93,7 +85,7 @@
                               <td class="item">Name<span class="icon s7-email"></span></td>
                               <td class="value-display">{{ organization.name }}</td>
                               <td class="value-edit" style="display: none;">
-                                  <input type="tel" name="name" value="{{ organization.name }}" id="name-input">
+                                  <input type="tel" name="name" value="{{ organization.email }}" id="name-input">
                               </td>
                            </tr>
                             <tr>
@@ -120,22 +112,12 @@
                                       <input type="text" name="website" value="{{ organization.website }}" id="website-input">
                                   </td>
                               </tr>
-                              <tr>
-                                <td class="icon"><span class="mdi mdi-globe-alt"></span></td>
-                                <td class="item">Location<span class="icon s7-map-marker"></span></td>
-                                <td class="value-display">{{ organization.location }}</td>
-                                <td class="value-edit" style="display: none;">
-                                    <input type="text" id="location-input" autocomplete="off" placeholder="Search cities...">
-                                    <input type="hidden" name="location-hidden-input" id="location-hidden-input" value="{{ organization.location }}">
-                                </td>
-                            </tr>
                           </tbody>
                       </table>
-                      {% if user_is_admin_or_owner %}
+                  
                       <button type="button" id="edit-button" class="btn btn-space btn-primary">Edit</button>
                       <button type="submit" id="save-button" class="btn btn-space btn-success" style="display: none;">Save</button>
-                      {% endif %}
-                    </div>
+                  </div>
                 </div>
               </form>
               </div>
@@ -152,15 +134,13 @@
                           <tr data-interest-id="{{ interest.id }}">
                               <td>
                                   <span class="icon s7-portfolio">{{ interest.name }}</span>
-                                  {% if user_is_admin_or_owner %}
                                    <button type="button" class="delete-interest"><i class="mdi mdi-delete"></i></button>
-                                   {% endif %}
-                                </td>
+                               </td>
                           </tr>
                           {% endfor %}
                       </tbody>
                   </table>
-                  {% if user_is_admin_or_owner %}
+                  
                   <!-- Formulario para agregar nuevo interest -->
                   <div id="add-interest-form">
                       <select id="interest-dropdown">
@@ -170,7 +150,7 @@
                       </select>
                       <button id="add-interest" class="btn btn-space btn-success">Add interest</button>
                   </div>
-                  {% endif %}
+                  
                   </div>
               </div>
             </div> 
@@ -268,7 +248,6 @@ document.addEventListener("DOMContentLoaded", function() {
         email: formData.get("email"),
         phone_number: formData.get("phone"),
         website: formData.get("website"),
-        location: formData.get("location-hidden-input"), 
     };
 
     fetch('/api/organization/' + organizationId + '/', {
@@ -350,100 +329,5 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const followButtons = document.querySelectorAll('.btn-follow');
-
-    followButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const organizationId = button.getAttribute('data-organization-id');
-            const csrfToken = document.querySelector('#follow-form [name=csrfmiddlewaretoken]').value;
-
-            fetch(`/organization/${organizationId}/follow`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cambia la clase CSS y el texto del botón
-                    button.classList.toggle('following');
-                    button.textContent = 'Unfollow';
-
-                    // Agrega un nuevo manejador de eventos para el "Unfollow"
-                    button.removeEventListener('click', followHandler); // Elimina el manejador anterior
-                    button.addEventListener('click', function() {
-                        // Realiza la solicitud de "Unfollow" aquí
-                        fetch(`/unfollow_organization/${organizationId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrfToken
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                console.log('Unfollow exitoso');
-                                // Puedes realizar otras acciones, como cambiar el aspecto del botón nuevamente
-                            } else {
-                                console.error('Error en Unfollow');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    });
-});
-
-function initAutocomplete() {
-    // Obtiene el elemento del campo de entrada donde se aplicará el autocompletado
-    var input = document.getElementById('location-input');
-
-    // Crea el objeto de autocompletado, restringiendo los resultados a ciudades
-    var autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
-
-    // Añade un listener para el evento 'place_changed', que se dispara cuando se selecciona una ubicación
-    autocomplete.addListener('place_changed', function() {
-        // Obtiene el lugar seleccionado del objeto de autocompletado
-        var place = autocomplete.getPlace();
-
-        // Verifica si el lugar tiene geometría (ubicación)
-        if (!place.geometry) {
-            // Si no tiene geometría, muestra un error y permite que el usuario vuelva a intentarlo
-            console.error("No se encontró la ubicación: '" + place.name + "'");
-            alert("No se pudo encontrar la ubicación seleccionada. Por favor, selecciona una opción de la lista.");
-            input.readOnly = false; // Hacer el campo editable nuevamente
-            return;
-        }
-
-        // Si se selecciona una ubicación válida, rellena el campo oculto con la dirección formateada
-        document.getElementById('location-hidden-input').value = place.formatted_address;
-
-        // Hacer el campo de entrada de solo lectura para evitar modificaciones manuales
-        input.readOnly = true;
-    });
-
-    // Añade un listener para el evento 'click' en el campo de entrada
-    input.addEventListener('click', function() {
-        // Si el campo está en solo lectura, lo hace editable al hacer clic en él
-        // Esto es útil si el usuario quiere cambiar la ubicación
-        if (this.readOnly) {
-            this.readOnly = false;
-            this.value = '';
-            document.getElementById('location-hidden-input').value = '';
-        }
-    });
-}
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8Ln8eq5J8InDkZBlbht_6ePNN0aOBeBc&libraries=places&callback=initAutocomplete" async defer></script>
 {% endblock scripts %}

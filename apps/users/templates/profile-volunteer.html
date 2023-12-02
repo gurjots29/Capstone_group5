@@ -9,582 +9,518 @@
 {% block title-page %} Profile Organizations  {% endblock title-page %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
 {% endblock css %}
 
 {% block content %}
 
-<div class="be-content">
+    <div class="be-content">
 
-    <div class="page-head">
-       <h2 class="page-head-title" id="profile" data-opcion="inicio">Profile Volunteer</h2>
-    </div>
+        <div class="page-head">
+            <h2 class="page-head-title" id="profile" data-opcion="inicio">Profile Volunteer</h2>
+        </div>
 
-    <div class="main-content container-fluid ">
-       <div class="row">
-              <div class="col-md-7">
-                <div class="user-display">
-                  <div class="user-display-bg">
-
-                    {% if request.user == volunteer.user %}
-                        
-                        {% if volunteer.background_image %}
-                        <!-- Si hay una imagen de fondo, mostrarla -->
-                        <img src="{{ volunteer.background_image.url }}" alt="Profile Background" id="current-background-image">
-                        {% else %}
-                        <img src="{% static 'theme/img/background-default.png' %}" alt="Edit" id="current-background-image">
-                        {% endif %}
-                    {% else %}
-                        {% if volunteer.background_image %}
-                        <!-- Si hay una imagen de fondo, mostrarla -->
-                        <img src="{{ volunteer.background_image.url }}" alt="Profile Background" id="None">
-                        {% else %}
-                        <img src="{% static 'theme/img/background-default.png' %}" alt="Edit" id="None">
-                        {% endif %}
-
-                    {% endif %}
-                  </div>
-                  <div class="user-display-bottom">
-                    <div class="user-display-avatar">
-                   {% if request.user == volunteer.user %}
-                   
-                        {% if volunteer.profile_picture %}
-                        <img src="{{ volunteer.profile_picture.url }}" alt="Avatar" id="current-profile-picture">
-                        {% else %}
-                        <img src="{% static 'theme/img/avatar.png' %}" alt="Avatar" id="current-profile-picture">
-                        {% endif %}
-                    {% else %}
-                        {% if volunteer.profile_picture %}
-                        <img src="{{ volunteer.profile_picture.url }}" alt="Avatar" id="None">
-                        {% else %}
-                        <img src="{% static 'theme/img/avatar.png' %}" alt="Avatar" id="None">
-                        {% endif %}
-                    {% endif %}
-                   </div>
-                    <div class="user-display-info">
-                      <div class="name">{{ volunteer.user.username }} </div>
-                      <div class="nick"> {{ volunteer.user.email }} </div>
-                    </div>
-                    <div class="row user-display-details">
-                      <div class="col-xs-4">
-                        <div class="title">Followers</div>
-                        <div class="counter">26</div>
-                      </div>
-                      <div class="col-xs-4">
-                        <div class="title">Following</div>
-                        <div class="counter">26</div>
-                      </div>
-                      <div class="col-xs-4">
-                        <div class="title"></div>
-                        <div class="counter">
-                            {% if  not request.user == volunteer.user %}
-                            <form id="follow-form">
-                            {% csrf_token %}
-                            <button type="button" class="btn btn-space btn-success btn-follow" data-volunteer-id="{{ volunteer.id }}">Follow</button>
-                            </form>  
+        <div class="main-content container-fluid ">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="user-display">
+                        <div class="user-display-bg">
+                            {% if volunteer.background_image %}
+                                <!-- Si hay una imagen de fondo, mostrarla -->
+                                <img src="{{ volunteer.background_image.url }}" alt="Profile Background"
+                                     id="current-background-image">
+                            {% else %}
+                                <img src="{% static 'theme/img/background-default.png' %}" alt="Edit"
+                                     id="current-background-image">
                             {% endif %}
                         </div>
-                      </div>
+                        <div class="user-display-bottom">
+                            <div class="user-display-avatar">
+                                {% if volunteer.profile_picture %}
+                                    <!-- Si hay una imagen de fondo, mostrarla -->
+                                    <img src="{{ volunteer.profile_picture.url }}" alt="Avatar"
+                                         id="current-profile-picture">
+                                {% else %}
+                                    <img src="{% static 'theme/img/avatar.png' %}" alt="Avatar"
+                                         id="current-profile-picture">
+                                {% endif %}
+                            </div>
+                            <div class="user-display-info">
+                                <div class="name">{{ volunteer.user.username }} </div>
+                                <div class="nick"> {{ volunteer.user.email }} </div>
+                            </div>
+                            <div class="row user-display-details">
+                                <div class="col-xs-4">
+                                    <div class="title">Issues</div>
+                                    <div class="counter">26</div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="title">Followers</div>
+                                    <div class="counter">{{ volunteer.follower_relationships.count }}</div>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                            <form id="profile-picture-form" class="image-upload-form" style="display: none;">
+                                {% csrf_token %}
+                                <input type="file" name="profile_picture" id="profile-picture-input" class="inputfile">
+                                <button type="submit">Upload</button>
+                            </form>
+                            <form id="background-image-form" class="image-upload-form" style="display: none;">
+                                {% csrf_token %}
+                                <input type="file" name="background_image" id="background-image-input"
+                                       class="inputfile">
+                                <button type="submit">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                    <form id="volunteer-form">
+                        {% csrf_token %}
+                        <div class="user-info-list panel panel-default">
+                            <div class="panel-heading panel-heading-divider">
+                                <div class="value-display">Bio <span class="panel-subtitle">{{ volunteer.bio }}</span>
+                                </div>
+                                <div class="value-edit" style="display: none;">Bio <textarea name="bio" rows="5"
+                                                                                             id="bio-input"
+                                                                                             cols="50">{{ volunteer.bio }}</textarea>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <table class="no-border no-strip skills">
+                                    <tbody class="no-border-x no-border-y">
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-case"></span></td>
+                                        <td class="item">Name<span class="icon s7-portfolio"></span></td>
+                                        <td class="value-display">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }}</td>
+                                        <td class="value-edit" style="display: none;">
+                                            First Name: <input type="text" name="first_name"
+                                                               value="{{ volunteer.user.first_name }}"
+                                                               id="first-name-input"><br>
+                                            Last Name: <input type="text" name="last_name"
+                                                              value="{{ volunteer.user.last_name }}"
+                                                              id="last-name-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-cake"></span></td>
+                                        <td class="item">Birthday<span class="icon s7-gift"></span></td>
+                                        <td class="value-display">{{ volunteer.date_of_birth }}</td>
+                                        <td class="value-edit" style="display: none;">
+                                            <input type="date" name="dob"
+                                                   value="{{ volunteer.date_of_birth|date:"Y-m-d" }}" id="dob-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-smartphone-android"></span></td>
+                                        <td class="item">Phone<span class="icon s7-phone"></span></td>
+                                        <td class="value-display">{{ volunteer.phone_number }}</td>
+                                        <td class="value-edit" style="display: none;">
+                                            <input type="tel" name="phone" value="{{ volunteer.phone_number }}"
+                                                   id="phone-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-globe-alt"></span></td>
+                                        <td class="item">Location<span class="icon s7-map-marker"></span></td>
+                                        <td class="value-display">{{ volunteer.location }}</td>
+                                        <td class="value-edit" style="display: none;">
+                                            <input type="text" name="location" value="{{ volunteer.location }}"
+                                                   id="location-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-bookmark-outline"></span></td>
+                                        <td class="item">Experiences<span class="icon s7-notebook"></span></td>
+                                        <td class="value-display">{{ volunteer.experiences }}</td>
+                                        <td class="value-edit" style="display: none;">
+                                            <textarea name="experiences" rows="4"
+                                                      id="experiences-input">{{ volunteer.experiences }}</textarea>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <button type="button" id="edit-button" class="btn btn-space btn-primary">Edit</button>
+                                <button type="submit" id="save-button" class="btn btn-space btn-success"
+                                        style="display: none;">Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="user-info-list panel panel-default">
+                        <div class="panel-heading panel-heading-divider">Skills
+                        </div>
+                        <div class="panel-body">
+
+                            <table class="no-border no-strip skills">
+                                <tbody class="no-border-x no-border-y">
+                                {% for skill in volunteer.skills.all %}
+                                    <tr data-skill-id="{{ skill.id }}">
+                                        <td>
+                                            <span class="icon s7-portfolio">{{ skill.name }}</span>
+                                            <button type="button" class="delete-skill"><i class="mdi mdi-delete"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <!-- Formulario para agregar nueva habilidad -->
+                            <div id="add-skill-form">
+                                <select id="skill-dropdown">
+                                    {% for skill in skills %}
+                                        <option value="{{ skill.id }}">{{ skill.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button id="add-skill" class="btn btn-space btn-success">Add Skill</button>
+
+                            </div>
+
+                        </div>
                     </div>
 
-                    <form id="profile-picture-form" class="image-upload-form" style="display: none;">
-                        {% csrf_token %}
-                        <input type="file" name="profile_picture" id="profile-picture-input" class="inputfile">
-                        <button type="submit">Upload</button>
-                    </form>
-                    
-                    <form id="background-image-form" class="image-upload-form" style="display: none;">
-                        {% csrf_token %}
-                        <input type="file" name="background_image" id="background-image-input" class="inputfile">
-                        <button type="submit">Upload</button>
-                    </form>
-                  </div>
-                </div>
-                <form id="volunteer-form">
-                    {% csrf_token %}
-                <div class="user-info-list panel panel-default">
-                  <div class="panel-heading panel-heading-divider">
-                  <div class="value-display" >Bio <span class="panel-subtitle">{{ volunteer.bio }}</span></div>
-                  <div class="value-edit" style="display: none;">Bio   <textarea name="bio" rows="5" id="bio-input" cols="50">{{ volunteer.bio }}</textarea></div>
-                </div>
-                  <div class="panel-body">
-                      <table class="no-border no-strip skills">
-                          <tbody class="no-border-x no-border-y">
-                              <tr>
-                                  <td class="icon"><span class="mdi mdi-case"></span></td>
-                                  <td class="item">Name<span class="icon s7-portfolio"></span></td>
-                                  <td class="value-display">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }}</td>
-                                  <td class="value-edit" style="display: none;">
-                                      First Name: <input type="text" name="first_name" value="{{ volunteer.user.first_name }}" id="first-name-input"><br>
-                                      Last Name: <input type="text" name="last_name" value="{{ volunteer.user.last_name }}" id="last-name-input">
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td class="icon"><span class="mdi mdi-cake"></span></td>
-                                  <td class="item">Birthday<span class="icon s7-gift"></span></td>
-                                  <td class="value-display">{{ volunteer.date_of_birth }}</td>
-                                  <td class="value-edit" style="display: none;">
-                                    <input type="date" name="dob" value="{{ volunteer.date_of_birth|date:"Y-m-d" }}" id="dob-input">
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td class="icon"><span class="mdi mdi-smartphone-android"></span></td>
-                                  <td class="item">Phone<span class="icon s7-phone"></span></td>
-                                  <td class="value-display">{{ volunteer.phone_number }}</td>
-                                  <td class="value-edit" style="display: none;">
-                                      <input type="tel" name="phone" value="{{ volunteer.phone_number }}" id="phone-input">
-                                  </td>
-                              </tr>
-                              <tr>
-                                <td class="icon"><span class="mdi mdi-globe-alt"></span></td>
-                                <td class="item">Location<span class="icon s7-map-marker"></span></td>
-                                <td class="value-display">{{ volunteer.location }}</td>
-                                <td class="value-edit" style="display: none;">
-                                    <input type="text" id="location-input" autocomplete="off" placeholder="Search cities...">
-                                    <input type="hidden" name="location-hidden-input" id="location-hidden-input" value="{{ volunteer.location }}">
-                                </td>
-                            </tr>
-                              <tr>
-                                <td class="icon"><span class="mdi mdi-bookmark-outline"></span></td>
-                                <td class="item">Experiences<span class="icon s7-notebook"></span></td>
-                                <td class="value-display">{{ volunteer.experiences }}</td>
-                                <td class="value-edit" style="display: none;">
-                                    <textarea name="experiences" rows="4" id="experiences-input">{{ volunteer.experiences }}</textarea>
-                                </td>
-                            </tr>
-                            
-                          </tbody>
-                      </table>
-                      {% if request.user == volunteer.user %}
-                      <button type="button" id="edit-button" class="btn btn-space btn-primary">Edit</button>
-                      <button type="submit" id="save-button" class="btn btn-space btn-success" style="display: none;">Save</button>
-                      {% endif %}
-                    </div>
-                </div>
-              </form>
-              </div>
-            
-              <div class="col-md-5">
-                <div class="user-info-list panel panel-default">
-                  <div class="panel-heading panel-heading-divider">Skills
-                  </div>
-                  <div class="panel-body">
-    
-                    <table class="no-border no-strip skills">
-                      <tbody class="no-border-x no-border-y">
-                          {% for skill in volunteer.skills.all %}
-                          <tr data-skill-id="{{ skill.id }}">
-                              <td>
-                                  <span class="icon s7-portfolio">{{ skill.name }}</span>
-                                  {% if request.user == volunteer.user %}
-                                   <button type="button" class="delete-skill"><i class="mdi mdi-delete"></i></button>
-                                   {% endif %}
-                               </td>
-                          </tr>
-                          {% endfor %}
-                      </tbody>
-                  </table>
-                  {% if request.user == volunteer.user %}
-                  <!-- Formulario para agregar nueva habilidad -->
-                  <div id="add-skill-form">
-                      <select id="skill-dropdown">
-                          {% for skill in skills %}
-                              <option value="{{ skill.id }}">{{ skill.name }}</option>
-                          {% endfor %}
-                      </select>
-                      <button id="add-skill" class="btn btn-space btn-success">Add Skill</button>
-                    
-                  </div>
-                  {% endif %}
-                  </div>
-                </div>
+                    <div class="user-info-list panel panel-default">
+                        <div class="panel-heading panel-heading-divider">Interests
+                        </div>
+                        <div class="panel-body">
 
-                <div class="user-info-list panel panel-default">
-                    <div class="panel-heading panel-heading-divider">Interests
+                            <table class="no-border no-strip">
+                                <tbody class="no-border-x no-border-y">
+                                {% for interest in volunteer.interests.all %}
+                                    <tr data-interest-id="{{ interest.id }}">
+                                        <td>
+                                            <span class="icon s7-portfolio">{{ interest.name }}</span>
+                                            <button type="button" class="delete-interest"><i class="mdi mdi-delete"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <!-- Formulario para agregar nuevo interest -->
+                            <div id="add-interest-form">
+                                <select id="interest-dropdown">
+                                    {% for interest in interests %}
+                                        <option value="{{ interest.id }}">{{ interest.name }}
+                                            ({{ interest.category.name }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <button id="add-interest" class="btn btn-space btn-success">Add interest</button>
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="panel-body">
-      
-                      <table class="no-border no-strip">
-                        <tbody class="no-border-x no-border-y">
-                            {% for interest in volunteer.interests.all %}
-                            <tr data-interest-id="{{ interest.id }}">
-                                <td>
-                                    <span class="icon s7-portfolio">{{ interest.name }}</span>
-                                    {% if request.user == volunteer.user %}
-                                     <button type="button" class="delete-interest"><i class="mdi mdi-delete"></i></button>
-                                     {% endif %}
-                                    </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% if request.user == volunteer.user %}
-                    <!-- Formulario para agregar nuevo interest -->
-                    <div id="add-interest-form">
-                        <select id="interest-dropdown">
-                            {% for interest in interests %}
-                                <option value="{{ interest.id }}">{{ interest.name }} ({{ interest.category.name }})</option>
-                            {% endfor %}
-                        </select>
-                        <button id="add-interest" class="btn btn-space btn-success">Add interest</button>
+                    <div class="user-info-list panel panel-default">
+                        <div class="panel-heading panel-heading-divider">Badges</div>
+                        <div class="panel-body">
+
+                            <table class="no-border no-strip skills">
+                                <tbody class="no-border-x no-border-y">
+                                {% for badge in volunteer.badges.all %}
+                                    <tr>
+                                        <td><img src="{{ badge.image.url }}" alt="{{ badge.name }}"
+                                                 class="badge-icon"> {{ badge.name }} </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    {% endif %}
-                    </div>
-                  </div>
-                <div class="user-info-list panel panel-default">
-                  <div class="panel-heading panel-heading-divider">Badges</div>
-                  <div class="panel-body">
-                 
-                    <table class="no-border no-strip skills">
-                      <tbody class="no-border-x no-border-y">
-                        {% for badge in volunteer.badges.all %}
-                          <tr>
-                              <td> <img src="{{ badge.image.url }}" alt="{{ badge.name }}" class="badge-icon"> {{ badge.name }} </td>
-                          </tr>
-                          {% endfor %}
-                      </tbody>
-                  </table>
-                  </div>
                 </div>
-              </div>
             </div
-     </div>
-</div>
+        </div>
+    </div>
 
 
 {% endblock content %}
 
 
 {% block scripts %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    let volunteerId = "{{ volunteer.id }}";
-    let csrfToken = "{{ csrf_token }}";
-
-    document.getElementById('current-profile-picture').addEventListener('click', function() {
-        document.getElementById('profile-picture-input').click();
-    });
-
-    document.getElementById('current-background-image').addEventListener('click', function() {
-        document.getElementById('background-image-input').click();
-    });
-
-    // Evento change para la foto de perfil
-    document.getElementById('profile-picture-input').addEventListener('change', function() {
-        if(this.files && this.files[0]) {
-            let formData = new FormData();
-            formData.append('profile_picture', this.files[0]);
-            console.log('Se ha seleccionado una foto de perfil:', this.files[0].name);
-
-            fetch('/api/volunteer/' + volunteerId + '/update_profile_picture/', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': csrfToken
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.newProfilePictureUrl) {
-                    document.getElementById('current-profile-picture').src = data.newProfilePictureUrl + '?t=' + new Date().getTime();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    });
-
-    // Evento change para la imagen de fondo
-    document.getElementById('background-image-input').addEventListener('change', function() {
-        if(this.files && this.files[0]) {
-            let formData = new FormData();
-            formData.append('background_image', this.files[0]);
-            console.log('Se ha seleccionado una imagen de fondo:', this.files[0].name);
-
-            fetch('/api/volunteer/' + volunteerId + '/update_background_image/', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.newBackgroundImageUrl) {
-                    document.getElementById('current-background-image').src = data.newBackgroundImageUrl + '?t=' + new Date().getTime();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    });
-
-  document.getElementById("edit-button").addEventListener("click", function() {
-    let displayElements = document.querySelectorAll(".value-display");
-    let editElements = document.querySelectorAll(".value-edit");
-
-    displayElements.forEach(element => element.style.display = "none");
-    editElements.forEach(element => element.style.display = "");
-
-    this.style.display = "none";
-    document.getElementById("save-button").style.display = "";
-});
-
-document.getElementById("volunteer-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    let formData = new FormData(this);
-
-    let data = {
-        user: {
-            first_name: formData.get("first_name"),
-            last_name: formData.get("last_name")
-        },
-        bio: formData.get("bio"),
-        date_of_birth: formData.get("dob"),
-        phone_number: formData.get("phone"),
-        location: formData.get("location-hidden-input"), 
-        experiences: formData.get("experiences"),
-    };
-
-    fetch('/api/volunteer/' + volunteerId + '/', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Actualiza la interfaz o redirecciona, según lo que necesites
-        location.reload(); // Por ejemplo, puedes recargar la página para mostrar los nuevos datos
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert("Hubo un error al actualizar los datos.");
-    });
-});
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    let volunteerId = "{{ volunteer.id }}";
-    let csrfToken = "{{ csrf_token }}";
-
-    document.getElementById("add-skill").addEventListener("click", function() {
-        let selectedSkillId = document.getElementById('skill-dropdown').value;
-        
-        // Luego, puedes hacer la llamada AJAX para agregar esta habilidad al voluntario.
-        // Esto es solo un ejemplo, deberías adaptarlo a tu backend/API.
-        fetch('/api/volunteer/' + volunteerId + '/add_skill/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
-            body: JSON.stringify({ skill_id: selectedSkillId })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
             }
-            return response.json();
-        })
-        .then(data => {
-            // Puedes actualizar la tabla para mostrar la nueva habilidad o recargar la página.
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Hubo un error al agregar la habilidad.");
-        });
-    });
+            return cookieValue;
+        }
 
-    document.querySelectorAll(".delete-skill").forEach(button => {
-        button.addEventListener("click", function() {
-            let row = this.closest('tr');
-            let skillId = row.getAttribute('data-skill-id');
-            
-            fetch('/api/volunteer/' + volunteerId + '/remove_skill/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify({ skill_id: skillId })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                // Eliminar la fila del DOM
-                row.remove();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("Hubo un error al eliminar la habilidad.");
-            });
-        });
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    let volunteerId = "{{ volunteer.id }}"; // Asegúrate de que esta es la variable correcta que contiene el ID del voluntario
-    let csrfToken = "{{ csrf_token }}";
-
-    document.getElementById("add-interest").addEventListener("click", function() {
-        let selectedInterestId = document.getElementById('interest-dropdown').value;
-        fetch('/api/volunteer/' + volunteerId + '/add_interest/', { // Asegúrate de que esta URL es correcta en tu backend
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
-            body: JSON.stringify({ interest_id: selectedInterestId })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Actualiza la interfaz de usuario aquí si es necesario
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Hubo un error al agregar el interés.");
-        });
-    });
-
-    document.querySelectorAll(".delete-interest").forEach(button => {
-        button.addEventListener("click", function() {
-            let row = this.closest('tr');
-            let interestId = row.getAttribute('data-interest-id');
-            fetch('/api/volunteer/' + volunteerId + '/remove_interest/', { // Asegúrate de que esta URL es correcta en tu backend
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify({ interest_id: interestId })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                row.remove(); // Elimina la fila de la tabla de la interfaz de usuario
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("Hubo un error al eliminar el interés.");
-            });
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const followButtons = document.querySelectorAll('.btn-follow');
-
-    followButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const volunteerId = button.getAttribute('data-volunteer-id');
-            const csrfToken = document.querySelector('#follow-form [name=csrfmiddlewaretoken]').value;
-
-            fetch(`/volunteer/${volunteerId}/follow`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cambia la clase CSS y el texto del botón
-                    button.classList.toggle('following');
-                    button.textContent = 'Unfollow';
-
-                    // Agrega un nuevo manejador de eventos para el "Unfollow"
-                    button.removeEventListener('click', followHandler); // Elimina el manejador anterior
-                    button.addEventListener('click', function() {
-                        // Realiza la solicitud de "Unfollow" aquí
-                        fetch(`/unfollow_volunteer/${volunteerId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrfToken
-                            }
-                        })
+        document.addEventListener('DOMContentLoaded', function () {
+            const followButtons = document.querySelectorAll('.follow-btn');
+            followButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const volunteerId = this.getAttribute('data-volunteer-id');
+                    console.log("volunteerId: ", volunteerId);
+                    fetch(`/follow_volunteer/${volunteerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrf_token'),
+                        },
+                        body: JSON.stringify({'volunteer_id': volunteerId})
+                    })
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                console.log('Unfollow exitoso');
-                                // Puedes realizar otras acciones, como cambiar el aspecto del botón nuevamente
+                                // Refresh the current page
+                                window.location.reload();
                             } else {
-                                console.error('Error en Unfollow');
+                                // Handle the case when the action is not successful
+                                console.error('Follow failed');
+                            }
+                        });
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let volunteerId = "{{ volunteer.id }}";
+            let csrfToken = "{{ csrf_token }}";
+
+            document.getElementById('current-profile-picture').addEventListener('click', function () {
+                document.getElementById('profile-picture-input').click();
+            });
+
+            document.getElementById('current-background-image').addEventListener('click', function () {
+                document.getElementById('background-image-input').click();
+            });
+
+            // Evento change para la foto de perfil
+            document.getElementById('profile-picture-input').addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    let formData = new FormData();
+                    formData.append('profile_picture', this.files[0]);
+                    console.log('Se ha seleccionado una foto de perfil:', this.files[0].name);
+
+                    fetch('/api/volunteer/' + volunteerId + '/update_profile_picture/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.newProfilePictureUrl) {
+                                document.getElementById('current-profile-picture').src = data.newProfilePictureUrl + '?t=' + new Date().getTime();
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
                         });
-                    });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+            });
+
+            // Evento change para la imagen de fondo
+            document.getElementById('background-image-input').addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    let formData = new FormData();
+                    formData.append('background_image', this.files[0]);
+                    console.log('Se ha seleccionado una imagen de fondo:', this.files[0].name);
+
+                    fetch('/api/volunteer/' + volunteerId + '/update_background_image/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.newBackgroundImageUrl) {
+                                document.getElementById('current-background-image').src = data.newBackgroundImageUrl + '?t=' + new Date().getTime();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                }
+            });
+
+            document.getElementById("edit-button").addEventListener("click", function () {
+                let displayElements = document.querySelectorAll(".value-display");
+                let editElements = document.querySelectorAll(".value-edit");
+
+                displayElements.forEach(element => element.style.display = "none");
+                editElements.forEach(element => element.style.display = "");
+
+                this.style.display = "none";
+                document.getElementById("save-button").style.display = "";
+            });
+
+            document.getElementById("volunteer-form").addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                let formData = new FormData(this);
+
+                let data = {
+                    user: {
+                        first_name: formData.get("first_name"),
+                        last_name: formData.get("last_name")
+                    },
+                    bio: formData.get("bio"),
+                    date_of_birth: formData.get("dob"),
+                    phone_number: formData.get("phone"),
+                    location: formData.get("location"),
+                    experiences: formData.get("experiences"),
+                };
+
+                fetch('/api/volunteer/' + volunteerId + '/', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Actualiza la interfaz o redirecciona, según lo que necesites
+                        location.reload(); // Por ejemplo, puedes recargar la página para mostrar los nuevos datos
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Hubo un error al actualizar los datos.");
+                    });
             });
         });
-    });
-});
 
-function initAutocomplete() {
-    // Obtiene el elemento del campo de entrada donde se aplicará el autocompletado
-    var input = document.getElementById('location-input');
+        document.addEventListener("DOMContentLoaded", function () {
+            let volunteerId = "{{ volunteer.id }}";
+            let csrfToken = "{{ csrf_token }}";
 
-    // Crea el objeto de autocompletado, restringiendo los resultados a ciudades
-    var autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
+            document.getElementById("add-skill").addEventListener("click", function () {
+                let selectedSkillId = document.getElementById('skill-dropdown').value;
 
-    // Añade un listener para el evento 'place_changed', que se dispara cuando se selecciona una ubicación
-    autocomplete.addListener('place_changed', function() {
-        // Obtiene el lugar seleccionado del objeto de autocompletado
-        var place = autocomplete.getPlace();
+                // Luego, puedes hacer la llamada AJAX para agregar esta habilidad al voluntario.
+                // Esto es solo un ejemplo, deberías adaptarlo a tu backend/API.
+                fetch('/api/volunteer/' + volunteerId + '/add_skill/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({skill_id: selectedSkillId})
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Puedes actualizar la tabla para mostrar la nueva habilidad o recargar la página.
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Hubo un error al agregar la habilidad.");
+                    });
+            });
 
-        // Verifica si el lugar tiene geometría (ubicación)
-        if (!place.geometry) {
-            // Si no tiene geometría, muestra un error y permite que el usuario vuelva a intentarlo
-            console.error("No se encontró la ubicación: '" + place.name + "'");
-            alert("No se pudo encontrar la ubicación seleccionada. Por favor, selecciona una opción de la lista.");
-            input.readOnly = false; // Hacer el campo editable nuevamente
-            return;
-        }
+            document.querySelectorAll(".delete-skill").forEach(button => {
+                button.addEventListener("click", function () {
+                    let row = this.closest('tr');
+                    let skillId = row.getAttribute('data-skill-id');
 
-        // Si se selecciona una ubicación válida, rellena el campo oculto con la dirección formateada
-        document.getElementById('location-hidden-input').value = place.formatted_address;
+                    fetch('/api/volunteer/' + volunteerId + '/remove_skill/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({skill_id: skillId})
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok");
+                            }
+                            // Eliminar la fila del DOM
+                            row.remove();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("Hubo un error al eliminar la habilidad.");
+                        });
+                });
+            });
+        });
 
-        // Hacer el campo de entrada de solo lectura para evitar modificaciones manuales
-        input.readOnly = true;
-    });
+        document.addEventListener("DOMContentLoaded", function () {
+            let volunteerId = "{{ volunteer.id }}"; // Asegúrate de que esta es la variable correcta que contiene el ID del voluntario
+            let csrfToken = "{{ csrf_token }}";
 
-    // Añade un listener para el evento 'click' en el campo de entrada
-    input.addEventListener('click', function() {
-        // Si el campo está en solo lectura, lo hace editable al hacer clic en él
-        // Esto es útil si el usuario quiere cambiar la ubicación
-        if (this.readOnly) {
-            this.readOnly = false;
-            this.value = '';
-            document.getElementById('location-hidden-input').value = '';
-        }
-    });
-}
+            document.getElementById("add-interest").addEventListener("click", function () {
+                let selectedInterestId = document.getElementById('interest-dropdown').value;
+                fetch('/api/volunteer/' + volunteerId + '/add_interest/', { // Asegúrate de que esta URL es correcta en tu backend
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({interest_id: selectedInterestId})
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Actualiza la interfaz de usuario aquí si es necesario
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Hubo un error al agregar el interés.");
+                    });
+            });
+
+            document.querySelectorAll(".delete-interest").forEach(button => {
+                button.addEventListener("click", function () {
+                    let row = this.closest('tr');
+                    let interestId = row.getAttribute('data-interest-id');
+                    fetch('/api/volunteer/' + volunteerId + '/remove_interest/', { // Asegúrate de que esta URL es correcta en tu backend
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({interest_id: interestId})
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Network response was not ok");
+                            }
+                            row.remove(); // Elimina la fila de la tabla de la interfaz de usuario
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("Hubo un error al eliminar el interés.");
+                        });
+                });
+            });
+        });
 
 
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8Ln8eq5J8InDkZBlbht_6ePNN0aOBeBc&libraries=places&callback=initAutocomplete" async defer></script>
+    </script>
 {% endblock scripts %}

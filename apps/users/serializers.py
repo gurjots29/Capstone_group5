@@ -65,3 +65,13 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = '__all__'
+
+
+
+class SuggestionSerializer(serializers.ModelSerializer):
+    firstname = serializers.ReadOnlyField(source='user.first_name')
+    lastname = serializers.ReadOnlyField(source='user.last_name')
+
+    class Meta:
+        model = Volunteer
+        fields = ('id', 'profile_picture', 'firstname', 'lastname', 'headline')
