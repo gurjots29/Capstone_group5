@@ -1,0 +1,39 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block titulo %} Events {% endblock titulo %}
+{% block title-page %} Events Management {% endblock title-page %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'thime/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css" />
+<style>
+    .card-img-top {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+{% endblock css %}
+
+{% block content %}
+<div class="be-content">
+    <div class="page-head">
+        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Events Management</h2>
+    </div>
+
+    <div class="main-content container-fluid">
+        <div class="row"> 
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Profile not found.</h4>
+                <p>Sorry, the Volunteer profile associated with your account was not found.</p>
+                <hr>
+                <p class="mb-0">Please contact the site administrator or go back to the <a href="{% url 'home' %}">home</a>.</p>
+            </div>
+        </div>
+    </diV>
+    </div>
+</div>
+{% endblock content %}

@@ -7,7 +7,8 @@ from .views import (user_logout,user_login,forgot_password_view,profile_organiza
     OrganizationRetrieveUpdateDestroyView, organization_memberships_view,user_signup, update_profile_picture,
     update_background_image,update_profile_logo,update_obackground_image,AddInterestToVolunteerView, 
     RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
-    VolunteerMatchView,VolunteerRelationships,unfollow_volunteer,follow_volunteer,follow_organization,unfollow_organization
+    VolunteerMatchView,VolunteerRelationships,unfollow_volunteer,follow_volunteer,follow_organization,unfollow_organization,
+    skills_admin_view, AddSkillView, AddInterestView, interest_admin_view,AddOrganizationMembershipView
 )
 app_name = 'users'
 
@@ -47,14 +48,21 @@ urlpatterns = [
     path('api/organization/<int:id>/add_interest/', AddInterestToOrganizationView.as_view(), name='add-intereest-to-organization'),
     path('api/organization/<int:id>/remove_interest/', RemoveInterestFromOrganizationView.as_view(), name='remove-interest-from-organization'),
     path('organization-match/', VolunteerMatchView.as_view(), name='organization-match'),
+    path('organization-match/subscribe/<int:organization_id>/', VolunteerMatchView.as_view(), name='organization-subscribe'),
+
     path('unfollow_organization/<int:organization_id>/', unfollow_organization, name='unfollow-organization'),
     path('organization/<int:organization_id>/follow', follow_organization, name='follow-organization'),
     
 
 
     path('profile-organization/<int:pk>/', OrganizationDetailView.as_view(), name='organization-detail'),
-   
     path('organization-memberships/', organization_memberships_view, name='organization-memberships'),
-
     
+    #Administration
+    path('skills-admin/', skills_admin_view, name='skills-admin'),
+    path('add-skill/', AddSkillView.as_view(), name='add-skill'),
+
+    path('interest-admin/', interest_admin_view, name='interest-admin'),
+    path('add-interest/', AddInterestView.as_view(), name='add-interest'),
+  
 ]

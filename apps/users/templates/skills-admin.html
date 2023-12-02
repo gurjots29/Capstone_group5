@@ -1,0 +1,124 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+
+{% block title %} Skills Management {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+<!-- Agrega aquí cualquier otro CSS que necesites -->
+{% endblock css %}
+
+{% block content %}
+<div class="be-content">
+    <div class="page-head">
+        <h2 class="page-head-title">Skills Management</h2>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSkillModal">Add New Skill</button>
+    </div>
+
+    <div class="main-content container-fluid">
+        <!-- Modal para agregar nueva habilidad -->
+        <div class="modal fade" id="addSkillModal" tabindex="-1" role="dialog" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSkillModalLabel">New Skill</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="skillForm">
+                            <div class="form-group">
+                                <label for="skillName">Skill Name</label>
+                                <input type="text" class="form-control" id="skillName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="skillCategory">Category</label>
+                                <select class="form-control" id="skillCategory" name="category">
+                                    {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="skillDescription">Description</label>
+                                <textarea class="form-control" id="skillDescription" name="description" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveSkill">Save Skill</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid para listar habilidades existentes -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Existing Skills</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Skill Name</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for skill in skills %}
+                                <tr>
+                                    <td>{{ skill.name }}</td>
+                                    <td>{{ skill.category.name }}</td>
+                                    <td>{{ skill.description }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3">No skills found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Manejar el evento de envío del formulario de habilidades
+        document.getElementById("saveSkill").addEventListener("click", function() {
+            var formData = new FormData(document.getElementById("skillForm"));
+
+            fetch("/users/add-skill/", { // Asegúrate de que esta es la URL correcta
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("#skillForm [name=csrfmiddlewaretoken]").value
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    alert("Skill added successfully!");
+                    $('#addSkillModal').modal('hide');
+                    loadSkills(); // Recargar la lista de habilidades
+                } else {
+                    alert("Error adding skill: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    });
+</script>
+{% endblock scripts %}

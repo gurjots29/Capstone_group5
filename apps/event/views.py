@@ -15,6 +15,8 @@ from .serializers import EventSerializer, RegistrationEventsSerializer, ProgramS
 from rest_framework import serializers
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import login_required
+
 
 class EventViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
@@ -56,13 +58,12 @@ class ProgramViewSet(generics.ListCreateAPIView):
     serializer_class = ProgramSerializer
 
 
-
-def events_management_view(request):
-    
-    if not request.user.is_authenticated:
-        return redirect('login')
-
-    volunteer = get_object_or_404(Volunteer, user=request.user)
+@login_required
+def events_management_view(request):    
+    try:
+        volunteer = Volunteer.objects.get(user=request.user)
+    except Volunteer.DoesNotExist:
+        return render(request, 'no_volunteer_error.html', {'error': 'No se encontró el perfil de Volunteer.'})
 
     admin_owner_roles = ['admin', 'owner']
     organization_ids = OrganizationMembership.objects.filter(
@@ -118,3 +119,8 @@ def events_view(request):
         'skills': skills,
         'events': events,  # Agregar eventos al contexto
     })
+
+def no_volunteer_error(request):
+    return render(request, 'no_volunteer_error.html')
+
+    

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Badge, Skill, Volunteer, Organization
+from .models import Badge, Skill, Volunteer, Organization, Interest, OrganizationMembership
 import datetime
 
 
@@ -65,3 +65,20 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = '__all__'
+
+
+class InterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interest
+        fields = '__all__'  # O especifica campos individuales si es necesario
+
+class OrganizationMembershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrganizationMembership
+        fields = ['volunteer', 'organization', 'role']  # Añade aquí todos los campos que necesites
+
+    def create(self, validated_data):
+        # Aquí puedes añadir cualquier lógica adicional necesaria para la creación de una membresía
+        return OrganizationMembership.objects.create(**validated_data)
+    
+
