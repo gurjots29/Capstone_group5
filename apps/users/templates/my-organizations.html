@@ -109,7 +109,6 @@
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
-    
     fetch("/organizations/")
     .then(response => {
         if (!response.ok) {
@@ -121,26 +120,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const table = document.getElementById("organizationTable").getElementsByTagName("tbody")[0];
         data.results.forEach(org => {
             const newRow = table.insertRow();
-            
+
+            // Crear el enlace para el nombre
             const nameLink = document.createElement("a");
             nameLink.href = `/profile-organization/${org.id}/`;
             nameLink.innerText = org.name;
 
- 
-            const cell = newRow.insertCell(0)
-            cell.appendChild(nameLink);
-            cell.className = "user-avatar cell-detail user-info"
-            const logoImg = document.createElement('img');
-            if (org.logo) {
-                logoImg.src = org.logo;
-            } else {
-                logoImg.src = "{% static 'theme/img/logo-default.png' %}"; 
-            }
-            cell.appendChild(logoImg);
-            const nameSpan = document.createElement('span');
-            nameSpan.innerText = org.name;
-            cell.appendChild(nameSpan);
-            
+            // Inserta el enlace en la celda del nombre
+            newRow.insertCell(0).appendChild(nameLink);
             newRow.insertCell(1).innerText = org.description;
             newRow.insertCell(2).innerText = org.email;
             newRow.insertCell(3).innerText = org.phone_number;

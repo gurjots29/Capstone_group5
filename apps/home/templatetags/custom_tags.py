@@ -1,7 +1,7 @@
 # Django's Libraries
 import os
 from django import template
-from apps.users.models import Volunteer
+
 
 register = template.Library()
 
@@ -13,15 +13,3 @@ def tag_menu(_user):
         'user': _user,
     }
     return contexto
-
-
-@register.simple_tag(takes_context=True)
-def get_volunteer_id(context):
-    request = context['request']
-    if request.user.is_authenticated:
-        try:
-            volunteer = Volunteer.objects.get(user=request.user)
-            return volunteer.id
-        except Volunteer.DoesNotExist:
-            return None
-    return None
