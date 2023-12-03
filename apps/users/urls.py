@@ -9,7 +9,7 @@ from .views import (user_logout, user_login, forgot_password_view, profile_organ
                     update_background_image, update_profile_logo, update_obackground_image, AddInterestToVolunteerView,
                     RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
                     organization_match_view, VolunteerRelationships, unfollow_volunteer, VolunteerDetailView2,
-                    follow_volunteer, SuggestedVolunteerList
+                    follow_volunteer, SuggestedVolunteerList, like_post, is_liked
                     )
 app_name = 'users'
 
@@ -39,6 +39,8 @@ urlpatterns = [
     path('unfollow_volunteer/<int:volunteer_id>/', unfollow_volunteer, name='unfollow-volunteer'),
     path('follow_volunteer/<int:volunteer_id>/', follow_volunteer, name='follow-volunteer'),
     path('api/suggestions/', SuggestedVolunteerList.as_view(), name='suggested_volunteers'),
+    path('like_post/<int:post_id>/', like_post, name='like_post'),
+    path('is_liked/<int:post_id>/', is_liked, name='is_liked'),
 
     #Organizations
     path('my-organizations/', my_organizations_view, name='my-organizations'),

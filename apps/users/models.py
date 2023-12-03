@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User  
 from django.core.exceptions import ValidationError
 
+from apps.post.models import Post
+
+
 class Category(models.Model):
     CATEGORY_TYPES = (
         ('interest', 'Interest'),
@@ -62,7 +65,7 @@ class Volunteer(models.Model):
     location = models.CharField(max_length=255, blank=True, null=True)  # Consider using a more detailed location model or a library like django-cities for more granularity
     date_of_birth = models.DateField(null=True, blank=True)
     headline = models.TextField(max_length=80, blank=True)
-    like_post = models.ManyToManyField("post.Post", related_name='like_users', blank=True)
+    like_post = models.ManyToManyField(Post, related_name='like_users', blank=True)
 
     following_volunteers = models.ManyToManyField(
         'self',

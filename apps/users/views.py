@@ -26,6 +26,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 
+from ..post.models import Post
+
 
 class BadgeListCreateView(generics.ListCreateAPIView):
     queryset = Badge.objects.all()
@@ -431,3 +433,30 @@ class SuggestedVolunteerList(generics.ListAPIView):
                 .exclude(user=current_user.user)
                 .exclude(user__in=following_users)
                 .distinct())
+
+
+@login_required
+def like_post(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        volunteer = get_object_or_404(Volunteer, user=request.user)
+
+        if post in volunteer.like_post.all():
+            volunteer.like_post.remove(post)
+            return JsonResponse({"success": True, "message": "Post unliked."})
+
+        volunteer.like_post.add(post)
+        return JsonResponse({"success": True, "message": "Post liked."})
+
+    return JsonResponse({"success": False, "message": "Invalid HTTP method"})
+
+
+@login_required
+def is_liked(request, post_id):
+    if request.method == 'GET':
+        post = get_object_or_404(Post, id=post_id)
+        volunteer = get_object_or_404(Volunteer, user=request.user)
+        if volunteer in post.like_users.all():
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False, "message": "Invalid HTTP method"})
+

@@ -129,6 +129,11 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                             </form>
+                            <div class="like-section">
+                                <button class="like-btn" data-post-id="{{ post.id }}">Like
+                                </button>
+                                <div class="like-count">{{ post.like_users.count }} likes</div>
+                            </div>
                         </div>
 
                     </div>
@@ -169,6 +174,7 @@
 {% block scripts %}
     <!-- Script para enviar el formulario por AJAX -->
     <script>
+
         document.addEventListener('DOMContentLoaded', (event) => {
 
             const postForm = document.getElementById('postForm');
@@ -317,12 +323,46 @@
                 });
             });
 
-        });
+            // Added post-like button and counter
+            let likeButtons = document.querySelectorAll('.like-btn');
 
+            likeButtons.forEach(function (likeButton) {
+                let postId = likeButton.getAttribute('data-post-id');
+
+                fetch('/is_liked/' + postId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            likeButton.style.backgroundColor = "red";
+                            likeButton.textContent = "Unlike";
+                        }
+                    });
+
+                likeButton.addEventListener('click', function () {
+                    const headers = new Headers();
+                    headers.append('X-CSRFToken', getCookie('csrftoken'));
+
+                    fetch(`/like_post/${postId}/`, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify({'post_id': postId})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            let likeCount = this.parentElement.querySelector('.like-count');
+                            if (data.message === "Post liked.") {
+                                likeCount.textContent = (parseInt(likeCount.textContent) + 1) + " likes";
+                                this.style.backgroundColor = "red";
+                                this.textContent = "Unlike";
+                            } else if (data.message === "Post unliked.") {
+                                likeCount.textContent = (parseInt(likeCount.textContent) - 1) + " likes";
+                                this.style.backgroundColor = "";
+                                this.textContent = "Like";
+                            }
+                        });
+                });
+            });
+
+        });
     </script>
 {% endblock scripts %}
-
-
-
-
-
