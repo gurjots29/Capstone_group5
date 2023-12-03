@@ -61,7 +61,7 @@
                               {% endif %}
             
                                 <div class="form-group login-submit">
-                                    <button data-dismiss="modal" type="submit" class="btn">Sing In</button>
+                                    <button data-dismiss="modal" type="submit" class="btn">Sign In</button>
                                 </div>
                             </form>
                         </div>
@@ -76,6 +76,56 @@
                         <span> <a href="{% url 'users:sign-up' %}">Sing up</a></span>
                     </div>
 
+                    <br>
+                                          <div class="col-md-12 text-center vertical-center">
+                        <!--<h2>Login</h2>-->
+                        
+                                <form class="center-form">            
+                                <div class="col-md-8">                     
+                                  
+
+                             
+                                  <div class="col-md-12 text-center"><!--<button type="button" class="button text-white m-3">Login</button>-->
+                                  <!--button onclick="signIn()" class="googlebutton">SignIn with Google</button-->
+                                  <img src="{% static 'media/rsz_gsign1.png' %}" onclick="signIn()" style="margin-bottom: 20px;"/></div>
+                                  
+                                </div>
+                                </form>
+                                  <script>
+                                      function signIn(){
+                                        let oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth"
+                                    
+                                        let form = document.createElement('form')
+                                        form.setAttribute('method','GET')
+                                        form.setAttribute('action',oauth2Endpoint)
+                                    
+                                        let params = {
+                                            "client_id": "786983586520-r34hhvra29es4m5ligmese3ekhmauolp.apps.googleusercontent.com",
+                                            "redirect_uri":"http://127.0.0.1:8000/home/",
+                                            "response_type":"token",
+                                            "scope": "https://www.googleapis.com/auth/userinfo.profile",
+                                            "include_granted_scopes":'true',
+                                            "state": "pass-through-value"
+                                        }
+                                        for(var p in params){
+                                            let input = document.createElement('input')
+                                            input.setAttribute('type','hidden')
+                                            input.setAttribute('name',p)
+                                            input.setAttribute('value',params[p])
+                                            form.appendChild(input)
+                                        }
+                                    
+                                        document.body.appendChild(form)
+                                        form.submit()
+            
+                                      }
+            
+                                  </script>
+                           
+                        
+                    </div>      
+
+                    
                     <br>
                     <div role="alert" class="alert alert-primary alert-icon alert-dismissible">
                         <div class="icon"><span class="mdi mdi-info-outline"></span></div>

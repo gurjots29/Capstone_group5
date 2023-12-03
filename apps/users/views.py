@@ -1,6 +1,7 @@
 from .models import Badge, Skill, Volunteer, Organization,OrganizationMembership, Interest, Relationship
-from .serializers import BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer, SuggestionSerializer
+from .serializers import BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer
 from .forms import LoginForm, SignupForm
+
 from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,6 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import Http404
 from django.http.response import JsonResponse
+from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 
 from rest_framework import generics, status
@@ -25,6 +27,10 @@ from rest_framework.decorators import api_view
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound
+
+from .utils import apply_one_hot_encoding, calculate_match,get_coordinates, calculate_match,calculate_distance
+import json
 
 
 class BadgeListCreateView(generics.ListCreateAPIView):
@@ -44,52 +50,19 @@ class VolunteerListCreateView(generics.ListCreateAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteerSerializer
 
-def profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    context = {
-        "user": user,
-    }
-    return render(request, "profile-volunteer.html", context)
-
-
 class VolunteerDetailView(DetailView):
     model = Volunteer
     template_name = 'profile-volunteer.html'
     context_object_name = 'volunteer'
 
     def get_object(self, queryset=None):
-        user_id = self.kwargs.get('user_id')
-        try:
-            return self.request.user.volunteer
-        except Volunteer.DoesNotExist:
-            raise Http404("No Volunteer associated with this user.")
+        id = self.kwargs.get('pk')  # Obtén el ID desde la URL
+        return get_object_or_404(Volunteer, id=id)
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['skills'] = Skill.objects.all()  # Añade todas las habilidades al contexto
         context['interests'] = Interest.objects.all()  # Añade todas las habilidades al contexto
-        context['following'] = self.request.user.volunteer.following_volunteers.all()
-        return context
-
-
-class VolunteerDetailView2(DetailView):
-    model = Volunteer
-    template_name = 'profile-volunteer.html'
-    context_object_name = 'volunteer'
-
-    def get_object(self, queryset=None):
-        user_id = self.kwargs.get('user_id')
-        try:
-            volunteer = Volunteer.objects.get(user_id=user_id)
-            return volunteer
-        except Volunteer.DoesNotExist:
-            raise Http404("No Volunteer associated with this user.")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['skills'] = Skill.objects.all()  # Añade todas las habilidades al contexto
-        context['interests'] = Interest.objects.all()  # Añade todas las habilidades al contexto
-        context['following'] = self.request.user.volunteer.following_volunteers.all()
         return context
 
 class VolunteerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -115,6 +88,12 @@ class AddInterestToVolunteerView(APIView):
         interest = get_object_or_404(Interest, id=interest_id)
 
         volunteer.interests.add(interest)
+
+        # Generar la codificación one-hot
+        interests = [i.name for i in volunteer.interests.all()]
+        encoded_data = Volunteer.apply_one_hot_encoding(interests)
+        volunteer.encoded_data = encoded_data
+  
         volunteer.save()
 
         return Response({"message": "Interest added successfully."}, status=status.HTTP_200_OK)
@@ -127,6 +106,12 @@ class RemoveInterestFromVolunteerView(APIView):
 
         if interest in volunteer.interests.all():
             volunteer.interests.remove(interest)
+
+            # Recalcular la codificación one-hot después de eliminar el interés
+            interests = [i.name for i in volunteer.interests.all()]
+            encoded_data = Volunteer.apply_one_hot_encoding(interests)
+            volunteer.encoded_data = encoded_data
+
             volunteer.save()
             return Response({"message": "Interest removed successfully."}, status=status.HTTP_200_OK)
         else:
@@ -172,7 +157,7 @@ class OrganizationListCreateView(generics.ListCreateAPIView):
           volunteer = self.request.user.volunteer
           OrganizationMembership.objects.create(volunteer=volunteer, organization=organization, role='owner')
         except Exception as e:
-            raise serializers.ValidationError(str(e))
+            raise serializer.ValidationError(str(e))
 
 
 class AddInterestToOrganizationView(APIView):
@@ -182,6 +167,12 @@ class AddInterestToOrganizationView(APIView):
         interest = get_object_or_404(Interest, id=interest_id)
 
         organization.interests.add(interest)
+
+         # Recalcular la codificación one-hot
+        interests = [i.name for i in organization.interests.all()]
+        encoded_data = Organization.apply_one_hot_encoding(interests)
+        organization.encoded_interests_skills = encoded_data
+
         organization.save()
 
         return Response({"message": "Interest added successfully."}, status=status.HTTP_200_OK)
@@ -194,12 +185,17 @@ class RemoveInterestFromOrganizationView(APIView):
 
         if interest in organization.interests.all():
             organization.interests.remove(interest)
+
+             # Recalcular la codificación one-hot
+            interests = [i.name for i in organization.interests.all()]
+            encoded_data = Organization.apply_one_hot_encoding(interests)
+            organization.encoded_interests_skills = encoded_data
+
             organization.save()
             return Response({"message": "Interest removed successfully."}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Interest not found in the volunteer's interests."}, status=status.HTTP_400_BAD_REQUEST)
         
-
 
 class OrganizationDetailView(DetailView):
     model = Organization
@@ -207,12 +203,26 @@ class OrganizationDetailView(DetailView):
     context_object_name = 'organization'
 
     def get_object(self, queryset=None):
-        org_id = self.kwargs.get('org_id')  # Obtén el ID desde la URL
+        org_id = self.kwargs.get('pk')  # Obtén el ID desde la URL
         return get_object_or_404(Organization, id=org_id)
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        organization = self.get_object()
         context['interests'] = Interest.objects.all()  # Añade todas las habilidades al contexto
+
+        # Añadir la lógica para verificar si el usuario actual es 'owner' o 'admin'
+        user_is_admin_or_owner = False
+        if self.request.user.is_authenticated:
+            membership = OrganizationMembership.objects.filter(
+                volunteer=self.request.user.volunteer,  # Asumiendo que el User tiene un perfil de Volunteer asociado
+                organization=organization,
+                role__in=['owner', 'admin']
+            ).first()
+            if membership:
+                user_is_admin_or_owner = True
+        
+        context['user_is_admin_or_owner'] = user_is_admin_or_owner
         return context
     
 
@@ -233,9 +243,6 @@ class OrganizationRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
 def my_organizations_view(request):
     return render(request, 'my-organizations.html')
 
-def organization_match_view(request):
-    return render(request, 'organization-match.html')
-
 def profile_organizations_view(request):
     return render(request, 'profile-organization.html')
 
@@ -246,6 +253,43 @@ def forgot_password_view(request):
     return render(request, 'forgot-password.html')
 
 
+MATCH_THRESHOLD = 2
+
+class VolunteerMatchView(APIView):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({"error": "Usuario no autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        volunteer = get_object_or_404(Volunteer, user=user)
+
+        matches = []
+        volunteer_encoded_interests = volunteer.encoded_data
+        volunteer_location = volunteer.location
+        volunteer_coords = get_coordinates(volunteer_location) if volunteer_location else None
+
+        for organization in Organization.objects.all():
+            organization_encoded_interests = organization.encoded_interests_skills
+            organization_location = organization.location
+            organization_coords = get_coordinates(organization_location) if organization_location else None
+
+            if volunteer_coords and organization_coords:
+                distance = calculate_distance(volunteer_coords, organization_coords)
+                if distance is not None:
+                    match_score = calculate_match(volunteer_encoded_interests, organization_encoded_interests, volunteer_coords, organization_coords)
+                    if match_score >= MATCH_THRESHOLD:
+                        matches.append({
+                            'organization': organization,
+                            'distance': distance
+                        })
+
+        context = {
+            'volunteer': volunteer,
+            'matches': matches,
+        }
+        return render(request, 'organization-match.html', context)
+    
+       
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -387,14 +431,17 @@ def VolunteerRelationships(request):
     # Obtiene los voluntarios que el usuario actual está siguiendo
     following = volunteer.following_volunteers.all()
 
+    # Obtiene las organizaciones que el voluntario está siguiendo
+    followed_organizations = volunteer.following_organizations.all()
+
     context = {
         "volunteer": volunteer,
-        "title": "Followers and Following",
+        "title": "Followers, Following, and Organizations",
         "followers": followers,  # Lista de seguidores
         "following": following,  # Lista de voluntarios seguidos
+        "followed_organizations": followed_organizations,  # Lista de organizaciones seguidas
     }
     return render(request, "relationships.html", context)
-
 
 @login_required
 def unfollow_volunteer(request, volunteer_id):
@@ -410,24 +457,56 @@ def unfollow_volunteer(request, volunteer_id):
 
     return JsonResponse({"success": False})
 
-
 @login_required
 def follow_volunteer(request, volunteer_id):
     if request.method == 'POST':
+        # Obtener el voluntario a seguir
         volunteer_to_follow = get_object_or_404(Volunteer, id=volunteer_id)
-        Relationship.objects.create(from_volunteer=request.user.volunteer, to_volunteer=volunteer_to_follow)
+
+        # Crear la relación de seguimiento (si no existe)
+        Relationship.objects.get_or_create(
+            from_volunteer=request.user.volunteer, 
+            to_volunteer=volunteer_to_follow
+        )
+
+        # Devolver una respuesta JSON
         return JsonResponse({"success": True})
+
     return JsonResponse({"success": False})
 
 
 
-class SuggestedVolunteerList(generics.ListAPIView):
-    serializer_class = SuggestionSerializer
 
-    def get_queryset(self):
-        current_user = self.request.user.volunteer
-        following_users = [volunteer.user for volunteer in current_user.following_volunteers.all()]
-        return (Volunteer.objects.filter(interests__in=current_user.interests.all(), skills__in=current_user.skills.all())
-                .exclude(user=current_user.user)
-                .exclude(user__in=following_users)
-                .distinct())
+@login_required
+def unfollow_organization(request, organization_id):
+    if request.method == 'POST':
+        # Obtener el voluntario a dejar de seguir
+        organization_to_unfollow = get_object_or_404(Organization, id=organization_id)
+
+        # Obtener la relación y eliminarla
+        Relationship.objects.filter(from_volunteer=request.user.volunteer, to_organization=organization_to_unfollow).delete()
+
+        # Devolver una respuesta JSON
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
+
+@login_required
+def follow_organization(request, organization_id):
+    if request.method == 'POST':
+        # Obtener el voluntario a seguir
+        organization_to_follow = get_object_or_404(Organization, id=organization_id)
+
+        # Crear la relación de seguimiento (si no existe)
+        Relationship.objects.get_or_create(
+            from_volunteer=request.user.volunteer, 
+            to_organization=organization_to_follow 
+        )
+
+        # Devolver una respuesta JSON
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
+
+
+
