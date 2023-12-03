@@ -1,35 +1,163 @@
 {% extends 'based_layout.html' %}
 
 {% load static %}
-{% load custom_tags %}
 
-{% block titulo %} Home {% endblock titulo %}
-
-{% block title-page %} My Organizations {% endblock title-page %}
+{% block title %} Organization Membership Management {% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
-<link rel="stylesheet" href="{% static 'thime/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
+<!-- Agrega aquí cualquier otro CSS que necesites -->
 {% endblock css %}
 
 {% block content %}
-
 <div class="be-content">
     <div class="page-head">
-       <h2 class="page-head-title" id="profile" data-opcion="inicio"> Memberships Management</h2>
+        <h2 class="page-head-title">Organization Membership Management</h2>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMembershipModal">Add New Membership</button>
+   
     </div>
+    <div class="main-content container-fluid">
+        <!-- Modal para agregar nueva habilidad -->
 
-    <div class="main-content container-fluid ">
-       <div class="row">
-              <div class="col-sm-12">
-           
-             </div>           
+    <!-- Modal para agregar nueva membresía -->
+    <div class="modal fade" id="addMembershipModal" tabindex="-1" role="dialog" aria-labelledby="addMembershipModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMembershipModalLabel">New Membership</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="membershipForm">
+                        <div class="form-group">
+                            <label for="volunteer">Volunteer</label>
+                            <select class="form-control" id="volunteer" name="volunteer">
+                                {% for volunteer in volunteers %}
+                                <option value="{{ volunteer.id }}">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="organization">Organization</label>
+                            <select class="form-control" id="organization" name="organization">
+                                {% for organization in organizations %}
+                                <option value="{{ organization.id }}">{{ organization.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="form-control" id="role" name="role">
+                                <option value="owner">Owner</option>
+                                <option value="admin">Admin</option>
+                                <option value="member">Member</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveMembership">Save Membership</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
+        <!-- Grid para listar membresías existentes y pendientes -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Memberships</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Volunteer</th>
+                                    <th>Organization</th>
+                                    <th>Role</th>
+                                    <th>Date Joined</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for membership in memberships %}
+                                <tr>
+                                    <td>{{ membership.volunteer }}</td>
+                                    <td>{{ membership.organization }}</td>
+                                    <td>{{ membership.get_role_display }}</td>
+                                    <td>{{ membership.date_joined|date:"SHORT_DATE_FORMAT" }}</td>
+                                    <td>{{ membership.get_status_display }}</td>
+                                    <td>
+                                        {% if membership.status == 'pending' %}
+                                        <button onclick="acceptMembership('{{ membership.id }}');" class="btn btn-success">Accept</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6">No memberships found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+    
 {% endblock content %}
 
 {% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("saveMembership").addEventListener("click", function() {
+            var formData = new FormData(document.getElementById("membershipForm"));
 
+            fetch("/users/add-membership/", { // Asegúrate de que esta es la URL correcta
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("#membershipForm [name=csrfmiddlewaretoken]").value
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    alert("Membership added successfully!");
+                    $('#addMembershipModal').modal('hide');
+                    // Aquí puedes recargar la página o actualizar la lista de membresías dinámicamente
+                } else {
+                    alert("Error adding membership: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    });
+    function acceptMembership(membershipId) {
+        // Realiza una solicitud AJAX a tu backend para actualizar el estado de la membresía
+        fetch(`/path/to/accept-membership/${membershipId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Membership accepted successfully.');
+                location.reload(); // Recargar la página para actualizar el grid
+            } else {
+                alert('Error while accepting membership.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 {% endblock scripts %}

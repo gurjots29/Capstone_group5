@@ -1,9 +1,11 @@
-from .models import Badge, Skill, Volunteer, Organization,OrganizationMembership, Interest, Relationship
-from .serializers import BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer
+from .models import Category,Badge, Skill, Volunteer, Organization,OrganizationMembership, Interest, Relationship
+from .serializers import OrganizationMembershipSerializer, InterestSerializer,BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer
 from .forms import LoginForm, SignupForm
 
 from django.urls import reverse
 from django.views.generic.detail import DetailView
+from django.views import View
+
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.shortcuts import render, redirect
@@ -16,12 +18,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import Http404
-from django.http.response import JsonResponse
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 
 from rest_framework import generics, status
 from rest_framework.views import APIView
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
@@ -30,6 +32,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.exceptions import NotFound
 
 from .utils import apply_one_hot_encoding, calculate_match,get_coordinates, calculate_match,calculate_distance
+from django.utils.decorators import method_decorator
 import json
 
 
@@ -246,22 +249,38 @@ def my_organizations_view(request):
 def profile_organizations_view(request):
     return render(request, 'profile-organization.html')
 
+
 def organization_memberships_view(request):
-    return render(request, 'organization-memberships.html')
+    current_volunteer = request.user.volunteer
+
+    user_organizations = Organization.objects.filter(
+        organizationmembership__volunteer=current_volunteer,
+        organizationmembership__role__in=['owner', 'admin']
+    )
+
+    memberships = OrganizationMembership.objects.filter(
+        organization__in=user_organizations
+    )
+
+    volunteers = Volunteer.objects.all()  
+
+    context = {
+        'memberships': memberships,
+        'volunteers': volunteers,  
+        'organizations': user_organizations
+    }
+
+    return render(request, 'organization-memberships.html', context)
 
 def forgot_password_view(request):
     return render(request, 'forgot-password.html')
 
-
 MATCH_THRESHOLD = 2
 
-class VolunteerMatchView(APIView):
+@method_decorator(login_required, name='dispatch')
+class VolunteerMatchView(View):
     def get(self, request, *args, **kwargs):
-        user = request.user
-        if not user.is_authenticated:
-            return Response({"error": "Usuario no autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
-
-        volunteer = get_object_or_404(Volunteer, user=user)
+        volunteer = request.user.volunteer
 
         matches = []
         volunteer_encoded_interests = volunteer.encoded_data
@@ -278,18 +297,38 @@ class VolunteerMatchView(APIView):
                 if distance is not None:
                     match_score = calculate_match(volunteer_encoded_interests, organization_encoded_interests, volunteer_coords, organization_coords)
                     if match_score >= MATCH_THRESHOLD:
+                        is_subscribed = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization).exists()
+                        is_owner = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization, role='owner').exists()
+                        is_admin = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization, role='admin').exists()
                         matches.append({
                             'organization': organization,
-                            'distance': distance
+                            'distance': distance,
+                            'is_subscribed': is_subscribed,
+                            'is_owner': is_owner,
+                            'is_admin': is_admin,
                         })
 
+        subscribed_organizations = OrganizationMembership.objects.filter(volunteer=volunteer).values_list('organization', flat=True)
         context = {
             'volunteer': volunteer,
             'matches': matches,
+            'subscribed_organizations': subscribed_organizations,
         }
         return render(request, 'organization-match.html', context)
+
+    def post(self, request, organization_id, *args, **kwargs):
+        organization = get_object_or_404(Organization, id=organization_id)
+        volunteer = request.user.volunteer
+
+        membership = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization).first()
+        if membership:
+            return JsonResponse({"message": "Subscribed"}, status=200)
+
+        OrganizationMembership.objects.create(volunteer=volunteer, organization=organization, role='member')
+
+        return JsonResponse({"message": "Subscribed successfully"}, status=200)
+
     
-       
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -509,4 +548,65 @@ def follow_organization(request, organization_id):
     return JsonResponse({"success": False})
 
 
+def skills_admin_view(request):
+    skills = Skill.objects.all()  # Obtiene todas las habilidades
+    categories = Category.objects.all()  # Obtiene todas las categorías
 
+    context = {
+        'skills': skills,
+        'categories': categories
+    }
+    
+    return render(request, 'skills-admin.html', context)
+
+
+class AddSkillView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Obtener los datos del formulario
+        skill_data = request.data
+
+        # Validar y guardar el nuevo Skill
+        serializer = SkillSerializer(data=skill_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Skill added successfully."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_BAD_REQUEST)
+
+
+def interest_admin_view(request):
+    interests = Interest.objects.all()  # Obtiene todos los intereses
+    categories = Category.objects.filter(category_type='interest')  # Obtiene las categorías de tipo 'interés'
+
+    context = {
+        'interests': interests,
+        'categories': categories
+    }
+    
+    return render(request, 'interest-admin.html', context)
+
+
+class AddInterestView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Obtener los datos del formulario
+        interest_data = request.data
+
+        # Validar y guardar el nuevo Interest
+        serializer = InterestSerializer(data=interest_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Interest added successfully."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class AddOrganizationMembershipView(APIView):
+    def post(self, request, *args, **kwargs):
+        membership_data = request.data
+
+        serializer = OrganizationMembershipSerializer(data=membership_data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"success": True, "message": "Membership added successfully."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"success": False, "error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        

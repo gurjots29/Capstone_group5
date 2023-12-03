@@ -6,13 +6,15 @@ from django.db.models import Q
 from apps.users.models import Volunteer, Organization
 from django.utils import timezone
 from django.db.models import Value, CharField
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
 #def home(request):
  #   return render(request, 'home.html')
 
-
+@login_required
 def home(request):
     posts = Post.objects.all().order_by('-created_at').select_related('user')
     # Obtener los próximos eventos

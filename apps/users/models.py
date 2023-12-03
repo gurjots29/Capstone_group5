@@ -122,21 +122,30 @@ class OrganizationMembership(models.Model):
         ('admin', 'Admin'),
         ('member', 'Member'),
     )
-    
+
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    )
+
     volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, null=True)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLES)
     date_joined = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
 
     class Meta:
         constraints = [
-            # Asegurando que un Volunteer solo tenga un tipo de rol específico en una organización
             models.UniqueConstraint(
                 fields=['volunteer', 'organization', 'role'],
                 name='unique_membership'
             )
         ]
 
+    def __str__(self):
+        return f"{self.volunteer} - {self.organization} ({self.get_role_display()})"
+        
 class Relationship(models.Model):
     from_volunteer = models.ForeignKey(
         Volunteer, 
