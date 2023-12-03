@@ -50,3 +50,8 @@
 #current-profile-picture, #current-background-image, #current-profile-logo {
     cursor: pointer;
 }
+
+input[readonly] {
+    background-color: #e9ecef; /* Un color de fondo para indicar que es de solo lectura */
+    cursor: pointer; /* Cambiar el cursor para indicar que es seleccionable */
+}

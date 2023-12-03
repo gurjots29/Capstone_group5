@@ -1,0 +1,62 @@
+{% extends 'based_layout.html' %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block titulo %} Events {% endblock titulo %}
+{% block title-page %} Events Management {% endblock title-page %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'thime/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css" />
+<style>
+    .card-img-top {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+{% endblock css %}
+
+{% block content %}
+<div class="be-content">
+    <div class="page-head">
+        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Events </h2>
+    </div>
+
+    <div class="main-content container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                    <div class="container">
+                        <div class="row" id="eventCards">
+                            <div id="eventCards">
+                                {% for event in events %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ event.title }}</h5>
+                                            <p class="card-text">Start Time: {{ event.start_time }}</p>
+                                            <p class="card-text">End Time: {{ event.end_time }}</p>
+                                            <p class="card-text">Location: {{ event.location }}</p>
+                                            <!-- Botón de inscripción -->
+                                            <button class="btn btn-primary" onclick="registerForEvent({{ event.id }})">Register</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <p>No events found.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+
+{% endblock scripts %}

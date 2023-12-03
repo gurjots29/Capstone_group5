@@ -14,11 +14,11 @@
     
     <link rel="stylesheet" href="{% static 'theme/lib/perfect-scrollbar/css/perfect-scrollbar.min.css' %}" type="text/css" />
 
-    <link rel="stylesheet" href="theme/lib/jqvmap/jqvmap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/lib/jqvmap/jqvmap.min.css' %}" type="text/css"/>
 
-    <link rel="stylesheet" href="theme/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css' %}" type="text/css"/>
 
-    <link rel="stylesheet" href="theme/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/lib/datetimepicker/css/bootstrap-datetimepicker.min.css' %}" type="text/css"/>
 
 
     <!-- Awesome Icons -->
@@ -49,10 +49,16 @@
             </div>
             <div class="be-right-navbar be-right-navbar-flex">
               <div class="page-title"><span>My Volunteer Platform</span> </div>
-              <div class="input-group input-group-sm">
-                <input type="text" name="search" placeholder="Search..." class="form-control search-input"><span class="input-group-btn">
+              
+              <div class="input-group input-search input-group-sm">
+
+                <input type="text" name="search" placeholder="Search..." class="form-control search-input">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="icon mdi mdi-search"></i></button></span>
+  
+                <div id="search-results"></div>  <!-- Div donde se mostrarán los resultados -->
               </div>
-                      
+              
               <ul class="nav navbar-nav navbar-right be-user-nav">
                 <li class="dropdown">
                   <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle">
@@ -81,21 +87,29 @@
                             </div>
                       </div>
                     </li>
-                    <li> <a href="{% url 'users:profile-volunteer' %}"><span class="icon mdi mdi-settings"></span> Profile</a></li>
-                    <li> <a href="{% url 'users:organization-match' %}"><span class="icon mdi mdi-settings"></span> organization match </a></li>
+                    {% get_volunteer_id as volunteer_id %}
+                    <li> 
+                      {% if volunteer_id %}
+                      <a href="{% url 'users:volunteer-detail' volunteer_id %}"><span class="icon mdi mdi-face"></span></span>Profile</a>
+                       {% else %}
+                      <a href="" ><span class="icon mdi mdi-face"></span>Profile</a> <!-- Enlace con href vacío -->
+                       {% endif %}
+                        </a>
+                    
+                    </li>
+                    <li> <a href="{% url 'users:organization-match' %}"><span class="icon mdi mdi-search"></span> Matching Interests </a></li>
                     <li>
-                      <a href="{% url 'users:relationships' %}">
-                          <span class="icon mdi mdi-settings"></span> Relationships 
+                      <a href="{% url 'users:relationships'%}">
+                          <span class="icon mdi mdi-accounts-list-alt"></span> Relationships 
                       </a>
                   </li>
                     <li><a href="{% url 'users:user_logout' %}"><span class="icon mdi mdi-power"></span> Logout</a></li>
                   </ul>
                 </li>
               </ul>
-             
-              
+            
               <ul class="nav navbar-nav navbar-right be-icons-nav">
-                <li class="dropdown"><a href="#" role="button" aria-expanded="false" class="be-toggle-right-sidebar"><span class="icon mdi mdi-settings"></span></a></li>
+                <li class="dropdown"><span></span></li>
                 <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
                   <ul class="dropdown-menu be-notifications">
                     <li>
@@ -105,33 +119,16 @@
                           <div class="content">
                             <ul>
                               <li class="notification notification-unread"><a href="#">
-                                  <div class="image"><img src="theme/img/avatar2.png" alt="Avatar"></div>
+                                  <div class="image"><img src="{% static 'theme/img/avatar2.png' %}" alt="Avatar"></div>
                                   <div class="notification-info">
                                     <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
-                                  </div></a></li>
-                        
+                                  </div></a>
+                               </li>
                             </ul>
                           </div>
                         </div>
                       </div>
                       <div class="footer"> <a href="#">View all notifications</a></div>
-                    </li>
-                  </ul>
-                </li>
-                <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle"><span class="icon mdi mdi-apps"></span></a>
-                  <ul class="dropdown-menu be-connections">
-                    <li>
-                      <div class="list">
-                        <div class="content">
-                          <div class="row">
-                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/github.png" alt="Github"><span>GitHub</span></a></div>
-                            </div>
-                          <div class="row">
-                            <div class="col-xs-4"><a href="#" class="connection-item"><img src="theme/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
-                           </div>
-                        </div>
-                      </div>
-                      <div class="footer"> <a href="#">More</a></div>
                     </li>
                   </ul>
                 </li>
@@ -190,13 +187,45 @@
     <script src="{% static 'theme/js/main.js' %}"></script>
 
     <script type="text/javascript">
-
       $(document).ready(function(){
           //initialize the javascript
           App.init();
       });
-
-  </script>
+    
+      document.addEventListener('DOMContentLoaded', function() {
+          const searchInput = document.querySelector('.search-input');
+          const resultsContainer = document.getElementById('search-results');
+    
+          searchInput.addEventListener('input', function() {
+              const searchTerm = searchInput.value;
+    
+              if (searchTerm.length < 2) {  // Puedes ajustar el número mínimo de caracteres aquí
+                  resultsContainer.innerHTML = '';
+                  return;
+              }
+    
+              fetch(`{% url 'home:search_api' %}?term=${encodeURIComponent(searchTerm)}`)
+              .then(response => response.json())
+              .then(data => {
+                  let html = '<ul>';
+                  // Iterar sobre volunteers
+                  data.volunteers.forEach(item => {
+                      html += `<li><a href="/volunteer/${item.id}/">${item.user__first_name} ${item.user__last_name}</a></li>`;
+                  });
+                  // Iterar sobre organizations
+                  data.organizations.forEach(item => {
+                      html += `<li><a href="/organizations/${item.id}/">${item.name}</a> </li>`;
+                  });
+                  html += '</ul>';
+                  resultsContainer.innerHTML = html;
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  resultsContainer.innerHTML = '<p>Error loading results.</p>';
+              });
+          });
+      });
+    </script>
 
 {% block scripts %}
 
