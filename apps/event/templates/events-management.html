@@ -192,6 +192,16 @@
 {% block scripts %}
 
 <script>
+function formatDateTimeForInput(dateTimeString) {
+    const dateTime = new Date(dateTimeString);
+    const year = dateTime.getUTCFullYear();
+    const month = String(dateTime.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(dateTime.getUTCDate()).padStart(2, '0');
+    const hours = String(dateTime.getUTCHours()).padStart(2, '0');
+    const minutes = String(dateTime.getUTCMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
   document.body.addEventListener('click', function (event) {
         if (event.target.classList.contains('edit-event-btn')) {
             event.preventDefault();
@@ -205,8 +215,8 @@
                     // Populate the modal fields with data for editing
                     document.getElementById("id").value = data.id;
                     document.getElementById("title").value = data.title;
-                    document.getElementById("start_time").value = data.start_time;
-                    document.getElementById("end_time").value = data.end_time;
+                    document.getElementById("start_time").value = formatDateTimeForInput(data.start_time);
+                    document.getElementById("end_time").value = formatDateTimeForInput(data.end_time);
                     document.getElementById("location").value = data.location;
                     document.getElementById("google_maps_location").value = data.google_maps_location;
                     document.getElementById("organization").value = data.organization;
@@ -245,6 +255,7 @@
             var formData = new FormData();
 
             // Append other fields to FormData
+            formData.append("id", document.getElementById("id").value);
             formData.append("title", document.getElementById("title").value);
             formData.append("start_time", document.getElementById("start_time").value);
             formData.append("end_time", document.getElementById("end_time").value);
