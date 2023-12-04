@@ -5,9 +5,11 @@ from rest_framework import generics
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework.views import APIView
+from django.views import View
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.shortcuts import redirect
+from django.http import JsonResponse
 
 from apps.users.models import Organization, Skill, Volunteer, OrganizationMembership
 from .models import Event, RegistrationEvents, Program
@@ -16,6 +18,19 @@ from rest_framework import serializers
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 from rest_framework.permissions import IsAuthenticated
 
+class EventRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+class EventRegisterView(View):
+    def post(self, request, event_id, *args, **kwargs):
+        event = get_object_or_404(Event, id=event_id)
+        user = request.user  # Assuming the user is authenticated
+
+
+        event.register_users.add(user)
+
+        return JsonResponse({'message': 'Successfully registered for the event'})
 class EventViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
