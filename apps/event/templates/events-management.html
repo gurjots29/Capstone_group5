@@ -56,6 +56,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <form id="eventForm" enctype="multipart/form-data">
+                                    <input type="hidden" class="form-control" id="id">
                                       {% csrf_token %}
                                       <!-- Title -->
                                       <div class="form-group">
@@ -163,14 +164,14 @@
                             <div id="eventCards">
                                 {% for event in events %}
                                 <div class="col-md-4 mb-4">
-                                    <div class="card">
+                                    <div class="card" data-event-id="{{ event.id }}">
                                         <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ event.title }}</h5>
                                             <p class="card-text">Start Time: {{ event.start_time }}</p>
                                             <p class="card-text">End Time: {{ event.end_time }}</p>
                                             <p class="card-text">Location: {{ event.location }}</p>
-                                            <button class="btn btn-primary" onclick="">Edit</button>
+                                            <button class="btn btn-primary edit-event-btn" onclick="">Edit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -191,10 +192,52 @@
 {% block scripts %}
 
 <script>
+  document.body.addEventListener('click', function (event) {
+        if (event.target.classList.contains('edit-event-btn')) {
+            event.preventDefault();
+            const eventId = event.target.closest('.card').getAttribute('data-event-id');
+            console.log(event.target.closest('.card'))
+            // Fetch event data based on eventId and populate the modal for editing
+            fetch(`/event/events/${eventId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Populate the modal fields with data for editing
+                    document.getElementById("id").value = data.id;
+                    document.getElementById("title").value = data.title;
+                    document.getElementById("start_time").value = data.start_time;
+                    document.getElementById("end_time").value = data.end_time;
+                    document.getElementById("location").value = data.location;
+                    document.getElementById("google_maps_location").value = data.google_maps_location;
+                    document.getElementById("organization").value = data.organization;
+                    document.getElementById("program").value = data.program;
+                    document.getElementById("skills_required").value = data.skills_required;
+                    document.getElementById("max_participants").value = data.max_participants;
+                    document.getElementById("total_hours").value = data.total_hours;
+                    document.getElementById("privacy").value = data.privacy;
+
+                    // Show the modal for editing
+                    $("#addEventModal").modal("show");
+                })
+                .catch(error => console.error("Error fetching event data:", error));
+            }
+        });
 
     document.addEventListener("DOMContentLoaded", function () {
         // New
         document.getElementById("add-button").addEventListener("click", function () {
+            document.getElementById("title").value = "";
+            document.getElementById("start_time").value = "";
+            document.getElementById("end_time").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("google_maps_location").value = "";
+            document.getElementById("organization").value = "";
+            document.getElementById("program").value = "";
+            document.getElementById("skills_required").value = "";
+            document.getElementById("max_participants").value = "";
+            document.getElementById("total_hours").value = "";
+            document.getElementById("privacy").value = "";
+            document.getElementById("id").value = "";
             $("#addEventModal").modal("show");
         });
 
@@ -224,8 +267,10 @@
             }
 
             // Perform the AJAX request
-            fetch("/event/new/", {
-                method: "POST",
+            const url = formData.get("id") ? `/event/events/${formData.get("id")}/` : "/event/new/";
+            console.log(formData.get("id") ? "PATCH" : "POST")
+            fetch(url, {
+                method:  formData.get("id") ? "PATCH" : "POST",
                 headers: {
                     // Don't set Content-Type for FormData, let the browser set it automatically
                     "X-CSRFToken": document.querySelector("#eventForm [name=csrfmiddlewaretoken]").value
@@ -245,6 +290,7 @@
                     location.reload();
                 })
                 .catch(error => {
+                console.log(error)
                     console.error("There was a problem with the fetch operation:", error);
                 });
         });
