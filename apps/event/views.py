@@ -5,9 +5,11 @@ from rest_framework import generics
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework.views import APIView
+from django.views import View
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.shortcuts import redirect
+from django.http import JsonResponse
 
 from apps.users.models import Organization, Skill, Volunteer, OrganizationMembership
 from .models import Event, RegistrationEvents, Program
@@ -15,9 +17,20 @@ from .serializers import EventSerializer, RegistrationEventsSerializer, ProgramS
 from rest_framework import serializers
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.decorators import login_required
+
+class EventRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+class EventRegisterView(View):
+    def post(self, request, event_id, *args, **kwargs):
+        event = get_object_or_404(Event, id=event_id)
+        user = request.user  # Assuming the user is authenticated
 
 
+        event.register_users.add(user)
+
+        return JsonResponse({'message': 'Successfully registered for the event'})
 class EventViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -58,12 +71,13 @@ class ProgramViewSet(generics.ListCreateAPIView):
     serializer_class = ProgramSerializer
 
 
-@login_required
-def events_management_view(request):    
-    try:
-        volunteer = Volunteer.objects.get(user=request.user)
-    except Volunteer.DoesNotExist:
-        return render(request, 'no_volunteer_error.html', {'error': 'No se encontró el perfil de Volunteer.'})
+
+def events_management_view(request):
+    
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    volunteer = get_object_or_404(Volunteer, user=request.user)
 
     admin_owner_roles = ['admin', 'owner']
     organization_ids = OrganizationMembership.objects.filter(
@@ -119,8 +133,3 @@ def events_view(request):
         'skills': skills,
         'events': events,  # Agregar eventos al contexto
     })
-
-def no_volunteer_error(request):
-    return render(request, 'no_volunteer_error.html')
-
-    
