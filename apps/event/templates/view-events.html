@@ -40,7 +40,7 @@
                                             <p class="card-text">End Time: {{ event.end_time }}</p>
                                             <p class="card-text">Location: {{ event.location }}</p>
                                             <!-- Botón de inscripción -->
-                                            {% if event.register_users %}
+                                            {% if request.user in event.register_users.all %}
                                             <button class="btn btn-success" disabled>Registered</button>
                                             {% else %}
                                             <button class="btn btn-primary register-event-btn">Register</button>
