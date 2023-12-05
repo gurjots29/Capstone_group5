@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User  
 from django.core.exceptions import ValidationError
 from django.db.models import JSONField
+from apps.post.models import Post
+
 
 class Category(models.Model):
     CATEGORY_TYPES = (
@@ -64,6 +66,7 @@ class Volunteer(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     headline = models.TextField(max_length=80, blank=True)
     encoded_data = JSONField(default=dict)
+    like_post = models.ManyToManyField(Post, related_name='like_users', blank=True)
 
     @staticmethod
     def apply_one_hot_encoding(interests):

@@ -1,15 +1,18 @@
 from django.urls import path
-from .views import (user_logout,user_login,forgot_password_view,profile_organizations_view, 
-                    SkillRetrieveUpdateDestroyView, VolunteerRetrieveUpdateDestroyView, 
-                    BadgeListCreateView, SkillListCreateView, VolunteerListCreateView, 
-                    OrganizationListCreateView,VolunteerDetailView, AddSkillToVolunteerView,
-    RemoveSkillFromVolunteerView, my_organizations_view ,OrganizationDetailView,
-    OrganizationRetrieveUpdateDestroyView, organization_memberships_view,user_signup, update_profile_picture,
-    update_background_image,update_profile_logo,update_obackground_image,AddInterestToVolunteerView, 
-    RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
-    VolunteerMatchView,VolunteerRelationships,unfollow_volunteer,follow_volunteer,follow_organization,unfollow_organization,
-    skills_admin_view, AddSkillView, AddInterestView, interest_admin_view,AddOrganizationMembershipView
-)
+from .views import (user_logout, user_login, forgot_password_view, profile_organizations_view,
+                    SkillRetrieveUpdateDestroyView, VolunteerRetrieveUpdateDestroyView,
+                    BadgeListCreateView, SkillListCreateView, VolunteerListCreateView,
+                    OrganizationListCreateView, VolunteerDetailView, AddSkillToVolunteerView,
+                    RemoveSkillFromVolunteerView, my_organizations_view, OrganizationDetailView,
+                    OrganizationRetrieveUpdateDestroyView, organization_memberships_view, user_signup,
+                    update_profile_picture,
+                    update_background_image, update_profile_logo, update_obackground_image, AddInterestToVolunteerView,
+                    RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
+                    VolunteerMatchView, VolunteerRelationships, unfollow_volunteer, follow_volunteer,
+                    follow_organization, unfollow_organization,
+                    skills_admin_view, AddSkillView, AddInterestView, interest_admin_view,
+                    AddOrganizationMembershipView, SuggestedVolunteerList, like_post, is_liked, VolunteerDetailView2
+                    )
 app_name = 'users'
 
 urlpatterns = [
@@ -26,7 +29,7 @@ urlpatterns = [
     #Volunteers
     path('volunteers/', VolunteerListCreateView.as_view(), name='volunteer-list-create'),
     path('profile-volunteer/', VolunteerDetailView.as_view(), name='profile-volunteer'),
-    path('volunteer/<int:pk>/', VolunteerDetailView.as_view(), name='volunteer-detail'),
+    path('volunteer/<int:user_id>/', VolunteerDetailView2.as_view(), name='volunteer-detail'),
     path('api/volunteer/<int:id>/', VolunteerRetrieveUpdateDestroyView.as_view(), name='volunteer-detail-update-delete'),
     path('api/volunteer/<int:id>/add_skill/', AddSkillToVolunteerView.as_view(), name='add-skill-to-volunteer'),
     path('api/volunteer/<int:id>/remove_skill/', RemoveSkillFromVolunteerView.as_view(), name='remove-skill-from-volunteer'),
@@ -36,7 +39,10 @@ urlpatterns = [
     path('api/volunteer/<int:id>/remove_interest/', RemoveInterestFromVolunteerView.as_view(), name='remove-interest-from-volunteer'),
     path("relationships/", VolunteerRelationships, name="relationships"),
     path('unfollow_volunteer/<int:volunteer_id>/', unfollow_volunteer, name='unfollow-volunteer'),
-    path('volunteer/<int:volunteer_id>/follow', follow_volunteer, name='follow-volunteer'),
+    path('follow_volunteer/<int:volunteer_id>/', follow_volunteer, name='follow-volunteer'),
+    path('api/suggestions/', SuggestedVolunteerList.as_view(), name='suggested_volunteers'),
+    path('like_post/<int:post_id>/', like_post, name='like_post'),
+    path('is_liked/<int:post_id>/', is_liked, name='is_liked'),
 
     #Organizations
     path('my-organizations/', my_organizations_view, name='my-organizations'),
