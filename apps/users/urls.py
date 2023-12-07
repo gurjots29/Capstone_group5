@@ -11,7 +11,7 @@ from .views import (user_logout, user_login, forgot_password_view, profile_organ
                     VolunteerMatchView, VolunteerRelationships, unfollow_volunteer, follow_volunteer,
                     follow_organization, unfollow_organization,
                     skills_admin_view, AddSkillView, AddInterestView, interest_admin_view,
-                    AddOrganizationMembershipView, SuggestedVolunteerList, like_post, is_liked, VolunteerDetailView2
+                    AddOrganizationMembershipView, SuggestedVolunteerList, like_post, is_liked, VolunteerDetailView2,
                     )
 app_name = 'users'
 
@@ -70,5 +70,6 @@ urlpatterns = [
 
     path('interest-admin/', interest_admin_view, name='interest-admin'),
     path('add-interest/', AddInterestView.as_view(), name='add-interest'),
-  
+
+
 ]
