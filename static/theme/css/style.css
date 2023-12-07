@@ -20974,3 +20974,42 @@ fieldset[disabled] .full-calendar .fc-button.active {
     margin-bottom: 0px !important;
   }
 }
+
+.post-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 90px;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.post-header a {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+.post-header img {
+  height: 55px;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  box-sizing: border-box;
+  margin-right: 15px;
+}
+
+.post-header span {
+  font-weight: bold;
+  font-size: 16px;
+  flex-direction: column;
+  margin-right: auto;
+}
+
+.post-header div {
+  font-weight: lighter;
+  font-size: 14px;
+  margin-right: auto;
+}

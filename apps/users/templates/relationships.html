@@ -9,15 +9,16 @@
 {% block title-page %} Profile Organizations  {% endblock title-page %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
-<link rel="stylesheet" href="{% static 'theme/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/css/volunteer.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'theme/lib/datatables/css/dataTables.bootstrap.min.css' %}" type="text/css"/>
 {% endblock css %}
 
 {% block content %}
 
-<div class="be-content">
-  <div class="page-head">
-        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Followers</h2>
+    <div class="be-content">
+
+    <div class="page-head">
+        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Relationships</h2>
     </div>
 
     <div class="main-content container-fluid ">
@@ -26,193 +27,282 @@
                 <div class="user-display">
                     <div class="user-display-bg">
                         {% if volunteer.background_image %}
-                         <!-- Si hay una imagen de fondo, mostrarla -->
-                         <img src="{{ volunteer.background_image.url }}" alt="Profile Background" id="current-background-image">
+                            <!-- Si hay una imagen de fondo, mostrarla -->
+                            <img src="{{ volunteer.background_image.url }}" alt="Profile Background"
+                                 id="current-background-image">
                         {% else %}
-                        <img src="{% static 'theme/img/background-default.png' %}" alt="Edit" id="current-background-image">
+                            <img src="{% static 'theme/img/background-default.png' %}" alt="Edit"
+                                 id="current-background-image">
                         {% endif %}
-                      </div>
+                    </div>
                     <div class="user-display-bottom">
                         <div class="user-display-avatar">
-                        {% if volunteer.profile_picture %}
-                            <img src="{{ volunteer.profile_picture.url }}" alt="Avatar" id="current-profile-picture">
-                        {% else %}
-                            <img src="{% static 'theme/img/avatar.png' %}" alt="Avatar" id="current-profile-picture">
-                        {% endif %}
-                         </div>
+                            {% if volunteer.profile_picture %}
+                                <img src="{{ volunteer.profile_picture.url }}" alt="Avatar"
+                                     id="current-profile-picture">
+                            {% else %}
+                                <img src="{% static 'theme/img/avatar.png' %}" alt="Avatar"
+                                     id="current-profile-picture">
+                            {% endif %}
+                        </div>
                         <div class="user-display-info">
                             <div class="name">
-                                {{ user.user.first_name }} {{ user.user.last_name }}
+                                {{ volunteer.user.first_name }} {{ volunteer.user.last_name }}
                             </div>
-                            <div class="nick"> </div>
+                            <div class="nick">
+                                {{ user.volunteer.headline }}
+                            </div>
                         </div>
                         <div class="row user-display-details">
                             <div class="col-xs-4">
-                                <div class="title"></div>
-                                <div class="counter"></div>
-                              </div>
-                            <div class="col-xs-4">
                                 <div class="title">Followers</div>
-                                <div class="counter">{{ followers|length }}</div>
+                                <div class="counter">{{ volunteer.follower_relationships.count }}</div>
                             </div>
                             <div class="col-xs-4">
                                 <div class="title">Following</div>
-                                 <div class="counter">{{ following|length }} </div>
-                        </div>
+                                <div class="counter">{{ volunteer.following_relationships.count }}</div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="panel panel-default panel-table">
-                    <div class="panel-heading">Followers </div>
-                  <div class="panel-body">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th style="width:50%;">Name</th>
-                          <th class="actions"></th>
-                        </tr>
-                      </thead>
-                    <tbody>
-                        {% for relationship in followers %}
-                         <tr>
-                           <td> <a href="{% url 'users:volunteer-detail' pk=relationship.from_volunteer.id %}">
-                               {% if relationship.from_volunteer.profile_picture %}
-                               <img src="{{ relationship.from_volunteer.profile_picture.url }}" class="badge-icon">
-                               {% else %}
-                               <img src="{% static 'media/avatar.png' %}" class="badge-icon">
-                               {% endif %}
-                                <span>
-                                    {% if relationship.from_volunteer.user.first_name and relationship.from_volunteer.user.last_name %}
-                                        {{ relationship.from_volunteer.user.first_name }} {{ relationship.from_volunteer.user.last_name }}
-                                    {% else %}
-                                        {{ relationship.from_volunteer.user.username }}
+            <div class="col-md-7">
+                <div class="user-display">
+                    <div class="user-display-bottom">
+                        <div class="row user-display-details">
+                            <div class="title"> [FOLLOWERS]<br> {{ followers|length }} users are following you!</div>
+                            {% for relationship in followers %}
+                                <div class="post-header">
+                                    <!-- Cambia a relationship.from_volunteer para obtener el objeto Volunteer -->
+                                    <a href="{% url 'users:volunteer-detail' user_id=relationship.from_volunteer.user.id %}">
+                                        {% if relationship.from_volunteer.profile_picture %}
+                                            <img src="{{ relationship.from_volunteer.profile_picture.url }}"
+                                                 class="badge-icon">
+                                        {% else %}
+                                            <img src="{% static 'media/avatar.png' %}" class="badge-icon">
+                                        {% endif %}
+                                        <span>
+                                        {% if relationship.from_volunteer.user.first_name and relationship.from_volunteer.user.last_name %}
+                                            {{ relationship.from_volunteer.user.first_name }}
+                                            {{ relationship.from_volunteer.user.last_name }}
+                                        {% else %}
+                                            {{ relationship.from_volunteer.user.username }}
+                                        {% endif %}
+                                    </span>
+                                    </a>
+                                    {% if relationship.from_volunteer.user.volunteer not in following %}
+                                        <button class="follow-btn"
+                                                data-volunteer-id="{{ relationship.from_volunteer.user.volunteer.id }}">
+                                            Follow
+                                        </button>
                                     {% endif %}
-                                </span>
-                                </a>
-                            </td>
-                            <td></td>
-                           </tr>
-                         {% endfor %}
-                     </tbody>
-                    </table>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <br>
+                        <div class="row user-display-details">
+                            <div class="title"> [FOLLOWING]<br> you are following {{ following|length }} users!</div>
+                            {% for following_volunteer in following %}
+                                <div class="post-header">
+                                    <a href="{% url 'users:volunteer-detail' user_id=following_volunteer.user.id %}">
+
+                                        {% if following_volunteer.profile_picture %}
+                                            <img src="{{ following_volunteer.profile_picture.url }}" class="badge-icon">
+                                        {% else %}
+                                            <img src="{% static 'media/avatar.png' %}" class="badge-icon">
+                                        {% endif %}
+                                        <span>
+                                        {% if following_volunteer.user.first_name and following_volunteer.user.last_name %}
+                                            {{ following_volunteer.user.first_name }}
+                                            {{ following_volunteer.user.last_name }}
+                                        {% else %}
+                                            {{ following_volunteer.user.username }}
+                                        {% endif %}
+                                    </span>
+                                    </a>
+                                    <button class="unfollow-btn" data-volunteer-id="{{ following_volunteer.id }}">
+                                        Unfollow
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-            </div>     
-            <div class="col-sm-6">
-                <div class="panel panel-default panel-table">
-                    <div class="panel-heading">Following
-                        
-                    </div>
-                    <div class="panel-body">
-                    <table class="table table-striped table-borderless">
-                    <thead>
-                    <tr>
-                        <th style="width:50%;">Type</th>
-                        <th style="width:50%;">Name</th>
-                        <th class="actions"></th>
-                    </tr>
-                    </thead>
-                    <tbody class="no-border-x">
-                    {% for following_volunteer in following %}
-                    <tr>
-                        <td>Volunteer</td>
-                      <td>
-                         <a href="{% url 'users:volunteer-detail' pk=following_volunteer.id %}">
-                         {% if following_volunteer.profile_picture %}
-                            <img src="{{ following_volunteer.profile_picture.url }}" class="badge-icon">
-                         {% else %}
-                            <img src="{% static 'media/avatar.png' %}" class="badge-icon">
-                         {% endif %}
-                         <span>
-                         {% if following_volunteer.user.first_name and following_volunteer.user.last_name %}
-                             {{ following_volunteer.user.first_name }} {{ following_volunteer.user.last_name }}
-                         {% else %}
-                             {{ following_volunteer.user.username }}
-                         {% endif %}
-                         </span>
-                         </a>
-                       </td>
-                        <td class="actions"><button class="unfollow-btn" data-volunteer-id="{{ following_volunteer.id }}">Unfollow</button></td>
-                     </tr>
-                     {% endfor %}
-                     {% for organization in followed_organizations %}
-                        <tr>
-                            <td>Organization</td>
-                            <td>
-                                <a href="{% url 'users:organization-detail' pk=organization.id %}">  <!-- Asegúrate que esta URL sea correcta -->
-                                {% if organization.logo %}
-                                    <img src="{{ organization.logo.url }}" class="badge-icon">  <!-- Ajusta si el campo para el logo se llama diferente -->
-                                {% else %}
-                                    <img src="{% static 'media/default-org-logo.png' %}" class="badge-icon">  <!-- Asume un logo por defecto -->
-                                {% endif %}
-                                <span>{{ organization.name }}</span>
-                                </a>
-                            </td>
-                            <td class="actions"><button class="unfollow-btn" data-organization-id="{{ organization.id }}">Unfollow</button></td>  <!-- Ajusta según la funcionalidad -->
-                        </tr>
-                        {% endfor %}
-                     </tbody>
-                    </table>
-                   </div>
                 </div>
             </div>
-           </div>
+            <div class="col-md-3 nova-sidebar">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
+                            <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
+                                Suggestions
+                            </div>
+                            <div class="panel-body">
+                                <table class="no-border no-strip skills">
+                                    <tbody class="no-border-x no-border-y">
+                                    <tr>
+                                        <td class="">
+                                            <div class="col-md-12">
+                                                <div id="suggested-friends-list" class="post-header">
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
 
 {% endblock content %}
 
 {% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const unfollowButtons = document.querySelectorAll('.unfollow-btn');
-        unfollowButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const volunteerId = this.getAttribute('data-volunteer-id');
-                fetch(`/unfollow_volunteer/${volunteerId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({'volunteer_id': volunteerId})
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-                        // Recargar la página actual
-                        window.location.reload();
-                    } else {
-                        // Manejar el caso en que la acción no sea exitosa
-                        console.error('Unfollow failed');
-                    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const unfollowButtons = document.querySelectorAll('.unfollow-btn');
+            unfollowButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const volunteerId = this.getAttribute('data-volunteer-id');
+                    fetch(`/unfollow_volunteer/${volunteerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({'volunteer_id': volunteerId})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Recargar la página actual
+                                window.location.reload();
+                            } else {
+                                // Manejar el caso en que la acción no sea exitosa
+                                console.error('Unfollow failed');
+                            }
+                        });
                 });
             });
         });
-    });
-    
-    // Función para obtener el valor de la cookie CSRFToken
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const followButtons = document.querySelectorAll('.follow-btn');
+            followButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const volunteerId = this.getAttribute('data-volunteer-id');
+                    console.log("volunteerId: ", volunteerId);
+                    fetch(`/follow_volunteer/${volunteerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify({'volunteer_id': volunteerId})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Refresh the current page
+                                window.location.reload();
+                            } else {
+                                // Handle the case when the action is not successful
+                                console.error('Follow failed');
+                            }
+                        });
+                });
+            });
+        });
+
+        // Función para obtener el valor de la cookie CSRFToken
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
+
+        function followVolunteer() {
+            const volunteerId = this.getAttribute('data-volunteer-id');
+            console.log("volunteerId: ", volunteerId);
+            fetch(`/follow_volunteer/${volunteerId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({'volunteer_id': volunteerId})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Refresh the current page
+                        window.location.reload();
+                    } else {
+                        // Handle the case when the action is not successful
+                        console.error('Follow failed');
+                    }
+                });
+        }
+
+        fetch('/api/suggestions/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (Array.isArray(data.results) && data.results.length > 0) {
+                    console.log('data success');
+
+                    var list = document.getElementById('suggested-friends-list');
+                    list.innerHTML = '';  // 기존 목록 삭제
+                    data.results.forEach(volunteer => {
+                        var row = document.createElement('div');
+                        row.className = 'row';
+
+                        var col = document.createElement('div');
+                        col.className = 'col';
+
+                        var img = document.createElement('img');
+                        img.src = volunteer.profile_picture;
+                        img.className = 'badge-icon';
+
+                        var name = document.createElement('span');
+                        name.textContent = volunteer.firstname + " " + volunteer.lastname;
+                        name.classList.add('volunteer-name');
+
+                        var button = document.createElement('button');
+                        button.textContent = 'Follow';
+                        button.className = 'follow-btn';
+                        button.setAttribute('data-volunteer-id', volunteer.id);
+                        button.addEventListener('click', followVolunteer);
+
+                        col.appendChild(img);
+                        col.appendChild(name);
+                        col.appendChild(button);
+                        row.appendChild(col);
+                        list.appendChild(row);
+                    });
+                } else {
+                    console.error('No suggestions found');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+
     </script>
 {% endblock scripts %}
