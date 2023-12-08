@@ -269,7 +269,7 @@
                     console.log('data success');
 
                     var list = document.getElementById('suggested-friends-list');
-                    list.innerHTML = '';  // 기존 목록 삭제
+                    list.innerHTML = '';
                     data.results.forEach(volunteer => {
                         var row = document.createElement('div');
                         row.className = 'row';
@@ -281,8 +281,9 @@
                         img.src = volunteer.profile_picture;
                         img.className = 'badge-icon';
 
-                        var name = document.createElement('span');
+                        var name = document.createElement('a');
                         name.textContent = volunteer.firstname + " " + volunteer.lastname;
+                        name.href = '/volunteer/' + volunteer.id;
                         name.classList.add('volunteer-name');
 
                         var button = document.createElement('button');
