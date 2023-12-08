@@ -63,7 +63,7 @@
                    </div>
                     <div class="user-display-info">
                       <div class="name">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }} </div>
-                      <div class="nick"> {{ volunteer.user.email }} </div>
+                      <div class="nick"> {{ volunteer.headline }} </div>
                     </div>
                     <div class="row user-display-details">
                       <div class="col-xs-4">
@@ -75,15 +75,16 @@
                         <div class="counter">{{ volunteer.following_relationships.count }}</div>
                       </div>
                       <div class="col-xs-4">
-                        <div class="title"></div>
-{#                        <div class="counter">#}
-{#                            {% if  not request.user == volunteer.user %}#}
-{#                            <form id="follow-form">#}
-{#                            {% csrf_token %}#}
-{#                            <button type="button" class="btn btn-space btn-success btn-follow" data-volunteer-id="{{ volunteer.id }}">Follow</button>#}
-{#                            </form>  #}
-{#                            {% endif %}#}
-{#                        </div>#}
+                        <div class="counter">
+                        {% if request.user != volunteer.user %}
+                            {% if volunteer in request.user.volunteer.following_volunteers.all %}
+                                <button class="unfollow-btn" data-volunteer-id="{{ volunteer.id }}">Unfollow</button>
+                            {% else %}
+                                <button class="follow-btn" data-volunteer-id="{{ volunteer.id }}">Follow</button>
+                            {% endif %}
+                        {% endif %}
+
+                        </div>
                       </div>
                     </div>
 
@@ -491,58 +492,76 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const followButtons = document.querySelectorAll('.btn-follow');
-
-    followButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const volunteerId = button.getAttribute('data-volunteer-id');
-            const csrfToken = document.querySelector('#follow-form [name=csrfmiddlewaretoken]').value;
-
-            fetch(`/volunteer/${volunteerId}/follow`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cambia la clase CSS y el texto del botón
-                    button.classList.toggle('following');
-                    button.textContent = 'Unfollow';
-
-                    // Agrega un nuevo manejador de eventos para el "Unfollow"
-                    button.removeEventListener('click', followHandler); // Elimina el manejador anterior
-                    button.addEventListener('click', function() {
-                        // Realiza la solicitud de "Unfollow" aquí
-                        fetch(`/unfollow_volunteer/${volunteerId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrfToken
-                            }
-                        })
+       document.addEventListener('DOMContentLoaded', function () {
+            const unfollowButtons = document.querySelectorAll('.unfollow-btn');
+            unfollowButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const volunteerId = this.getAttribute('data-volunteer-id');
+                    fetch(`/unfollow_volunteer/${volunteerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({'volunteer_id': volunteerId})
+                    })
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                console.log('Unfollow exitoso');
-                                // Puedes realizar otras acciones, como cambiar el aspecto del botón nuevamente
+                                // Recargar la página actual
+                                window.location.reload();
                             } else {
-                                console.error('Error en Unfollow');
+                                // Manejar el caso en que la acción no sea exitosa
+                                console.error('Unfollow failed');
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
                         });
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                });
             });
         });
-    });
-});
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const followButtons = document.querySelectorAll('.follow-btn');
+            followButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const volunteerId = this.getAttribute('data-volunteer-id');
+                    console.log("volunteerId: ", volunteerId);
+                    fetch(`/follow_volunteer/${volunteerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify({'volunteer_id': volunteerId})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Refresh the current page
+                                window.location.reload();
+                            } else {
+                                // Handle the case when the action is not successful
+                                console.error('Follow failed');
+                            }
+                        });
+                });
+            });
+        });
+
+        // Función para obtener el valor de la cookie CSRFToken
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
 
 function initAutocomplete() {
     // Obtiene el elemento del campo de entrada donde se aplicará el autocompletado
