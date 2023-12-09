@@ -1,5 +1,6 @@
 from .models import Category,Badge, Skill, Volunteer, Organization,OrganizationMembership, Interest, Relationship
-from .serializers import OrganizationMembershipSerializer, InterestSerializer,BadgeSerializer, SkillSerializer, VolunteerSerializer, OrganizationSerializer
+from .serializers import OrganizationMembershipSerializer, InterestSerializer, BadgeSerializer, SkillSerializer, \
+    VolunteerSerializer, OrganizationSerializer, SuggestionSerializer
 from .forms import LoginForm, SignupForm
 
 from django.urls import reverse
@@ -35,6 +36,7 @@ from django.views.decorators.http import require_POST
 from .utils import apply_one_hot_encoding, calculate_match,get_coordinates, calculate_match,calculate_distance
 from django.utils.decorators import method_decorator
 import json
+from ..post.models import Post
 
 
 class BadgeListCreateView(generics.ListCreateAPIView):
@@ -99,6 +101,27 @@ class VolunteerDetailView(DetailView):
 
         context['user_is_follower'] = user_is_follower
         return context
+
+class VolunteerDetailView2(DetailView):
+    model = Volunteer
+    template_name = 'profile-volunteer.html'
+    context_object_name = 'volunteer'
+
+    def get_object(self, queryset=None):
+        user_id = self.kwargs.get('user_id')
+        try:
+            volunteer = Volunteer.objects.get(user_id=user_id)
+            return volunteer
+        except Volunteer.DoesNotExist:
+            raise Http404("No Volunteer associated with this user.")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['skills'] = Skill.objects.all()  # Añade todas las habilidades al contexto
+        context['interests'] = Interest.objects.all()  # Añade todas las habilidades al contexto
+        context['following'] = self.request.user.volunteer.following_volunteers.all()
+        return context
+
 
 class VolunteerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Volunteer.objects.all()
@@ -620,6 +643,16 @@ def follow_volunteer(request, volunteer_id):
     return JsonResponse({"success": False})
 
 
+class SuggestedVolunteerList(generics.ListAPIView):
+    serializer_class = SuggestionSerializer
+
+    def get_queryset(self):
+        current_user = self.request.user.volunteer
+        following_users = [volunteer.user for volunteer in current_user.following_volunteers.all()]
+        return (Volunteer.objects.filter(interests__in=current_user.interests.all(), skills__in=current_user.skills.all())
+                .exclude(user=current_user.user)
+                .exclude(user__in=following_users)
+                .distinct())
 
 
 @login_required
@@ -715,4 +748,32 @@ class AddOrganizationMembershipView(APIView):
             return Response({"success": True, "message": "Membership added successfully."}, status=status.HTTP_201_CREATED)
         else:
             return Response({"success": False, "error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
+@login_required
+def like_post(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, id=post_id)
+        volunteer = get_object_or_404(Volunteer, user=request.user)
+
+        if post in volunteer.like_post.all():
+            volunteer.like_post.remove(post)
+            return JsonResponse({"success": True, "message": "Post unliked."})
+
+        volunteer.like_post.add(post)
+        return JsonResponse({"success": True, "message": "Post liked."})
+
+    return JsonResponse({"success": False, "message": "Invalid HTTP method"})
+
+
+@login_required
+def is_liked(request, post_id):
+    if request.method == 'GET':
+        post = get_object_or_404(Post, id=post_id)
+        volunteer = get_object_or_404(Volunteer, user=request.user)
+        if volunteer in post.like_users.all():
+            return JsonResponse({"success": True})
+    return JsonResponse({"success": False, "message": "Invalid HTTP method"})
+
+
+

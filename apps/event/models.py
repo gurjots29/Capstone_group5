@@ -1,5 +1,5 @@
 from django.db import models
-from apps.users.models import Organization, Skill, Volunteer
+from django.contrib.auth.models import User
 # Create your models here.
 #from django.db import models
 
@@ -15,6 +15,7 @@ class Event(models.Model):
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
     skills_required = models.ForeignKey('users.Skill', on_delete=models.CASCADE, null=True, blank=True)
     max_participants = models.PositiveIntegerField()
+    register_users = models.ManyToManyField(User)
     total_hours = models.PositiveIntegerField()
     privacy = models.CharField(
         max_length=15,

@@ -29,6 +29,26 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+@login_required
+def user_feed(request):
+    user_volunteer = Volunteer.objects.get(user=request.user)
+    following_volunteers = user_volunteer.following_volunteers.all()
+    following_users = [volunteer.user for volunteer in following_volunteers]
+    following_users.append(request.user)
+
+    posts = Post.objects.filter(user__in=following_users).order_by('-created_at')
+
+    upcoming_events = Event.objects.filter(start_time__gt=timezone.now()).order_by('start_time')[:5]
+
+    context = {
+        'posts': posts,
+        'upcoming_events': upcoming_events,
+
+    }
+
+    return render(request, 'home.html', context)
+
+
 def search_api(request):
     query = request.GET.get('term', '')  # 'term' es el parámetro comúnmente usado por plugins de autocompletar
 

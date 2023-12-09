@@ -82,3 +82,10 @@ class OrganizationMembershipSerializer(serializers.ModelSerializer):
         return OrganizationMembership.objects.create(**validated_data)
     
 
+class SuggestionSerializer(serializers.ModelSerializer):
+    firstname = serializers.ReadOnlyField(source='user.first_name')
+    lastname = serializers.ReadOnlyField(source='user.last_name')
+
+    class Meta:
+        model = Volunteer
+        fields = ('id', 'profile_picture', 'firstname', 'lastname', 'headline')

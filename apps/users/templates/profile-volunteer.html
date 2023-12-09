@@ -62,8 +62,8 @@
                     {% endif %}
                    </div>
                     <div class="user-display-info">
-                      <div class="name">{{ volunteer.user.username }} </div>
-                      <div class="nick"> {{ volunteer.user.email }} </div>
+                      <div class="name">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }} </div>
+                      <div class="nick"> {{ volunteer.headline }} </div>
                     </div>
                     <div class="row user-display-details">
                         <div class="col-xs-4">
@@ -82,7 +82,6 @@
                             <div class="counter">{{ volunteer.following_organizations.count }}</div>
                         </div>
                       <div class="col-xs-4">
-                        <div class="title"></div>
                         <div class="counter">
                             {% if not request.user == volunteer.user %}
                                 <form id="follow-form">
@@ -94,6 +93,8 @@
                                     {% endif %}
                                 </form>  
                             {% endif %}
+                        {% endif %}
+
                         </div>
                       </div>
                     </div>
@@ -559,8 +560,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
             });
         });
-    });
-});
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const followButtons = document.querySelectorAll('.follow-btn');
+            followButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const volunteerId = this.getAttribute('data-volunteer-id');
+                    console.log("volunteerId: ", volunteerId);
+                    fetch(`/follow_volunteer/${volunteerId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify({'volunteer_id': volunteerId})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Refresh the current page
+                                window.location.reload();
+                            } else {
+                                // Handle the case when the action is not successful
+                                console.error('Follow failed');
+                            }
+                        });
+                });
+            });
+        });
+
+        // Función para obtener el valor de la cookie CSRFToken
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
 
 function initAutocomplete() {
     // Obtiene el elemento del campo de entrada donde se aplicará el autocompletado
