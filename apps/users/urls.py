@@ -27,8 +27,7 @@ urlpatterns = [
     #Volunteers
     path('volunteers/', VolunteerListCreateView.as_view(), name='volunteer-list-create'),
     path('profile-volunteer/', VolunteerDetailView.as_view(), name='profile-volunteer'),
-    path('volunteer/<int:user_id>/', VolunteerDetailView2.as_view(), name='volunteer-detail'),
-    path('api/volunteer/<int:id>/', VolunteerRetrieveUpdateDestroyView.as_view(), name='volunteer-detail-update-delete'),
+    path('volunteer/<int:pk>/', VolunteerDetailView.as_view(), name='volunteer-detail'),  
     path('api/volunteer/<int:id>/add_skill/', AddSkillToVolunteerView.as_view(), name='add-skill-to-volunteer'),
     path('api/volunteer/<int:id>/remove_skill/', RemoveSkillFromVolunteerView.as_view(), name='remove-skill-from-volunteer'),
     path('api/volunteer/<int:id>/update_profile_picture/', update_profile_picture, name='update-profile-picture'),
