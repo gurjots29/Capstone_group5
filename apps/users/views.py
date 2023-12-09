@@ -31,6 +31,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 from rest_framework.exceptions import NotFound
+from django.views.decorators.http import require_POST
 
 from .utils import apply_one_hot_encoding, calculate_match,get_coordinates, calculate_match,calculate_distance
 from django.utils.decorators import method_decorator
@@ -63,11 +64,42 @@ class VolunteerDetailView(DetailView):
     def get_object(self, queryset=None):
         id = self.kwargs.get('pk')  # Obtén el ID desde la URL
         return get_object_or_404(Volunteer, id=id)
-        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['skills'] = Skill.objects.all()  # Añade todas las habilidades al contexto
-        context['interests'] = Interest.objects.all()  # Añade todas las habilidades al contexto
+        volunteer = self.get_object()
+
+        # Añade las habilidades e intereses al contexto
+        context['skills'] = Skill.objects.all()  
+        context['interests'] = Interest.objects.all()
+
+        # Añade solo las habilidades e intereses del voluntario en cuestión al contexto
+        context['volunteer_skills'] = volunteer.skills.all()
+        context['volunteer_interests'] = volunteer.interests.all()
+
+        # Obtiene los seguidores y los seguidos del voluntario
+        context['followers'] = volunteer.follower_relationships.all() 
+        context['following'] = volunteer.following_volunteers.all() 
+        context['followed_organizations'] = volunteer.following_organizations.all()
+
+         # Obtiene las organizaciones donde el voluntario es miembro
+        member_organizations = OrganizationMembership.objects.filter(
+            volunteer=volunteer,
+            status='accepted'  # Asume que 'accepted' es un estado de membresía válido
+        ).select_related('organization')
+
+        context['member_organizations'] = [membership.organization for membership in member_organizations]
+
+
+        # Añadir la lógica para verificar si el usuario actual ya sigue al voluntario
+        user_is_follower = False
+        if self.request.user.is_authenticated and not self.request.user == volunteer.user:
+            user_is_follower = Relationship.objects.filter(
+                from_volunteer=self.request.user.volunteer,
+                to_volunteer=volunteer
+            ).exists()
+
+        context['user_is_follower'] = user_is_follower
         return context
 
 class VolunteerDetailView2(DetailView):
@@ -235,13 +267,16 @@ class OrganizationDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         organization = self.get_object()
-        context['interests'] = Interest.objects.all()  # Añade todas las habilidades al contexto
+        context['interests'] = Interest.objects.all()
 
-        # Añadir la lógica para verificar si el usuario actual es 'owner' o 'admin'
+        # Añade los seguidores de la organización al contexto
+        context['followers'] = Relationship.objects.filter(to_organization=organization)
+
+        # Lógica para verificar si el usuario actual es 'owner' o 'admin'
         user_is_admin_or_owner = False
         if self.request.user.is_authenticated:
             membership = OrganizationMembership.objects.filter(
-                volunteer=self.request.user.volunteer,  # Asumiendo que el User tiene un perfil de Volunteer asociado
+                volunteer=self.request.user.volunteer,
                 organization=organization,
                 role__in=['owner', 'admin']
             ).first()
@@ -249,6 +284,17 @@ class OrganizationDetailView(DetailView):
                 user_is_admin_or_owner = True
         
         context['user_is_admin_or_owner'] = user_is_admin_or_owner
+
+         # Añadir la lógica para verificar si el usuario actual ya sigue a la organización
+        user_is_follower = False
+        if self.request.user.is_authenticated:
+            user_is_follower = Relationship.objects.filter(
+                from_volunteer=self.request.user.volunteer,
+                to_organization=organization
+            ).exists()
+
+        context['user_is_follower'] = user_is_follower
+
         return context
     
 
@@ -266,8 +312,24 @@ class OrganizationRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIVie
             print(e)
             return Response({"error": "Error updating the organization."}, status=status.HTTP_400_BAD_REQUEST)
         
+
 def my_organizations_view(request):
-    return render(request, 'my-organizations.html')
+    if request.user.is_authenticated:
+        volunteer = request.user.volunteer
+        memberships = OrganizationMembership.objects.filter(volunteer=volunteer, role__in=['owner', 'admin'])
+        organizations = [membership.organization for membership in memberships]
+
+        # Asignar la lista de intereses a cada organización
+        for org in organizations:
+            org.interests_list = ", ".join([interest.name for interest in org.interests.all()])
+
+        context = {
+            'organizations': organizations,
+        }
+    else:
+        context = {}
+
+    return render(request, 'my-organizations.html', context)
 
 def profile_organizations_view(request):
     return render(request, 'profile-organization.html')
@@ -281,11 +343,12 @@ def organization_memberships_view(request):
         organizationmembership__role__in=['owner', 'admin']
     )
 
+    # Aquí agregamos la lógica de ordenación elegida
     memberships = OrganizationMembership.objects.filter(
         organization__in=user_organizations
-    )
+    ).order_by('status', 'date_joined')  # Ejemplo de ordenación combinada
 
-    volunteers = Volunteer.objects.all()  
+    volunteers = Volunteer.objects.all()
 
     context = {
         'memberships': memberships,
@@ -295,11 +358,38 @@ def organization_memberships_view(request):
 
     return render(request, 'organization-memberships.html', context)
 
+@login_required
+@require_POST
+def accept_membership_view(request, membership_id):
+    membership = get_object_or_404(OrganizationMembership, id=membership_id)
+
+    # Asegúrate de que el usuario actual tiene permiso para aceptar la membresía
+    if request.user.volunteer in membership.organization.volunteers.all():
+        membership.status = 'accepted'
+        membership.save()
+        return JsonResponse({'message': 'Membership accepted successfully'})
+    else:
+        return JsonResponse({'message': 'Unauthorized'}, status=403)
+    
+
 def forgot_password_view(request):
     return render(request, 'forgot-password.html')
 
+def get_match_level(match_score):
+    # Ajusta estos valores según el nuevo sistema de puntuación
+    if match_score >= 10:  # Asumiendo que 10 es un buen puntaje alto
+        return 'Strong'
+    elif 5 <= match_score < 10:
+        return 'Moderate'
+    elif match_score < 5:
+        return 'Weak'
+ 
 MATCH_THRESHOLD = 2
-
+MATCH_LEVEL_VALUES = {
+    'Strong': 3,
+    'Moderate': 2,
+    'Weak': 1
+}
 @method_decorator(login_required, name='dispatch')
 class VolunteerMatchView(View):
     def get(self, request, *args, **kwargs):
@@ -317,28 +407,45 @@ class VolunteerMatchView(View):
 
             if volunteer_coords and organization_coords:
                 distance = calculate_distance(volunteer_coords, organization_coords)
-                if distance is not None:
-                    match_score = calculate_match(volunteer_encoded_interests, organization_encoded_interests, volunteer_coords, organization_coords)
-                    if match_score >= MATCH_THRESHOLD:
-                        is_subscribed = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization).exists()
-                        is_owner = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization, role='owner').exists()
-                        is_admin = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization, role='admin').exists()
-                        matches.append({
-                            'organization': organization,
-                            'distance': distance,
-                            'is_subscribed': is_subscribed,
-                            'is_owner': is_owner,
-                            'is_admin': is_admin,
-                        })
+                match_score = calculate_match(volunteer_encoded_interests, organization_encoded_interests, volunteer_coords, organization_coords)
+                if match_score >= MATCH_THRESHOLD:
+                    membership = OrganizationMembership.objects.filter(volunteer=volunteer, organization=organization).first()
 
-        subscribed_organizations = OrganizationMembership.objects.filter(volunteer=volunteer).values_list('organization', flat=True)
+                    if membership:
+                        match_status = membership.status
+                        is_subscribed = membership.status == 'accepted'
+                        is_owner = membership.role == 'owner' and is_subscribed
+                        is_admin = membership.role == 'admin' and is_subscribed
+                    else:
+                        match_status = 'not_member'
+                        is_subscribed = False
+                        is_owner = False
+                        is_admin = False
+
+                    match_level = get_match_level(match_score)
+                    organization_interests = ', '.join([interest.name for interest in organization.interests.all()])
+
+                    matches.append({
+                        'organization': organization,
+                        'distance': distance,
+                        'is_subscribed': is_subscribed,
+                        'is_owner': is_owner,
+                        'is_admin': is_admin,
+                        'match_level': match_level,
+                        'interests': organization_interests,
+                        'match_status': match_status  # Añadir el estado de la membresía
+                    })
+
+        matches.sort(key=lambda x: (-MATCH_LEVEL_VALUES.get(x['match_level'], 0), x['distance']))
+
+     
         context = {
             'volunteer': volunteer,
             'matches': matches,
-            'subscribed_organizations': subscribed_organizations,
         }
         return render(request, 'organization-match.html', context)
-
+    
+    
     def post(self, request, organization_id, *args, **kwargs):
         organization = get_object_or_404(Organization, id=organization_id)
         volunteer = request.user.volunteer
@@ -351,7 +458,6 @@ class VolunteerMatchView(View):
 
         return JsonResponse({"message": "Subscribed successfully"}, status=200)
 
-    
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)

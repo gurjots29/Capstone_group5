@@ -66,24 +66,34 @@
                       <div class="nick"> {{ volunteer.headline }} </div>
                     </div>
                     <div class="row user-display-details">
-                      <div class="col-xs-4">
-                        <div class="title">Followers</div>
-                        <div class="counter">{{ volunteer.follower_relationships.count }}</div>
-                      </div>
-                      <div class="col-xs-4">
-                        <div class="title">Following</div>
-                        <div class="counter">{{ volunteer.following_relationships.count }}</div>
-                      </div>
+                        <div class="col-xs-4">
+                            <div class="title">Followers</div>
+                            <!-- Muestra el número de seguidores -->
+                            <div class="counter">{{ volunteer.follower_relationships.count }}</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="title">Following</div>
+                            <!-- Muestra el número de seguidos -->
+                            <div class="counter">{{ volunteer.following_volunteers.count }}</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="title">Following Organizations</div>
+                            <!-- Muestra el número de organizaciones seguidas -->
+                            <div class="counter">{{ volunteer.following_organizations.count }}</div>
+                        </div>
                       <div class="col-xs-4">
                         <div class="counter">
-                        {% if request.user != volunteer.user %}
-                            {% if volunteer in request.user.volunteer.following_volunteers.all %}
-                                <button class="unfollow-btn" data-volunteer-id="{{ volunteer.id }}">Unfollow</button>
-                            {% else %}
-                                <button class="follow-btn" data-volunteer-id="{{ volunteer.id }}">Follow</button>
+                            {% if not request.user == volunteer.user %}
+                                <form id="follow-form">
+                                    {% csrf_token %}
+                                    {% if user_is_follower %}
+                                        <button type="button" class="btn btn-space btn-danger btn-unfollow" data-volunteer-id="{{ volunteer.id }}">Unfollow</button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-space btn-success btn-follow" data-volunteer-id="{{ volunteer.id }}">Follow</button>
+                                    {% endif %}
+                                </form>  
                             {% endif %}
-                        {% endif %}
-
+                       
                         </div>
                       </div>
                     </div>
@@ -173,7 +183,7 @@
     
                     <table class="no-border no-strip skills">
                       <tbody class="no-border-x no-border-y">
-                          {% for skill in volunteer.skills.all %}
+                        {% for skill in volunteer_skills %}
                           <tr data-skill-id="{{ skill.id }}">
                               <td>
                                   <span class="icon s7-portfolio">{{ skill.name }}</span>
@@ -185,14 +195,16 @@
                           {% endfor %}
                       </tbody>
                   </table>
-                  {% if request.user == volunteer.user %}
+                
                   <!-- Formulario para agregar nueva habilidad -->
+                  {% if request.user == volunteer.user %}
                   <div id="add-skill-form">
                       <select id="skill-dropdown">
                           {% for skill in skills %}
                               <option value="{{ skill.id }}">{{ skill.name }}</option>
                           {% endfor %}
                       </select>
+                    
                       <button id="add-skill" class="btn btn-space btn-success">Add Skill</button>
                     
                   </div>
@@ -207,7 +219,7 @@
       
                       <table class="no-border no-strip">
                         <tbody class="no-border-x no-border-y">
-                            {% for interest in volunteer.interests.all %}
+                            {% for interest in volunteer_interests %}
                             <tr data-interest-id="{{ interest.id }}">
                                 <td>
                                     <span class="icon s7-portfolio">{{ interest.name }}</span>
@@ -219,19 +231,39 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% if request.user == volunteer.user %}
+                    
                     <!-- Formulario para agregar nuevo interest -->
+                    {% if request.user == volunteer.user %}
                     <div id="add-interest-form">
+                      
                         <select id="interest-dropdown">
                             {% for interest in interests %}
                                 <option value="{{ interest.id }}">{{ interest.name }} ({{ interest.category.name }})</option>
                             {% endfor %}
                         </select>
                         <button id="add-interest" class="btn btn-space btn-success">Add interest</button>
-                    </div>
+                      </div>
                     {% endif %}
                     </div>
                   </div>
+
+                  <div class="user-info-list panel panel-default">
+                    <div class="panel-heading panel-heading-divider">Member Organizations</div>
+                    <div class="panel-body">
+                   
+                      <table class="no-border no-strip skills">
+                        <tbody class="no-border-x no-border-y">
+                            {% for organization in member_organizations %}
+                            <tr>
+                                <td> <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" class="badge-icon">  {{ organization.name }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                  </div>
+
+                  
                 <div class="user-info-list panel panel-default">
                   <div class="panel-heading panel-heading-divider">Badges</div>
                   <div class="panel-body">
@@ -247,6 +279,8 @@
                   </table>
                   </div>
                 </div>
+
+
               </div>
             </div
      </div>
@@ -492,30 +526,37 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-       document.addEventListener('DOMContentLoaded', function () {
-            const unfollowButtons = document.querySelectorAll('.unfollow-btn');
-            unfollowButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const volunteerId = this.getAttribute('data-volunteer-id');
-                    fetch(`/unfollow_volunteer/${volunteerId}/`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': getCookie('csrftoken'),
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({'volunteer_id': volunteerId})
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Recargar la página actual
-                                window.location.reload();
-                            } else {
-                                // Manejar el caso en que la acción no sea exitosa
-                                console.error('Unfollow failed');
-                            }
-                        });
-                });
+document.addEventListener('DOMContentLoaded', function() {
+    const followButtons = document.querySelectorAll('.btn-follow, .btn-unfollow');
+
+    followButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const volunteerId = button.getAttribute('data-volunteer-id');
+            const csrfToken = document.querySelector('#follow-form [name=csrfmiddlewaretoken]').value;
+            const isFollowing = button.classList.contains('btn-unfollow');
+            let url = isFollowing ? `/unfollow_volunteer/${volunteerId}/` : `/volunteer/${volunteerId}/follow`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.textContent = isFollowing ? 'Follow' : 'Unfollow';
+                    button.classList.toggle('btn-success', isFollowing);
+                    button.classList.toggle('btn-danger', !isFollowing);
+                    button.classList.toggle('btn-unfollow', !isFollowing);
+                    button.classList.toggle('btn-follow', isFollowing);
+
+                    // Recargar la página para actualizar el contador
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
 

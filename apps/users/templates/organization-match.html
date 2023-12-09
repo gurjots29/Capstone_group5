@@ -17,13 +17,27 @@
     <div class="page-head">
        <h2 class="page-head-title" id="profile" data-opcion="inicio"> Organizations Match</h2>
     </div>
-
     <div class="main-content container-fluid ">
-       <div class="row">
-              <div class="col-sm-12">
-                <div class="panel panel-default panel-table">
-                    
-             <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default panel-table">
+        <div class="panel-heading">
+          <div class="panel-body">
+            <div id="table1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row be-datatable-header">
+           
+                  <div class="col-sm-6">
+                    <div class="dataTables_length" id="table1_length">
+                    <label>Show <select name="table1_length" aria-controls="table1" class="form-control input-sm">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option></select> entries</label></div></div>
+                    <div class="col-sm-6"><div id="table1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="table1"></label></div></div>
+                    </div>
+                 </div>
+               </div>
+             </div>
                 <div class="table-responsive noSwipe">
                   <form id="matchForm">
                     {% csrf_token %}
@@ -37,11 +51,14 @@
                                         <label for="check1"></label>
                                     </div>
                                 </th>
+                                
                                 <th style="width:20%;">Organization</th>
                                 <th style="width:17%;">Description</th>
+                                <th style="width:17%;">Match Level</th>
                                 <th style="width:15%;">Distance</th>
                                 <th style="width:10%;">Website</th>
                                 <th style="width:10%;">Location</th>
+                                <th style="width:10%;">Interest</th>
                                 <th style="width:10%;"></th>
                             </tr>
                         </thead>
@@ -55,37 +72,48 @@
                                     </div>
                                 </td>
                                 <td class="user-avatar cell-detail user-info">
-                                    {% if match.organization.logo %}
-                                    <!-- Si hay una imagen de fondo, mostrarla -->
-                                    <img src="{{ match.organization.logo.url }}" alt="Avatar" id="current-profile-logo">
-                                    {% else %}
-                                    <img src="{% static 'theme/img/logo-default.png' %}" alt="Avatar" id="current-profile-logo">
-                                    {% endif %}
-                                    <span>{{ match.organization.name }}</span>
-                                </td>
-                                <td class="cell-detail">
-                                    <span>{{ match.organization.description }}</span>
-                                </td>
+                                  <a href="{% url 'users:organization-detail' pk=match.organization.id %}">
+                                      {% if match.organization.logo %}
+                                          <img src="{{ match.organization.logo.url }}" alt="Avatar" id="current-profile-logo">
+                                      {% else %}
+                                          <img src="{% static 'theme/img/logo-default.png' %}" alt="Avatar" id="current-profile-logo">
+                                      {% endif %}
+                                      <span>{{ match.organization.name }}</span>
+                                  </a>
+                              </td>
+                              <td class="cell-detail">
+                                <span>{{ match.organization.description|slice:":50" }}</span>
+                                {% if match.organization.description|length > 50 %}
+                                    ...
+                                {% endif %}
+                            </td>
+                                <td>{{ match.match_level }}</td>
                                 <td class="milestone">{{ match.distance|floatformat:2 }} km</span> </td>
-                                <td class="cell-detail">
-                                    <span>{{ match.organization.website }}</span>
+                                <td class="user-avatar cell-detail user-info">
+                                  <!-- Solo el enlace a la página web de la organización -->
+                                  <a href="{{ match.organization.website }}" target="_blank">
+                                      {{ match.organization.website }}
+                                  </a>
                                 </td>
                                 <td class="cell-detail">
                                     <span>{{ match.organization.location }}</span>
                                 </td>
+                                <td>{{ match.interests }}</td>
                                 <td class="text-right">
-                                    {% if match.is_subscribed %}
-                                        {% if match.is_owner %}
-                                            <span class="label label-info">Owner</span>
-                                        {% elif match.is_admin %}
-                                            <span class="label label-success">Admin</span>
-                                        {% else %}
-                                            <span class="label label-primary">Member</span>
-                                        {% endif %}
-                                    {% else %}
-                                        <button class="btn btn-primary subscribe-button" data-organization-id="{{ match.organization.id }}">Subscribe</button>
-                                    {% endif %}
-                                </td>
+                                  {% if match.match_status == 'accepted' %}
+                                      {% if match.is_owner %}
+                                          <span class="label label-info">Owner</span>
+                                      {% elif match.is_admin %}
+                                          <span class="label label-success">Admin</span>
+                                      {% else %}
+                                          <span class="label label-primary">Member</span>
+                                      {% endif %}
+                                  {% elif match.match_status == 'pending' %}
+                                      <span class="label label-warning">Pending</span>
+                                  {% else %}
+                                      <button class="btn btn-primary subscribe-button" data-organization-id="{{ match.organization.id }}">Subscribe</button>
+                                  {% endif %}
+                              </td>
                             </tr>
                             {% empty %}
                             <tr>

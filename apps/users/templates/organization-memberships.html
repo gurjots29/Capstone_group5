@@ -11,13 +11,40 @@
 
 {% block content %}
 <div class="be-content">
-    <div class="page-head">
-        <h2 class="page-head-title">Organization Membership Management</h2>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMembershipModal">Add New Membership</button>
-   
-    </div>
     <div class="main-content container-fluid">
         <!-- Modal para agregar nueva habilidad -->
+    <div class="page-head">
+        <h2 class="page-head-title">Organization Membership Management</h2>
+    
+    </div>
+                    
+   
+    <div class="panel panel-default panel-table">
+    <div class="panel-heading">
+      <div class="panel-body">
+        <div id="table1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+            <div class="row be-datatable-header">
+       
+                <div class="col-sm-6">
+                <form method="get" action="">
+                    <label for="filter_status">Status</label>
+                        <select caria-controls="table1" class="form-control input-sm" id="filter_status" name="status">
+                            <option value="">--Select Status--</option>
+                            <option value="pending">Pending</option>
+                            <option value="accepted">Accepted</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    <!-- Aquí puedes agregar más campos de filtro si es necesario -->
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMembershipModal">Add New Membership</button>
+                </form>
+                </div>
+             </div>
+           </div>
+         </div>
+      </div>
+    
+
 
     <!-- Modal para agregar nueva membresía -->
     <div class="modal fade" id="addMembershipModal" tabindex="-1" role="dialog" aria-labelledby="addMembershipModalLabel" aria-hidden="true">
@@ -66,7 +93,7 @@
     </div>
 
         <!-- Grid para listar membresías existentes y pendientes -->
-        <div class="row mt-4">
+        <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Memberships</div>
@@ -93,6 +120,7 @@
                                     <td>
                                         {% if membership.status == 'pending' %}
                                         <button onclick="acceptMembership('{{ membership.id }}');" class="btn btn-success">Accept</button>
+                                        <button onclick="rejectMembership('{{ membership.id }}');" class="btn btn-danger">Reject</button>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -106,9 +134,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    </div>
+      </div>
+ 
 </div>
     
 {% endblock content %}
@@ -141,9 +168,9 @@
             });
         });
     });
+
     function acceptMembership(membershipId) {
-        // Realiza una solicitud AJAX a tu backend para actualizar el estado de la membresía
-        fetch(`/path/to/accept-membership/${membershipId}/`, {
+        fetch(`/accept-membership/${membershipId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'

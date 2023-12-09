@@ -90,8 +90,7 @@
                     {% get_volunteer_id as volunteer_id %}
                     <li> 
                       {% if volunteer_id %}
-                      <a href="{% url 'users:volunteer-detail' volunteer_id %}"><span class="icon mdi mdi-face"></span></span>Profile</a>
-                       {% else %}
+                      <a href="{% url 'users:volunteer-detail' volunteer_id %}"><span class="icon mdi mdi-face"></span></span>Profile</a>   {% else %}
                       <a href="" ><span class="icon mdi mdi-face"></span>Profile</a> <!-- Enlace con href vacío -->
                        {% endif %}
                         </a>
