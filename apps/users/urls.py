@@ -8,7 +8,7 @@ from .views import (user_logout,user_login,forgot_password_view,profile_organiza
     update_background_image,update_profile_logo,update_obackground_image,AddInterestToVolunteerView, 
     RemoveInterestFromVolunteerView, AddInterestToOrganizationView, RemoveInterestFromOrganizationView,
     VolunteerMatchView,VolunteerRelationships,unfollow_volunteer,follow_volunteer,follow_organization,unfollow_organization,
-    skills_admin_view, AddSkillView, AddInterestView, interest_admin_view,AddOrganizationMembershipView
+    skills_admin_view, AddSkillView, AddInterestView, interest_admin_view,AddOrganizationMembershipView,accept_membership_view
 )
 app_name = 'users'
 
@@ -55,9 +55,10 @@ urlpatterns = [
     
 
 
-    path('profile-organization/<int:pk>/', OrganizationDetailView.as_view(), name='organization-detail'),
+    path('profile-organization/<int:pk>/', OrganizationDetailView.as_view(), name='profile-organization'),
     path('organization-memberships/', organization_memberships_view, name='organization-memberships'),
-    
+     path('accept-membership/<int:membership_id>/', accept_membership_view, name='accept-membership'),
+
     #Administration
     path('skills-admin/', skills_admin_view, name='skills-admin'),
     path('add-skill/', AddSkillView.as_view(), name='add-skill'),

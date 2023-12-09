@@ -34,20 +34,31 @@ def apply_one_hot_encoding(interests):
     return encoded_data
 
 
-DISTANCE_THRESHOLD = 5  # 5 km
+DISTANCE_THRESHOLD = 6  # 5 km
+MAX_DISTANCE_SCORE = 10  # Puntuación máxima para la distancia
+
+def calculate_distance_score(distance):
+    if distance <= DISTANCE_THRESHOLD:
+        # Escala inversa: a menor distancia, mayor puntuación
+        return MAX_DISTANCE_SCORE * (1 - (distance / DISTANCE_THRESHOLD))
+    return 0
+
+# Puntaje adicional por cada interés coincidente
+INTEREST_SCORE = 2  # Puntaje adicional por cada interés coincidente
 
 def calculate_match(volunteer_encoded_data, organization_encoded_data, volunteer_coords, organization_coords):
     match_score = 0
+    interest_match = False
 
     # Comparación de intereses
     for interest, has_interest in volunteer_encoded_data.items():
         if has_interest and organization_encoded_data.get(interest, False):
-            match_score += 1
+            match_score += INTEREST_SCORE  # Usar INTEREST_SCORE aquí
+            interest_match = True
 
-    # Comparación de ubicación con mayor peso
-    if volunteer_coords and organization_coords:
+    # Comparación de ubicación solo si hay coincidencia de intereses
+    if interest_match and volunteer_coords and organization_coords:
         distance = calculate_distance(volunteer_coords, organization_coords)
-        if distance <= DISTANCE_THRESHOLD:
-            match_score += 3  # Incrementa el puntaje en mayor medida si las ubicaciones están cerca
+        match_score += calculate_distance_score(distance)
 
     return match_score

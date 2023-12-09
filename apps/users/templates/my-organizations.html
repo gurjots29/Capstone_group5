@@ -89,10 +89,33 @@
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Website</th>
+                                        <th>Location</th>
+                                        <th>Interests</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Los datos se llenarán aquí usando DataTables y la API -->
+                                    {% for organization in organizations %}
+                                        <tr>
+                                            <td class="user-avatar cell-detail user-info">
+                                                <a href="{% url 'users:profile-organization' pk=organization.id %}">
+                                                    {% if organization.logo %}
+                                                        <img src="{{ organization.logo.url }}" alt="{{ organization.name }}" >
+                                                    {% else %}
+                                                        <img src="{% static 'theme/img/logo-default.png' %}" alt="Default Logo">
+                                                    {% endif %}
+                                                    {{ organization.name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ organization.description }}</td>
+                                            <td>{{ organization.email }}</td>
+                                            <td>{{ organization.phone }}</td>
+                                            <td><a href="{{ organization.website }}" target="_blank">{{ organization.website }}</a></td>
+                                            <td>{{ organization.location }}</td>
+                                            <td>{{ organization.interests_list }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr><td colspan="7">No organizations found.</td></tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -110,47 +133,6 @@
 
 document.addEventListener("DOMContentLoaded", function() {
     
-    fetch("/organizations/")
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then(data => {
-        const table = document.getElementById("organizationTable").getElementsByTagName("tbody")[0];
-        data.results.forEach(org => {
-            const newRow = table.insertRow();
-            
-            const nameLink = document.createElement("a");
-            nameLink.href = `/profile-organization/${org.id}/`;
-            nameLink.innerText = org.name;
-
- 
-            const cell = newRow.insertCell(0)
-            cell.appendChild(nameLink);
-            cell.className = "user-avatar cell-detail user-info"
-            const logoImg = document.createElement('img');
-            if (org.logo) {
-                logoImg.src = org.logo;
-            } else {
-                logoImg.src = "{% static 'theme/img/logo-default.png' %}"; 
-            }
-            cell.appendChild(logoImg);
-            const nameSpan = document.createElement('span');
-            nameSpan.innerText = org.name;
-            cell.appendChild(nameSpan);
-            
-            newRow.insertCell(1).innerText = org.description;
-            newRow.insertCell(2).innerText = org.email;
-            newRow.insertCell(3).innerText = org.phone_number;
-            newRow.insertCell(4).innerText = org.website;
-        });
-    })
-    .catch(error => {
-        console.error("There was a problem with the fetch operation:", error);
-    });
-
  // New
 document.getElementById("add-button").addEventListener("click", function() {
     $("#addOrganizationModal").modal("show");

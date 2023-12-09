@@ -50,18 +50,21 @@
                       </div>
                       <div class="col-xs-4">
                         <div class="title">Followers</div>
-                        <div class="counter">26</div>
-                      </div>
+                        <div class="counter">{{ followers.count }}</div>
+                    </div>
                       <div class="col-xs-4">
                         <div class="title"></div>
                         <div class="counter">
                             {% if not user_is_admin_or_owner %}
-                            <form id="follow-form">
-                            {% csrf_token %}
-                            <button type="button" class="btn btn-space btn-success btn-follow" data-organization-id="{{ organization.id }}">Follow</button>
-                            </form>  
+                                <form id="follow-form">
+                                    {% csrf_token %}
+                                    {% if user_is_follower %}
+                                        <button type="button" class="btn btn-space btn-danger btn-unfollow" data-organization-id="{{ organization.id }}">Unfollow</button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-space btn-success btn-follow" data-organization-id="{{ organization.id }}">Follow</button>
+                                    {% endif %}
+                                </form>  
                             {% endif %}
-
                         </div>
                       </div>
                     </div>
@@ -350,58 +353,45 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
-
 document.addEventListener('DOMContentLoaded', function() {
-    const followButtons = document.querySelectorAll('.btn-follow');
+    // Función para manejar el seguimiento de una organización
+    function handleFollow(organizationId, csrfToken, isFollowing) {
+        let url = isFollowing ? `/unfollow_organization/${organizationId}/` : `/organization/${organizationId}/follow`;
+        let method = 'POST';
+        let buttonAction = isFollowing ? 'Follow' : 'Unfollow';
+        let buttonClass = isFollowing ? 'btn-success' : 'btn-danger';
 
-    followButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const organizationId = button.getAttribute('data-organization-id');
-            const csrfToken = document.querySelector('#follow-form [name=csrfmiddlewaretoken]').value;
+        fetch(url, {
+            method: method,
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let followButton = document.querySelector(`.btn-${isFollowing ? 'unfollow' : 'follow'}[data-organization-id="${organizationId}"]`);
+                followButton.textContent = buttonAction;
+                followButton.classList.remove(isFollowing ? 'btn-danger' : 'btn-success');
+                followButton.classList.add(buttonClass);
 
-            fetch(`/organization/${organizationId}/follow`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cambia la clase CSS y el texto del botón
-                    button.classList.toggle('following');
-                    button.textContent = 'Unfollow';
-
-                    // Agrega un nuevo manejador de eventos para el "Unfollow"
-                    button.removeEventListener('click', followHandler); // Elimina el manejador anterior
-                    button.addEventListener('click', function() {
-                        // Realiza la solicitud de "Unfollow" aquí
-                        fetch(`/unfollow_organization/${organizationId}/`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRFToken': csrfToken
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                console.log('Unfollow exitoso');
-                                // Puedes realizar otras acciones, como cambiar el aspecto del botón nuevamente
-                            } else {
-                                console.error('Error en Unfollow');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                // Recargar la página para reflejar los cambios en el contador de seguidores
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
+    }
+
+    // Añade manejadores de eventos a los botones "Follow" y "Unfollow"
+    const followButtons = document.querySelectorAll('.btn-follow, .btn-unfollow');
+    followButtons.forEach(button => {
+        const organizationId = button.getAttribute('data-organization-id');
+        const csrfToken = document.querySelector('#follow-form [name=csrfmiddlewaretoken]').value;
+        const isFollowing = button.classList.contains('btn-unfollow');
+
+        button.addEventListener('click', () => handleFollow(organizationId, csrfToken, isFollowing));
     });
 });
 
