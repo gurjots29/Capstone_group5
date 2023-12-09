@@ -159,12 +159,12 @@
                             </div>
                         </div>
                     </div>                    
-                    <div class="container">
-                        <div class="row" id="eventCards">
-                            <div id="eventCards">
+                    <!-- <div class="container"> -->
+                        <div class="row" style="padding: 20px;" id="eventCards">
+                            <!-- <div id="eventCards"> -->
                                 {% for event in events %}
-                                <div class="col-md-4 mb-4">
-                                    <div class="card" data-event-id="{{ event.id }}">
+                                <div class="col-md-4 col-12 ">
+                                    <div class="card" style="padding-bottom: 20px;" data-event-id="{{ event.id }}">
                                         <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ event.title }}</h5>
@@ -178,9 +178,9 @@
                                 {% empty %}
                                 <p>No events found.</p>
                                 {% endfor %}
-                            </div>
+                            <!-- </div> -->
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>

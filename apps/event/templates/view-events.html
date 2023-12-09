@@ -24,15 +24,13 @@
     </div>
 
     <div class="main-content container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                    <div class="container">
-                        <div class="row" id="eventCards">
-                            <div id="eventCards">
-                            {% csrf_token %}
+       
+        
+        {% csrf_token %}
+        <div class="row gy-5" id="eventCards">
                                 {% for event in events %}
-                                <div class="col-md-4 mb-4">
-                                    <div class="card" data-event-id="{{ event.id }}">
+                                <div class="col-md-4 col-12 ">
+                                    <div class="card " style="padding-bottom: 20px;" data-event-id="{{ event.id }}">
                                         <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ event.title }}</h5>
@@ -41,9 +39,10 @@
                                             <p class="card-text">Location: {{ event.location }}</p>
                                             <!-- Botón de inscripción -->
                                             {% if request.user in event.register_users.all %}
-                                            <button class="btn btn-success" disabled>Registered</button>
+                                            <button class="btn btn-success " disabled>Registered</button>
+                                            <button class="btn btn-danger unregister-event-btn ">Unregister</button>
                                             {% else %}
-                                            <button class="btn btn-primary register-event-btn">Register</button>
+                                            <button class="btn btn-primary register-event-btn ">Register</button>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -51,61 +50,80 @@
                                 {% empty %}
                                 <p>No events found.</p>
                                 {% endfor %}
-                            </div>
+                            
                         </div>
-                    </div>
-                </div>
-            </div>
+                    
         </div>
     </div>
 </div>
 
 {% endblock content %}
 
+
 {% block scripts %}
 <script>
 document.body.addEventListener('click', function (event) {
-        if (event.target.classList.contains('register-event-btn')) {
-            event.preventDefault();
-            const eventId = event.target.closest('.card').getAttribute('data-event-id');
-            console.log(eventId);
-            const registerBtn = event.target
-            // Call the register API endpoint
-            registerUserForEvent(eventId, registerBtn);
-            }
-        });
-        // Function to register a user for an event
-        function registerUserForEvent(eventId, registerBtn) {
+    if (event.target.classList.contains('register-event-btn')) {
+        event.preventDefault();
+        const eventId = event.target.closest('.card').getAttribute('data-event-id');
+        const registerBtn = event.target;
+        registerUserForEvent(eventId, registerBtn);
+    } else if (event.target.classList.contains('unregister-event-btn')) {
+        event.preventDefault();
+        const eventId = event.target.closest('.card').getAttribute('data-event-id');
+        const unregisterBtn = event.target;
+        unregisterUserFromEvent(eventId, unregisterBtn);
+    }
+});
 
-            // Your registration logic here
-            // You may want to include CSRF token and handle other headers
-            fetch(`/event/events/${eventId}/register/`, {
-                method: "POST",
-                headers: {
-                    // Don't set Content-Type for FormData, let the browser set it automatically
-                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
-                },
-                credentials: 'same-origin'  // Include this if your frontend and backend are on the same domain
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Handle successful registration
-                    alert("Successfully registered for the event!");
-
-                    // Update the button text to "Registered"
-                    registerBtn.classList.remove('btn-primary');
-                    registerBtn.classList.add('btn-success');
-                    registerBtn.textContent = "Registered";
-                    registerBtn.disabled = true; // Disable the button after registration
-                })
-                .catch(error => {
-                    console.error("Error registering for the event:", error);
-                });
+function registerUserForEvent(eventId, registerBtn) {
+    fetch(`events/${eventId}/register/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status} - ${response.statusText}`);
         }
+        return response.json();
+    })
+    .then(data => {
+        alert("Successfully registered for the event!");
+        location.reload();
+    
+    })
+    .catch(error => {
+        console.error("Error registering for the event:", error);
+    });
+}
+function unregisterUserFromEvent(eventId, unregisterBtn) {
+    fetch(`/event/events/${eventId}/unregister/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status} - ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert("Successfully unregistered from the event!");
+        location.reload();
+        
+    })
+    .catch(error => {
+        console.error("Error unregistering from the event:", error);
+    });
+}
 </script>
 {% endblock scripts %}
+
+
