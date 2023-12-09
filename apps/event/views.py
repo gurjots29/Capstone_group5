@@ -31,6 +31,19 @@ class EventRegisterView(View):
         event.register_users.add(user)
 
         return JsonResponse({'message': 'Successfully registered for the event'})
+
+class EventUnregisterView(View):
+    def post(self, request, event_id, *args, **kwargs):
+        print('Hello',event_id)
+        event = Event.objects.get(pk = event_id)
+        print(event)
+        event = get_object_or_404(Event, id=event_id)
+        user = request.user  # Assuming the user is authenticated
+
+        event.register_users.remove(user)
+
+        return JsonResponse({'message': 'Successfully unregistered from the event'})
+
 class EventViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -110,7 +123,8 @@ def events_view(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    volunteer = get_object_or_404(Volunteer, user=request.user)
+    #volunteer = get_object_or_404(Volunteer, user=request.user)
+    volunteer = Volunteer.objects.first()
 
     admin_owner_roles = ['admin', 'owner']
     organization_ids = OrganizationMembership.objects.filter(
@@ -126,6 +140,8 @@ def events_view(request):
    
    # Filter events belonging to the filtered organizations
     events = Event.objects.filter(organization__id__in=organization_ids)
+    
+    print('events',events)
 
     return render(request, 'view-events.html', {
         'organizations': organizations,
