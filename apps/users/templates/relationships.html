@@ -23,7 +23,7 @@
 
     <div class="main-content container-fluid ">
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <div class="user-display">
                     <div class="user-display-bg">
                         {% if volunteer.background_image %}
@@ -67,15 +67,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
-                <div class="user-display">
+            <div class="row">
+                <div class="col-sm-6">
+                <div class="panel panel-default panel-table">
                     <div class="user-display-bottom">
                         <div class="row user-display-details">
                             <div class="title"> [FOLLOWERS]<br> {{ followers|length }} users are following you!</div>
                             {% for relationship in followers %}
                                 <div class="post-header">
                                     <!-- Cambia a relationship.from_volunteer para obtener el objeto Volunteer -->
-                                    <a href="{% url 'users:volunteer-detail' user_id=relationship.from_volunteer.user.id %}">
+                                    <a href="{% url 'users:volunteer-detail' pk=relationship.from_volunteer.user.id %}">
                                         {% if relationship.from_volunteer.profile_picture %}
                                             <img src="{{ relationship.from_volunteer.profile_picture.url }}"
                                                  class="badge-icon">
@@ -105,7 +106,7 @@
                             <div class="title"> [FOLLOWING]<br> you are following {{ following|length }} users!</div>
                             {% for following_volunteer in following %}
                                 <div class="post-header">
-                                    <a href="{% url 'users:volunteer-detail' user_id=following_volunteer.user.id %}">
+                                    <a href="{% url 'users:volunteer-detail' pk=following_volunteer.user.id %}">
 
                                         {% if following_volunteer.profile_picture %}
                                             <img src="{{ following_volunteer.profile_picture.url }}" class="badge-icon">
@@ -130,9 +131,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 nova-sidebar">
-                <div class="row">
-                    <div class="col-md-12">
+            <div class="col-sm-6">
+                <div class="panel panel-default panel-table">
                         <div class="panel panel-border panel-contrast user-info-list nova-panel-default">
                             <div class="panel-heading panel-heading-default nova-panel-heading-formulario">
                                 Suggestions
@@ -154,7 +154,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
