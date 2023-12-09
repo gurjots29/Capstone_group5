@@ -20,7 +20,7 @@
 
         <div class="main-content container-fluid ">
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-9">
                     <!-- Button to activate the create post modal -->
                     <button type="button" class="btn btn-primary mb-3" data-toggle="modal"
                             data-target="#createPostModal">Create Post
@@ -71,7 +71,7 @@
                     {% for post in posts %}
                         <div class="user-info-list panel panel-default panel-border">
                             <div class="post-header">
-                                <a href="{% url 'users:volunteer-detail' user_id=post.user.id %}">
+                                <a href="{% url 'users:volunteer-detail2' user_id=post.user.id %}">
                                     {% if post.user.volunteer.profile_picture %}
                                         <img src="{{ post.user.volunteer.profile_picture.url }}" alt="">
                                     {% else %}
